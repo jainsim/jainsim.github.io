@@ -2,29 +2,98 @@
 
 import Image from "next/image";
 import { useEffect } from "react";
+import { adjacentProjects } from "@/data/projects";
 import type { CaseImage, CaseSection, Project } from "@/data/projects";
 
 type Props = {
   project: Project | null;
   onClose: () => void;
+  onNavigate: (slug: string) => void;
 };
+
+/** Prev/next pager linking to the adjacent case studies. */
+function ProjectPager({
+  slug,
+  onNavigate,
+  onClose,
+}: {
+  slug: string;
+  onNavigate: (slug: string) => void;
+  onClose: () => void;
+}) {
+  const { prev, next } = adjacentProjects(slug);
+
+  const Link = ({ project: p, dir }: { project: Project; dir: "prev" | "next" }) => (
+    <button
+      type="button"
+      onClick={() => onNavigate(p.slug)}
+      className={`group flex flex-col gap-xxs rounded-md border border-hairline bg-elevated p-lg text-left transition-colors hover:bg-hairline-soft ${
+        dir === "next" ? "sm:items-end sm:text-right" : ""
+      }`}
+    >
+      <span className="font-mono text-mono-eyebrow uppercase text-mute">
+        {dir === "prev" ? "← Previous" : "Next →"}
+      </span>
+      <span className="text-heading-md text-ink">{p.title}</span>
+      <span className="text-body-md text-mute">{p.discipline}</span>
+    </button>
+  );
+
+  return (
+    <nav
+      aria-label="More projects"
+      className="mt-3xl border-t border-hairline pt-2xl"
+    >
+      <div className="mb-lg flex items-center justify-between">
+        <p className="font-mono text-mono-eyebrow uppercase text-mute">
+          More work
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          className="font-mono text-mono-eyebrow uppercase text-mute underline-offset-4 transition-colors hover:text-ink hover:underline"
+        >
+          All work ↑
+        </button>
+      </div>
+      <div className="grid grid-cols-1 gap-md sm:grid-cols-2">
+        {prev ? <Link project={prev} dir="prev" /> : <span />}
+        {next ? <Link project={next} dir="next" /> : <span />}
+      </div>
+    </nav>
+  );
+}
 
 /** One screenshot in a bordered card with a quiet decision-caption below. */
 function Figure({ image }: { image: CaseImage }) {
+  // Landscape UI shots fill the column width; tall portrait/phone screens are
+  // capped to the viewport height so they never overflow a laptop screen, and
+  // the matte card hugs the image instead of stretching it.
+  const isFull = image.layout === "full";
   return (
-    <figure className="m-0">
-      <span className="block overflow-hidden rounded-lg border border-hairline bg-hairline-soft p-md sm:p-lg">
+    <figure className={`m-0 ${isFull ? "" : "flex flex-col items-center"}`}>
+      <span
+        className={`overflow-hidden rounded-lg border border-hairline bg-hairline-soft p-md sm:p-lg ${
+          isFull ? "block" : "inline-block"
+        }`}
+      >
         <Image
           src={image.src}
           alt={image.caption ?? ""}
           width={image.width}
           height={image.height}
           sizes="(max-width: 768px) 100vw, 900px"
-          className="h-auto w-full rounded-md"
+          className={`block rounded-md ${
+            isFull ? "h-auto w-full" : "h-auto w-auto max-h-[70vh] max-w-full"
+          }`}
         />
       </span>
       {image.caption ? (
-        <figcaption className="mt-sm font-mono text-body-sm leading-5 text-mute">
+        <figcaption
+          className={`mt-sm font-mono text-body-sm leading-5 text-mute ${
+            isFull ? "" : "max-w-sm text-center"
+          }`}
+        >
           {image.caption}
         </figcaption>
       ) : null}
@@ -144,7 +213,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
  * every project is deep-linkable. Text-rich, single hero image; the data model
  * accepts an image array for richer galleries later.
  */
-export default function CaseStudyOverlay({ project, onClose }: Props) {
+export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props) {
   useEffect(() => {
     if (!project) return;
     const onKey = (e: KeyboardEvent) => {
@@ -154,6 +223,8 @@ export default function CaseStudyOverlay({ project, onClose }: Props) {
     // Lenis.stop() adds the .lenis-stopped class that locks overflow.
     window.lenis?.stop();
     document.documentElement.classList.add("lenis-stopped");
+    // Jump to the top when opening or switching between case studies.
+    document.querySelector('[role="dialog"]')?.scrollTo(0, 0);
     window.addEventListener("keydown", onKey);
     return () => {
       window.lenis?.start();
@@ -231,6 +302,8 @@ export default function CaseStudyOverlay({ project, onClose }: Props) {
             <SectionBlock key={s.heading} section={s} />
           ))}
         </div>
+
+        <ProjectPager slug={project.slug} onNavigate={onNavigate} onClose={onClose} />
       </article>
     </div>
   );

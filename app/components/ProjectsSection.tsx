@@ -89,6 +89,7 @@ export default function ProjectsSection() {
       <CaseStudyOverlay
         project={openSlug ? projectBySlug(openSlug) ?? null : null}
         onClose={close}
+        onNavigate={open}
       />
     </section>
   );
