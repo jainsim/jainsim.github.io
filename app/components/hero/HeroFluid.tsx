@@ -714,18 +714,18 @@ export default function HeroFluid() {
       return aspectRatio > 1 ? delta / aspectRatio : delta;
     }
 
-    // "Deep Pine" — rich, dark teal tones. Deliberately near-black so the smoke
-    // reads as a deep shadow-haze that pools and swells through the fjord rather
-    // than a bright wisp. Additive over an already-dark image, so it stays moody.
+    // "Steel Blue" — muted mountain blue sampled from the fjord (#61748a,
+    // #506478, #3e5060). Lighter than the pines, so it reads more visibly as
+    // cool smoke against the dark image while staying desaturated, not shiny.
     const PALETTE = [
-      [0.18, 0.29, 0.282], // #2e4a48
-      [0.106, 0.196, 0.196], // #1b3232
-      [0.063, 0.129, 0.133], // #102122
+      [0.38, 0.455, 0.541], // #61748a
+      [0.314, 0.392, 0.471], // #506478
+      [0.243, 0.314, 0.376], // #3e5060
     ];
     function generateColor() {
       const base = PALETTE[Math.floor(Math.random() * PALETTE.length)];
       const jitter = 0.9 + Math.random() * 0.2;
-      const intensity = 0.17;
+      const intensity = 0.13;
       return {
         r: base[0] * intensity * jitter,
         g: base[1] * intensity * jitter,
