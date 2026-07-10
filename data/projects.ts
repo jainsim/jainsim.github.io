@@ -423,32 +423,151 @@ export const projects: Project[] = [
     role: "UX/UI Designer",
     discipline: "Design Systems",
     org: "The Mobility House",
-    year: "2024",
+    year: "2023–2024",
     hero: { src: "/projects/designgrid-hero.png", width: 5765, height: 3340 },
+    overlayHero: { src: "/projects/designgrid/hero.png", width: 6960, height: 3914 },
     images: ["/projects/designgrid.png"],
-    subtitle: "The infrastructure behind a three-product enterprise SaaS suite.",
+    subtitle:
+      "The infrastructure behind a three-product enterprise SaaS suite — a design system built with engineering, tested before code, and adopted across the suite.",
     meta: [
-      { label: "Role", value: "UX/UI Designer" },
+      { label: "Role", value: "UX/UI Designer — design system owner" },
       { label: "Duration", value: "9 months" },
-      { label: "Domain", value: "B2B Enterprise SaaS" },
+      { label: "Domain", value: "B2B · Enterprise SaaS · Design Systems" },
       { label: "Client", value: "The Mobility House" },
     ],
     sections: [
       {
-        heading: "Context & Problem",
-        body: "The product ecosystem was fragmented — each application spoke its own interface language, with inconsistent components and competing definitions of basic UI elements. Teams rebuilt identical components across three codebases, slowing engineering velocity and making new products nearly impossible to scale.",
+        heading: "Context",
+        body:
+          "When I joined The Mobility House, the product suite had grown across multiple applications — each with its own interface language, its own component patterns, and its own definition of what a button looked like. Teams rebuilt the same UI elements repeatedly. Every new feature started from scratch instead of building on decisions the team had already made.\n\nThe cost was time. Design handoffs were slow because there was nothing to hand off to. Development was slow because engineers were rebuilding components across three codebases. And scaling was impossible — each new product inherited the same inconsistency.\n\nI rebuilt DesignGrid from the ground up: a single source of truth for UI decisions, tested before code, adopted across the suite.",
+      },
+      {
+        heading: "The problem",
+        // synthesized lead — the section is pure bullets in the source doc
+        body: "The fragmentation wasn't cosmetic — it showed up in three ways.",
+        points: [
+          "Inconsistent UI meant inconsistent workflows — one product used modals for configuration, another used panels. A toggle meant one thing in the dashboard and something else in the installer app. This wasn't a polish problem — it was cognitive load. Every new user and every new engineer had to learn the language from scratch.",
+          "The work was repetitive — designing a new feature meant gathering screenshots from old features, tracing the patterns, rebuilding the components, then waiting to find out whether dev had already built something similar. No single source of truth meant constant duplicated effort.",
+          "Brand identity was diluting — TMH's new brand guidelines existed but applied unevenly. Some products followed them closely; others had adapted them so far that users couldn't tell they belonged to the same suite. White-labeling was painful — reusing components across customers meant reworking layouts every time.",
+        ],
+        images: [
+          {
+            src: "/projects/designgrid/before-site-setup.png",
+            width: 14232,
+            height: 4332,
+            layout: "full",
+            caption: "Site setup — before.",
+          },
+        ],
       },
       {
         heading: "Approach",
-        body: "Adopted Brad Frost's Atomic Design hierarchy to enforce consistency through structure, on an Ant Design foundation customized for brand alignment. Three pillars: accessibility built in from the start (WCAG before shipping), collaborative development with engineering, and a dual source of truth — Figma for decisions, code for implementation, validated with Chromatic.",
+        body:
+          "Why Atomic Design — I studied how other companies were building design systems: the patterns they used, where they struggled, what actually stuck. Brad Frost's Atomic Design methodology organizes components by complexity: atoms (the smallest elements), molecules (simple combinations), organisms (complex, multi-part systems). That hierarchy forces a discipline — you can't build an organism without first deciding what the atoms are. Consistency by design rather than by process.",
+        callout: {
+          label: "Design decision · Ant Design as the base library",
+          body:
+            "Engineering didn't want a design system. Not because they disagreed with the goal — because building one from scratch meant months of component work with no user-facing feature at the end of it, and that was a cost they couldn't justify.\n\nAnt Design was how I got to yes. Our engineers already knew it, so adopting it meant the team spent its effort on adaptation rather than invention. I took what Ant provided — buttons, form patterns, the layout grid — and shaped it into DesignGrid's atoms and molecules.\n\nThe trade-off — inheriting Ant's opinions meant inheriting constraints I didn't choose. But a design system that engineering agrees to build is worth more than a better one they don't. Building from scratch would have produced a purer system and no adoption.",
+        },
       },
       {
-        heading: "System & Adoption",
-        body: "Structured the system from atoms to templates and treated adoption as the real work — pairing with product teams, demonstrating component rationale, and treating edge cases as system insights rather than exceptions. Chromatic visual regression testing held quality across viewports and states.",
+        heading: "The three pillars",
+        body: "",
+        points: [
+          "Accessibility as a foundation, not an afterthought — colour contrast, touch targets, and OS conventions were entry requirements, not polish. I audited the existing suite with Stark and found core table text failing WCAG on every threshold — normal and large text, AA and AAA. The DesignGrid palette was built to clear all four. Contrast on primary table content went from 2.55:1 to 18.92:1.",
+          "Communication with developers, from day one — I didn't design the system and hand it off. I built it with the engineering team — listening to their edge cases, understanding what they needed to implement quickly, and designing components developers would actually want to reach for.",
+          "A single source of truth in Figma, tested in code — components live in two places: the design file, where decisions are made, and the code repository, where they ship. Chromatic kept the two in sync — catching visual drift before it became debt.",
+        ],
+        images: [
+          {
+            src: "/projects/designgrid/accessibility-before-after.png",
+            width: 3294,
+            height: 1263,
+            layout: "full",
+            caption: "Contrast audit — before and after.",
+          },
+        ],
+      },
+      {
+        heading: "The architecture",
+        body:
+          "Atoms. The base layer — buttons, inputs, labels, icons, avatars. Once you define what a button is, every component that needs a button inherits that decision.\n\nMolecules. Simple combinations: form groups (label + input + helper text), navigation items (icon + label), action cards. This is where you start to see how atoms cooperate.\n\nOrganisms. Complex, multi-part systems — modals, tables, dashboards, data forms. This is where the leverage shows: you're not starting from scratch, you're assembling tested pieces.\n\nTemplates. Page-level skeletons — the arrangement of organisms into a working view. A template decides where the navigation sits, where the primary table lands, how a configuration panel relates to the content behind it.",
+        images: [
+          { src: "/projects/designgrid/atoms.png", width: 3960, height: 464, layout: "full", caption: "Atoms" },
+          { src: "/projects/designgrid/molecules.png", width: 5372, height: 1400, layout: "full", caption: "Molecules" },
+          { src: "/projects/designgrid/organisms.png", width: 3348, height: 2656, layout: "full", caption: "Organisms" },
+          { src: "/projects/designgrid/templates.png", width: 5760, height: 3792, layout: "full", caption: "Templates" },
+        ],
+      },
+      {
+        heading: "The real challenge — designing for adoption",
+        body:
+          "Building the system was the easy part. Getting teams to use it was the hard part.\n\nShipping a component didn't make anyone use it. Adoption meant sitting with teams, walking through the component, explaining why this shape and not that one, and answering the inevitable \"but what if we need to…\". The system was never about restriction. It was about making the right choice the easy choice.\n\nThe resistance was real, and it was reasonable. Engineering pushed back twice — first on building a design system at all, and later on the data-heavy tables, the most expensive components in the library to build and maintain. Both objections came from the same place: a large upfront cost against no immediate user-facing feature.\n\nNeither objection was wrong on its own terms. The design system got built because Ant Design made the first step cheap enough to take. The tables got built because I stopped arguing and went to look.\n\nThe same instinct drove the site setup redesign. The old flow moved you through five separate views to configure a single site, with no overview anywhere. I pushed for a stepwise structure with the full data model visible in one place, so dependencies were legible at a glance instead of discovered by clicking forward.",
+        callout: {
+          label: "How the table argument actually ended",
+          body:
+            "I ran Hotjar on the existing charging-point tables. The session recordings showed users tracking back and forth across the full width of the row, hunting for the column they needed, with clicks landing on targets that weren't clickable and clickable targets going untouched. It wasn't a preference problem. Users couldn't parse the row.\n\nThat recording ended the debate faster than any argument I'd made. The rebuilt table replaced the flat wide grid with a nested hierarchy — accounts expanding into sites, sites into stations — so a row could be scanned rather than traversed. The cost engineering was worried about was real. It just wasn't the biggest cost on the table.",
+        },
+        images: [
+          {
+            src: "/projects/designgrid/hotjar-old-tables.png",
+            width: 1824,
+            height: 802,
+            layout: "full",
+            caption: "Hotjar session tracking on the original table.",
+          },
+          {
+            src: "/projects/designgrid/tables-before.png",
+            width: 2424,
+            height: 483,
+            layout: "full",
+            caption: "The original table — before DesignGrid.",
+          },
+          {
+            src: "/projects/designgrid/tables-after.png",
+            width: 2880,
+            height: 2048,
+            layout: "full",
+            caption: "The rebuilt table component in DesignGrid.",
+          },
+          {
+            src: "/projects/designgrid/after-site-setup.png",
+            width: 10251,
+            height: 4107,
+            layout: "full",
+            caption: "Site setup — after.",
+          },
+        ],
+      },
+      {
+        heading: "Testing & validation",
+        body:
+          "Chromatic became the QA layer that kept the system honest. Every component change was tested across viewport sizes, interaction states, and edge cases before it reached code — catching the inconsistencies that otherwise surface only when three engineers implement the same button three different ways.\n\nThe sharpest feedback came from real use. Redesigning the Dashboard on the new components made teams surface gaps: \"we need a variant for this\", \"this doesn't support that state\". Those requests fed straight back into the library, so the system grew from what the products actually needed rather than from what I'd anticipated.",
       },
       {
         heading: "Outcome",
-        body: "An 80% reduction in development time for new products and features, recurring design/engineering duplication eliminated, and a coherent experience across the entire suite — infrastructure-level design that changed how teams make decisions.",
+        body:
+          "Before DesignGrid there was no front-end component library and no design source of truth. Designers copy-pasted screens from old features; engineers rebuilt the same table, the same dropdown, the same modal across three codebases. Every new feature paid the full cost of every decision that had already been made once.\n\nThat's where the time went, and that's what the system took back. The first product is slower, because you're building the system and the product. The second is faster. By the third, the recurring decisions are already made and the saving compounds. Engineering's internal estimate put the reduction in development time for new features at roughly 80%.",
+        metrics: [
+          { value: "2.55:1 → 18.92:1", label: "contrast on primary table content, now clearing WCAG AA and AAA" },
+          { value: "3", label: "products consuming a shared component library" },
+          { value: "1", label: "source of truth, synced between Figma and code, tested in Chromatic" },
+        ],
+      },
+      {
+        heading: "What one system taught me",
+        body: "",
+        points: [
+          "Consistency isn't about control — it's about clarity. The worst design systems say \"you must use this\". The best make it obvious why you'd want to. When an engineer reaches for a tested button instead of relitigating button sizes in code review, that isn't restriction — it's a gift.",
+          "A design system is only as strong as its adoption. I could have built something thorough and beautiful and shipped it into silence. What made DesignGrid work was sitting with teams, answering why this decision, and treating their edge cases as system insights rather than exceptions.",
+          "Stop arguing, go get the recording. I spent weeks making the case for rebuilding the tables and got nowhere. Twenty minutes of Hotjar sessions did it. When a decision is stuck between two reasonable positions, the fastest way out is usually evidence neither side has seen yet — and I should have reached for it sooner than I did.",
+          "Infrastructure is design work. I arrived thinking I'd design components. What I actually did was reshape how the team makes decisions. That's design — it just isn't visible in the final product.",
+        ],
+      },
+      {
+        heading: "The bigger picture",
+        body:
+          "I built the system that let teams ship fast.\n\nThis is the work that doesn't appear in a user-facing feature but changes how fast a team can move. One investment in getting the system right multiplies across every product that uses it. I came in expecting to design components; what I designed was the decision-making layer underneath them.",
       },
     ],
   },
