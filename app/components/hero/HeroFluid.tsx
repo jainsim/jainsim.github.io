@@ -714,17 +714,18 @@ export default function HeroFluid() {
       return aspectRatio > 1 ? delta / aspectRatio : delta;
     }
 
-    // "Grey Lavender" — muted slate tones sampled from the fjord (#b8b8cc,
-    // #9aa0bd, #7d84a3). Low intensity keeps the additive smoke soft, not shiny.
+    // "Deep Pine" — rich, dark teal tones. Deliberately near-black so the smoke
+    // reads as a deep shadow-haze that pools and swells through the fjord rather
+    // than a bright wisp. Additive over an already-dark image, so it stays moody.
     const PALETTE = [
-      [0.722, 0.722, 0.8], // #b8b8cc
-      [0.604, 0.627, 0.741], // #9aa0bd
-      [0.49, 0.518, 0.639], // #7d84a3
+      [0.18, 0.29, 0.282], // #2e4a48
+      [0.106, 0.196, 0.196], // #1b3232
+      [0.063, 0.129, 0.133], // #102122
     ];
     function generateColor() {
       const base = PALETTE[Math.floor(Math.random() * PALETTE.length)];
       const jitter = 0.9 + Math.random() * 0.2;
-      const intensity = 0.09;
+      const intensity = 0.17;
       return {
         r: base[0] * intensity * jitter,
         g: base[1] * intensity * jitter,
