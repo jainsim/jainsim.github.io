@@ -510,6 +510,13 @@ export const projects: Project[] = [
         },
         images: [
           {
+            src: "/projects/designgrid/tables-before.png",
+            width: 2424,
+            height: 483,
+            layout: "full",
+            caption: "The old table — before DesignGrid.",
+          },
+          {
             src: "/projects/designgrid/hotjar-old-tables.png",
             width: 1824,
             height: 802,
@@ -518,13 +525,6 @@ export const projects: Project[] = [
           },
           {
             src: "/projects/designgrid/tables-after.png",
-            width: 2424,
-            height: 483,
-            layout: "full",
-            caption: "Rebuilt table — nested account/site/station hierarchy.",
-          },
-          {
-            src: "/projects/designgrid/table-component.png",
             width: 2880,
             height: 2048,
             layout: "full",
