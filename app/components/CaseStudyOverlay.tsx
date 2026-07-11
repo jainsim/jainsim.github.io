@@ -27,15 +27,16 @@ function ProjectPager({
     <button
       type="button"
       onClick={() => onNavigate(p.slug)}
-      className={`group flex flex-col gap-xxs rounded-md border border-hairline bg-elevated p-lg text-left transition-colors hover:bg-hairline-soft ${
-        dir === "next" ? "sm:items-end sm:text-right" : ""
+      className={`group flex min-h-[44px] flex-col justify-center gap-xxs rounded-sm py-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink ${
+        dir === "next" ? "items-end text-right" : "items-start text-left"
       }`}
     >
-      <span className="font-mono text-mono-eyebrow uppercase text-mute">
+      <span className="font-mono text-mono-eyebrow uppercase text-mute transition-colors group-hover:text-ink">
         {dir === "prev" ? "← Previous" : "Next →"}
       </span>
-      <span className="text-heading-md text-ink">{p.title}</span>
-      <span className="text-body-md text-mute">{p.discipline}</span>
+      <span className="text-label-sm text-ink underline-offset-4 group-hover:underline">
+        {p.title}
+      </span>
     </button>
   );
 
@@ -56,7 +57,7 @@ function ProjectPager({
           All work ↑
         </button>
       </div>
-      <div className="grid grid-cols-1 gap-md sm:grid-cols-2">
+      <div className="flex items-start justify-between gap-lg">
         {prev ? <Link project={prev} dir="prev" /> : <span />}
         {next ? <Link project={next} dir="next" /> : <span />}
       </div>
