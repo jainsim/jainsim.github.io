@@ -4,36 +4,20 @@ import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 
 /**
- * Cuberto-style masked line reveal. Each line sits inside an overflow-hidden
- * "mask" and starts translated fully below it (so nothing flashes before the
- * script runs). On scroll into view the lines slide up one after another on a
- * power4.out deceleration. Honors prefers-reduced-motion.
+ * Cuberto-style masked reveal, per word. Each word sits inside its own
+ * inline-block overflow-hidden mask, so the paragraph wraps naturally at any
+ * viewport width (no hard-coded line breaks). On scroll into view the words
+ * slide up in a fast stagger. Honors prefers-reduced-motion.
  */
 
-// The merged About statement — one paragraph, all at h2 (heading-lg) size.
-const LINES = [
-  "Senior Product Designer turning complex enterprise",
-  "data into clarity. 7+ years building B2B SaaS",
-  "platforms, native mobile apps, design systems, and",
-  "end-to-end flows — most recently across EV",
-  "infrastructure at ChargePoint and The Mobility House.",
-];
+// The merged About statement — one paragraph, wraps responsively.
+const STATEMENT =
+  "Senior Product Designer turning complex enterprise data into clarity. " +
+  "7+ years building B2B SaaS platforms, native mobile apps, design systems, " +
+  "and end-to-end flows — most recently across EV infrastructure at " +
+  "ChargePoint and The Mobility House.";
 
-function MaskLine({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className: string;
-}) {
-  return (
-    <span className="block overflow-hidden pb-[0.12em]">
-      <span className={`reveal-line block will-change-transform ${className}`}>
-        {children}
-      </span>
-    </span>
-  );
-}
+const WORDS = STATEMENT.split(" ");
 
 export default function AboutReveal() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -41,7 +25,7 @@ export default function AboutReveal() {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const lines = root.querySelectorAll<HTMLElement>(".reveal-line");
+    const words = root.querySelectorAll<HTMLElement>(".reveal-word");
 
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -60,15 +44,15 @@ export default function AboutReveal() {
         played = true;
         io.disconnect();
         gsap.fromTo(
-          lines,
+          words,
           { yPercent: 115 },
           {
             yPercent: 0,
-            duration: 1.4,
+            duration: 1.1,
             ease: "power4.out",
-            stagger: 0.12,
+            stagger: { amount: 0.5 },
             onComplete: () => {
-              gsap.set(lines, { clearProps: "transform,will-change" });
+              gsap.set(words, { clearProps: "transform,will-change" });
             },
           }
         );
@@ -83,10 +67,14 @@ export default function AboutReveal() {
   return (
     <div ref={rootRef} className="mt-lg">
       <h2 className="max-w-4xl text-heading-lg text-ink">
-        {LINES.map((line) => (
-          <MaskLine key={line} className="text-heading-lg text-ink">
-            {line}
-          </MaskLine>
+        {WORDS.map((word, i) => (
+          <span key={`${word}-${i}`}>
+            <span className="inline-block overflow-hidden pb-[0.12em] align-top">
+              <span className="reveal-word inline-block will-change-transform">
+                {word}
+              </span>
+            </span>{" "}
+          </span>
         ))}
       </h2>
     </div>
