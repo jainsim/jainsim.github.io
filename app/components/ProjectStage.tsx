@@ -97,7 +97,7 @@ export default function ProjectStage({
           type="button"
           onClick={() => onOpen(project.slug)}
           aria-label={`Open ${project.title} case study`}
-          className="project-stage relative flex items-center justify-center overflow-hidden rounded-md border border-hairline outline-none focus-visible:ring-2 focus-visible:ring-link focus-visible:ring-offset-2 focus-visible:ring-offset-elevated"
+          className="project-stage relative flex items-center justify-center overflow-hidden rounded-md border border-hairline outline-none transition-transform duration-200 focus-visible:ring-2 focus-visible:ring-link focus-visible:ring-offset-2 focus-visible:ring-offset-elevated active:scale-[0.99]"
         >
           <span className="project-shot absolute flex items-center justify-center">
             <Image
@@ -119,15 +119,7 @@ export default function ProjectStage({
           {project.index}
         </span>
         <div className="text-center">
-          <p className="text-label-sm text-ink">
-            {project.title}
-            <span
-              aria-hidden
-              className="ml-1 inline-block text-mute opacity-0 transition-all duration-300 group-hover:opacity-100"
-            >
-              ↗
-            </span>
-          </p>
+          <p className="text-label-sm text-ink">{project.title}</p>
           <p className="text-body-sm text-faint">{project.discipline}</p>
         </div>
         <span className="font-mono text-mono-eyebrow text-mute">

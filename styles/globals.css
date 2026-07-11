@@ -87,10 +87,20 @@ html.lenis-stopped body {
   }
 }
 
-/* Mobile: frame goes full-width, mat breathing room tightens slightly. */
+/* Mobile: frame goes full-width, mat breathing room tightens slightly,
+   and content drives card height so screenshots fill the width. */
 @media (max-width: 768px) {
   :root {
     --mat-inset: 4%;
+    --stack-top: 64px;
+  }
+  .project-stage {
+    width: 100%;
+    height: auto;
+    max-height: 60svh;
+  }
+  .stack-card {
+    min-height: 0; /* let content drive card height instead of the vh floor */
   }
 }
 
