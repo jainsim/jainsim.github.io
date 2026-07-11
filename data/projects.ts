@@ -582,16 +582,19 @@ export const projects: Project[] = [
     inProgress: true,
     hero: { src: "/projects/cocreate-hero.png", width: 2117, height: 4452 },
     images: ["/projects/cocreate.png"],
-    subtitle: "A collaborative design initiative — case study in progress.",
+    subtitle:
+      "Seamless collaboration between artisans, merchandisers, and designers — empowering 30,000+ women artisans to showcase their work and earn income.",
     meta: [
       { label: "Role", value: "Product Designer" },
       { label: "Status", value: "In Progress" },
-      { label: "Domain", value: "Product Design" },
+      { label: "Domain", value: "Product Design · Social Impact" },
+      { label: "Partner", value: "Industree Foundation" },
     ],
     sections: [
       {
         heading: "In Progress",
-        body: "This case study is being written. CoCreate explores collaborative, multiplayer workflows for enterprise teams — check back soon for the full story, or reach out and I'll walk you through it.",
+        body:
+          "CoCreate connects artisans, merchandisers, and designers in shared collab rooms with transparent costing sheets — built on research that found 80% of profits never reached the artisans.\n\nThe full case study is being written. Reach out and I'll walk you through it.",
       },
     ],
   },

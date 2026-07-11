@@ -283,18 +283,30 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
           ))}
         </dl>
 
-        {/* Hero image — rendered at its true ratio so nothing crops */}
-        <div className="mt-2xl overflow-hidden rounded-lg border border-hairline bg-elevated">
-          <Image
-            src={(project.overlayHero ?? project.hero).src}
-            alt={project.title}
-            width={(project.overlayHero ?? project.hero).width}
-            height={(project.overlayHero ?? project.hero).height}
-            priority
-            sizes="(max-width: 1200px) 100vw, 1200px"
-            className="h-auto w-full"
-          />
-        </div>
+        {/* Hero image — rendered at its true ratio so nothing crops.
+            Portrait heroes (phone screenshots) sit centered on the mat at a
+            phone-scale width instead of stretching the full column. */}
+        {(() => {
+          const hero = project.overlayHero ?? project.hero;
+          const isPortrait = hero.height > hero.width;
+          return (
+            <div className="mt-2xl overflow-hidden rounded-lg border border-hairline bg-elevated">
+              <Image
+                src={hero.src}
+                alt={project.title}
+                width={hero.width}
+                height={hero.height}
+                priority
+                sizes={isPortrait ? "(max-width: 768px) 60vw, 360px" : "(max-width: 1200px) 100vw, 1200px"}
+                className={
+                  isPortrait
+                    ? "mx-auto h-auto w-[60%] max-w-[360px] py-2xl"
+                    : "h-auto w-full"
+                }
+              />
+            </div>
+          );
+        })()}
 
         {/* Sections — copy in a narrow reading column, images breathe wider */}
         <div className="mt-3xl flex flex-col gap-3xl">
