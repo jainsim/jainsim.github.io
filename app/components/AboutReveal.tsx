@@ -66,7 +66,10 @@ export default function AboutReveal() {
 
   return (
     <div ref={rootRef} className="mt-lg">
-      <h2 className="max-w-4xl text-heading-lg text-ink">
+      {/* Fluid size: 32px from ~666px up (identical to text-heading-lg on
+          desktop), scaling down to ~22px on a 390px phone so lines hold
+          6–8 words instead of 3–4. */}
+      <h2 className="max-w-4xl text-[length:clamp(1.25rem,3vw+0.75rem,2rem)] font-semibold leading-[1.25] tracking-[-0.04em] text-ink [text-wrap:pretty]">
         {WORDS.map((word, i) => (
           <span key={`${word}-${i}`}>
             <span className="inline-block overflow-hidden pb-[0.12em] align-top">
