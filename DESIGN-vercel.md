@@ -336,7 +336,7 @@ Whitespace is structural. The near-white canvas and generous section padding do 
 #### Breakpoints
 | Name | Width | Key Changes |
 |---|---|---|
-| Mobile | ≤ 640px | Single-column stacks; nav → menu trigger; hero type scales down; pill CTAs go full-width |
+| Mobile | ≤ 640px | Single-column stacks; nav links stay inline at all breakpoints; hero type scales down; pill CTAs go full-width |
 | Tablet | 768px | 2-up card grids; condensed nav |
 | Laptop | 1024px | 3–4-up grids; full nav row |
 | Desktop | 1200px+ | Centered max-width container, full multi-column grids |
@@ -345,7 +345,7 @@ Whitespace is structural. The near-white canvas and generous section padding do 
 Marketing pill CTAs (`{components.button-primary}`) and nav buttons clear the 44px WCAG-AAA target via line-height-driven height. Circular icon buttons (`{components.button-icon-circular}`) keep adequate hit area.
 
 #### Collapsing Strategy
-The nav row collapses behind a menu trigger; multi-column hairline-card grids reflow to a single column; code-editor and node-graph illustrations scale or scroll rather than shrink illegibly; the pricing tier grid stacks vertically.
+The nav links stay inline at all breakpoints; multi-column hairline-card grids reflow to a single column; code-editor and node-graph illustrations scale or scroll rather than shrink illegibly; the pricing tier grid stacks vertically.
 
 #### Image Behavior
 The hero mesh gradient is a CSS/SVG composition that scales fluidly. Feature illustrations (node graphs, code editors) are vector/HTML, ink-on-white, scaling crisply. Customer logos sit in a greyscale strip. No heavy raster photography.
