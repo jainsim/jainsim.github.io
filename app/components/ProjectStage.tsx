@@ -33,21 +33,37 @@ export default function ProjectStage({
         "(prefers-reduced-motion: reduce)"
       ).matches;
 
-      // Fuel-style zoom-out: as the next card rises to its pin point, this
-      // card recedes. The last card has no successor, so it never recedes.
+      // Fuel-style zoom-out: covered cards keep receding as every later
+      // card arrives — deeper cards end smaller, so strips read as depth.
       const nextCard = cardRef.current?.nextElementSibling;
       if (!prefersReduced && nextCard?.classList.contains("stack-card")) {
+        // querySelectorAll, not a selector string — gsap.context(scope) would
+        // scope ".stack-card" to this card's subtree and match nothing.
+        const cards = Array.from(
+          document.querySelectorAll<HTMLElement>(".stack-card")
+        );
+        const n = cards.length;
+        const lastCard = cards[n - 1];
+        const rootStyles = getComputedStyle(document.documentElement);
+        const stackTop =
+          parseFloat(rootStyles.getPropertyValue("--stack-top")) || 80;
+        const peek =
+          parseFloat(rootStyles.getPropertyValue("--stack-peek")) || 14;
+        const lastPin = stackTop + (n - 1) * peek;
+        const finalScale = 1 - 0.04 * (n - 1 - order);
+
         gsap.fromTo(
           cardRef.current,
           { scale: 1 },
           {
-            scale: 0.96,
+            scale: finalScale,
             transformOrigin: "center top",
             ease: "none",
             scrollTrigger: {
               trigger: nextCard,
               start: "top bottom",
-              end: "top 80px",
+              endTrigger: lastCard,
+              end: "top " + lastPin,
               scrub: true,
             },
           }
@@ -73,7 +89,7 @@ export default function ProjectStage({
       ref={cardRef}
       data-slug={project.slug}
       style={{ "--i": order } as React.CSSProperties}
-      className="stack-card group mt-2xl flex flex-col overflow-hidden rounded-t-lg border border-hairline bg-canvas px-lg pb-md pt-lg shadow-[0_1px_1px_rgba(0,0,0,0.04)]"
+      className="stack-card group mt-2xl flex flex-col overflow-hidden rounded-lg border border-hairline bg-canvas px-lg pb-md pt-lg shadow-[0_1px_1px_rgba(0,0,0,0.04)]"
     >
       {/* Tinted mat — click opens the case study */}
       <div className="flex flex-1 items-center justify-center">
@@ -98,7 +114,7 @@ export default function ProjectStage({
       </div>
 
       {/* Caption row — index / title·discipline / year */}
-      <div className="mt-md flex w-full items-baseline justify-between border-t border-hairline pt-sm">
+      <div className="mt-md flex w-full items-baseline justify-between pt-sm">
         <span className="font-mono text-mono-eyebrow text-mute">
           {project.index}
         </span>
