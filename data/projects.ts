@@ -37,6 +37,8 @@ export type Project = {
   org: string;
   year: string;
   inProgress?: boolean;
+  accent: string; // brand hex - 8% tint on the mat
+  accentText: string; // brand hex tuned for legible index text (deeper where needed)
   hero: HeroImage; // the home-page stage screenshot (device mockup, native ratio)
   overlayHero?: HeroImage; // wider hero shown at the top of the case-study overlay
   images: string[]; // first is the hero/panel image
@@ -54,6 +56,8 @@ export const projects: Project[] = [
     discipline: "Native Mobile App",
     org: "ChargePoint",
     year: "2025",
+    accent: "#F06800",
+    accentText: "#D65A00",
     hero: { src: "/projects/installer-hero.png", width: 2117, height: 4328 },
     overlayHero: { src: "/projects/installer/hero-3-screens.png", width: 7009, height: 4152 },
     images: ["/projects/installer/hero-3-screens.png"],
@@ -237,6 +241,8 @@ export const projects: Project[] = [
     discipline: "Enterprise Workflow",
     org: "ChargePoint",
     year: "2025",
+    accent: "#0E7C86",
+    accentText: "#0E7C86",
     hero: { src: "/projects/activation-hero.png", width: 5701, height: 3323 },
     images: ["/projects/activation.png"],
     subtitle:
@@ -424,6 +430,8 @@ export const projects: Project[] = [
     discipline: "Design Systems",
     org: "The Mobility House",
     year: "2023–2024",
+    accent: "#0066FF",
+    accentText: "#0066FF",
     hero: { src: "/projects/designgrid-hero.png", width: 5765, height: 3340 },
     overlayHero: { src: "/projects/designgrid/hero.png", width: 6960, height: 3914 },
     images: ["/projects/designgrid.png"],
@@ -580,6 +588,8 @@ export const projects: Project[] = [
     org: "Independent project",
     year: "2026",
     inProgress: true,
+    accent: "#00970F",
+    accentText: "#00970F",
     hero: { src: "/projects/cocreate-hero.png", width: 2117, height: 4452 },
     images: ["/projects/cocreate.png"],
     subtitle:

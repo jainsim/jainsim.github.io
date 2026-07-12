@@ -69,7 +69,11 @@ html.lenis-stopped body {
     aspect-ratio: 16 / 10;
     width: min(100%, calc(var(--stage-height-cap) * 1.6));
     height: auto;
-    background-color: theme("colors.hairline-soft");
+    background-color: color-mix(
+      in srgb,
+      var(--accent, theme("colors.hairline-soft")) 8%,
+      theme("colors.canvas")
+    );
   }
 
   /* Inset keeps the screenshot floating on the mat. */

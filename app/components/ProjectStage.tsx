@@ -88,7 +88,13 @@ export default function ProjectStage({
     <section
       ref={cardRef}
       data-slug={project.slug}
-      style={{ "--i": order } as React.CSSProperties}
+      style={
+        {
+          "--i": order,
+          "--accent": project.accent,
+          "--accent-text": project.accentText,
+        } as React.CSSProperties
+      }
       className="stack-card group mt-2xl flex flex-col overflow-hidden rounded-lg border border-hairline bg-canvas px-lg pb-md pt-lg shadow-[0_1px_1px_rgba(0,0,0,0.04)]"
     >
       {/* Tinted mat - click opens the case study */}
@@ -115,7 +121,10 @@ export default function ProjectStage({
 
       {/* Caption row - index / title·discipline / year */}
       <div className="mt-md flex w-full items-baseline justify-between pt-sm">
-        <span className="font-mono text-mono-eyebrow text-mute">
+        <span
+          className="font-mono text-mono-eyebrow"
+          style={{ color: "var(--accent-text)" }}
+        >
           {project.index}
         </span>
         <div className="text-center">
