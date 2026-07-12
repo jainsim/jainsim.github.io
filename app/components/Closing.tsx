@@ -74,7 +74,7 @@ export default function Closing() {
           <div className="mt-2xl flex flex-wrap items-center justify-center gap-md">
             <a
               href="mailto:seemasam2113@gmail.com"
-              className="rounded-pill bg-ink px-lg py-sm text-body-lg font-medium text-on-primary transition-colors hover:bg-black"
+              className="rounded-pill border border-transparent bg-ink px-lg py-sm text-body-lg font-medium text-on-primary transition-colors hover:bg-black"
             >
               Get in touch
             </a>
@@ -84,7 +84,7 @@ export default function Closing() {
               rel="noreferrer"
               className="rounded-pill border border-hairline bg-elevated px-lg py-sm text-body-lg font-medium text-ink transition-colors hover:bg-hairline-soft"
             >
-              Resume ↗
+              Resume
             </a>
           </div>
         </div>

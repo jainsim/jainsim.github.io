@@ -138,7 +138,7 @@ export default function Hero() {
           <div className="mt-xl flex flex-wrap items-center gap-md">
             <a
               href="mailto:seemasam2113@gmail.com"
-              className="rounded-pill bg-fjord-text px-lg py-sm text-body-lg font-medium text-fjord-ink transition-opacity hover:opacity-90"
+              className="rounded-pill border border-transparent bg-fjord-text px-lg py-sm text-body-lg font-medium text-fjord-ink transition-opacity hover:opacity-90"
             >
               Get in touch
             </a>
@@ -148,7 +148,7 @@ export default function Hero() {
               rel="noreferrer"
               className="rounded-pill border border-white/25 px-lg py-sm text-body-lg font-medium text-fjord-text transition-colors hover:border-fjord-text hover:bg-white/10"
             >
-              Resume ↗
+              Resume
             </a>
           </div>
         </div>
