@@ -10,11 +10,11 @@ import { gsap } from "@/lib/gsap";
  * slide up in a fast stagger. Honors prefers-reduced-motion.
  */
 
-// The merged About statement — one paragraph, wraps responsively.
+// The merged About statement - one paragraph, wraps responsively.
 const STATEMENT =
   "Senior Product Designer turning complex enterprise data into clarity. " +
   "7+ years building B2B SaaS platforms, native mobile apps, design systems, " +
-  "and end-to-end flows — most recently across EV infrastructure at " +
+  "and end-to-end flows, most recently across EV infrastructure at " +
   "ChargePoint and The Mobility House.";
 
 const WORDS = STATEMENT.split(" ");
@@ -34,7 +34,7 @@ export default function AboutReveal() {
 
     // Bulletproof: the copy is visible by default. Only at the moment the
     // section scrolls into view do we snap it below the mask and slide it up
-    // (fromTo). If the trigger never fires, the text simply stays visible —
+    // (fromTo). If the trigger never fires, the text simply stays visible -
     // it can never be permanently hidden. IntersectionObserver is used (not
     // ScrollTrigger) so it's immune to page-height shifts from the stack.
     let played = false;

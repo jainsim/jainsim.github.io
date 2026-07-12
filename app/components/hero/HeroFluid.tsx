@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 /**
- * HeroFluid — GPU fluid-smoke atmosphere for the hero.
+ * HeroFluid - GPU fluid-smoke atmosphere for the hero.
  *
  * A self-contained WebGL Navier–Stokes ("stable fluids") simulation adapted
  * from Pavel Dobryakov's WebGL-Fluid-Simulation (MIT). Soft icy dye is splatted
@@ -714,7 +714,7 @@ export default function HeroFluid() {
       return aspectRatio > 1 ? delta / aspectRatio : delta;
     }
 
-    // "Steel Blue" — muted mountain blue sampled from the fjord (#61748a,
+    // "Steel Blue" - muted mountain blue sampled from the fjord (#61748a,
     // #506478, #3e5060). Lighter than the pines, so it reads more visibly as
     // cool smoke against the dark image while staying desaturated, not shiny.
     const PALETTE = [
@@ -788,7 +788,7 @@ export default function HeroFluid() {
 
     rafId = requestAnimationFrame(update);
     } catch (err) {
-      // WebGL can fail on some devices/drivers — degrade to the still hero
+      // WebGL can fail on some devices/drivers - degrade to the still hero
       // rather than crashing the whole section.
       console.warn("HeroFluid disabled:", err);
     }

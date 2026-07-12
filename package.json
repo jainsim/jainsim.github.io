@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint && npm run lint:copy",
+    "lint:copy": "bash scripts/check-em-dash.sh"
   },
   "dependencies": {
     "geist": "1.3.1",

@@ -6,7 +6,7 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 import HeroFluid from "./hero/HeroFluid";
 
 /**
- * Scene 1 — dark cinematic Fjord hero.
+ * Scene 1 - dark cinematic Fjord hero.
  * Full-viewport misty-mountains image with a WebGL fluid-smoke atmosphere,
  * gentle vertical scroll parallax (no zoom), and an almost-imperceptible
  * mouse parallax across background / atmosphere / content depth tiers.
@@ -16,7 +16,7 @@ export default function Hero() {
   const imageRef = useRef<HTMLDivElement>(null);
   const fluidRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  // null until we know the pointer type — WebGL atmosphere only mounts on
+  // null until we know the pointer type - WebGL atmosphere only mounts on
   // fine-pointer devices (mouse parallax is meaningless + costly on touch).
   const [coarsePointer, setCoarsePointer] = useState<boolean | null>(null);
 
@@ -31,7 +31,7 @@ export default function Hero() {
       // below) so parallax translation never reveals an image edge.
       gsap.set(imageRef.current, { scale: 1.1 });
 
-      // Vertical scroll parallax — image drifts slower than the page, no scale.
+      // Vertical scroll parallax - image drifts slower than the page, no scale.
       gsap.to(imageRef.current, {
         yPercent: 12,
         ease: "none",
@@ -56,7 +56,7 @@ export default function Hero() {
         },
       });
 
-      // Inertial mouse parallax — three depth tiers, opposite the cursor.
+      // Inertial mouse parallax - three depth tiers, opposite the cursor.
       // Skipped entirely on touch devices (no cursor to follow).
       if (coarse) return;
       const setImg = {
@@ -95,7 +95,7 @@ export default function Hero() {
       ref={sectionRef}
       className="relative h-[100svh] w-full overflow-hidden bg-fjord-ink"
     >
-      {/* Background image — statically over-scaled so parallax never reveals an edge */}
+      {/* Background image - statically over-scaled so parallax never reveals an edge */}
       <div ref={imageRef} className="absolute inset-0 scale-110 will-change-transform motion-reduce:scale-100">
         <Image
           src="/hero/misty-mountains.jpg"
@@ -108,7 +108,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-fjord-ink/40 via-fjord-ink/10 to-fjord-ink/85" />
       </div>
 
-      {/* Fluid-smoke atmosphere — between image and content. Only mounted on
+      {/* Fluid-smoke atmosphere - between image and content. Only mounted on
           fine-pointer devices; on touch the still image + gradient carries it. */}
       <div ref={fluidRef} className="absolute inset-0 will-change-transform">
         {coarsePointer === false ? <HeroFluid /> : null}
@@ -126,15 +126,15 @@ export default function Hero() {
             Seema Jain
           </h1>
           <p className="mt-lg max-w-xl text-body-lg text-fjord-text/80">
-            Senior Product Designer — turning complex enterprise data into
+            Senior Product Designer - turning complex enterprise data into
             clarity.
           </p>
           <p className="mt-sm max-w-xl text-body-md text-fjord-mute">
-            Based in Salzburg, Austria — open to relocate · EU Blue Card visa
+            Based in Salzburg, Austria - open to relocate · EU Blue Card visa
             holder.
           </p>
 
-          {/* CTA row — light-on-dark twins of the Closing pills */}
+          {/* CTA row - light-on-dark twins of the Closing pills */}
           <div className="mt-xl flex flex-wrap items-center gap-md">
             <a
               href="mailto:seemasam2113@gmail.com"
@@ -158,16 +158,16 @@ export default function Hero() {
             <span className="eyebrow">Scroll to explore</span>
             <span className="h-px w-16 bg-fjord-mute/50" />
           </div>
-          {/* Credit line — centered under the scroll indicator on small screens */}
+          {/* Credit line - centered under the scroll indicator on small screens */}
           <p className="eyebrow mt-sm text-center text-mute sm:hidden">
-            V1.0 — Vibe-coded with Claude
+            V1.0 - Vibe-coded with Claude
           </p>
         </div>
 
-        {/* Credit line — bottom-right, sharing the scroll indicator's baseline
+        {/* Credit line - bottom-right, sharing the scroll indicator's baseline
             (offsets mirror the container's px-lg / py-2xl padding tokens) */}
         <p className="eyebrow absolute bottom-2xl right-lg hidden text-mute sm:block">
-          V1.0 — Vibe-coded with Claude
+          V1.0 - Vibe-coded with Claude
         </p>
       </div>
     </section>

@@ -6,7 +6,7 @@ import ProjectStage from "./ProjectStage";
 import CaseStudyOverlay from "./CaseStudyOverlay";
 
 /**
- * Scene 2 — light Vercel-minimal projects gallery.
+ * Scene 2 - light Vercel-minimal projects gallery.
  * Uniform 16/10 mat frames (one per project) + a sticky "where am I"
  * counter, plus the URL-addressable full-screen case-study overlay.
  */
@@ -76,7 +76,7 @@ export default function ProjectsSection() {
         ))}
       </div>
 
-      {/* Sticky "where am I" counter — bottom-left, only within Work */}
+      {/* Sticky "where am I" counter - bottom-left, only within Work */}
       <div
         aria-hidden
         className={`pointer-events-none fixed bottom-lg left-lg z-30 font-mono text-mono-eyebrow text-mute transition-opacity duration-500 max-md:hidden ${

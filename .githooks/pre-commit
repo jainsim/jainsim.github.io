@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Repo pre-commit hook. Enable once with:
+#   git config core.hooksPath .githooks
+exec "$(git rev-parse --show-toplevel)/scripts/check-em-dash.sh" --staged

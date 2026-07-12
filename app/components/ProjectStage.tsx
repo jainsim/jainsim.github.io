@@ -16,7 +16,7 @@ type Props = {
  * One project in the sticky overlap-stack. Each card is pinned near the top
  * (position: sticky); as you scroll, the next card rises up and covers the
  * previous one while the pinned card zooms out and fades back (GSAP-scrubbed
- * — single scroll system). Every screenshot sits on the same fixed 16/10
+ * - single scroll system). Every screenshot sits on the same fixed 16/10
  * tinted mat (object-contain, never cropped).
  */
 export default function ProjectStage({
@@ -34,10 +34,10 @@ export default function ProjectStage({
       ).matches;
 
       // Fuel-style zoom-out: covered cards keep receding as every later
-      // card arrives — deeper cards end smaller, so strips read as depth.
+      // card arrives - deeper cards end smaller, so strips read as depth.
       const nextCard = cardRef.current?.nextElementSibling;
       if (!prefersReduced && nextCard?.classList.contains("stack-card")) {
-        // querySelectorAll, not a selector string — gsap.context(scope) would
+        // querySelectorAll, not a selector string - gsap.context(scope) would
         // scope ".stack-card" to this card's subtree and match nothing.
         const cards = Array.from(
           document.querySelectorAll<HTMLElement>(".stack-card")
@@ -91,7 +91,7 @@ export default function ProjectStage({
       style={{ "--i": order } as React.CSSProperties}
       className="stack-card group mt-2xl flex flex-col overflow-hidden rounded-lg border border-hairline bg-canvas px-lg pb-md pt-lg shadow-[0_1px_1px_rgba(0,0,0,0.04)]"
     >
-      {/* Tinted mat — click opens the case study */}
+      {/* Tinted mat - click opens the case study */}
       <div className="flex flex-1 items-center justify-center">
         <button
           type="button"
@@ -113,7 +113,7 @@ export default function ProjectStage({
         </button>
       </div>
 
-      {/* Caption row — index / title·discipline / year */}
+      {/* Caption row - index / title·discipline / year */}
       <div className="mt-md flex w-full items-baseline justify-between pt-sm">
         <span className="font-mono text-mono-eyebrow text-mute">
           {project.index}

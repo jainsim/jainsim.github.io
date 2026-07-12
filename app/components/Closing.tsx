@@ -1,7 +1,7 @@
 import AboutReveal from "./AboutReveal";
 
 /**
- * About band → Contact/CTA band → footer. Static server component —
+ * About band → Contact/CTA band → footer. Static server component -
  * quiet, ink-on-white, generous vertical rhythm per the Geist system.
  */
 export default function Closing() {
@@ -20,7 +20,7 @@ export default function Closing() {
         {/* Origin story + facts */}
         <div className="border-t border-hairline">
           <div className="mx-auto grid max-w-container gap-3xl px-lg py-4xl md:grid-cols-2 md:gap-2xl">
-            {/* Left — origin story */}
+            {/* Left - origin story */}
             <div>
               <p className="eyebrow text-mute">Before UX</p>
               <p className="mt-lg max-w-lg text-body-lg text-body">
@@ -30,12 +30,12 @@ export default function Closing() {
                 they touch something, and think at a system level.
               </p>
               <p className="mt-md max-w-lg text-body-lg text-body">
-                The instincts carried over — the same empathy, faster feedback
+                The instincts carried over, the same empathy, faster feedback
                 loops, and products that reach millions.
               </p>
             </div>
 
-            {/* Right — facts */}
+            {/* Right - facts */}
             <div>
               <p className="eyebrow text-mute">At a glance</p>
               <dl className="mt-lg divide-y divide-hairline border-b border-hairline">
@@ -97,7 +97,7 @@ export default function Closing() {
             Seema Jain
           </span>
           <span className="font-mono text-mono-eyebrow text-mute">
-            © 2026 — Salzburg, AT
+            © 2026 - Salzburg, AT
           </span>
         </div>
       </footer>
