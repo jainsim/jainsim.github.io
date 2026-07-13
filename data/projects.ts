@@ -58,7 +58,7 @@ export const projects: Project[] = [
     year: "2025",
     accent: "#F06800",
     accentText: "#D65A00",
-    hero: { src: "/projects/installer-hero.png", width: 2117, height: 4328 },
+    hero: { src: "/projects/installer-hero.png", width: 4234, height: 8655 },
     overlayHero: { src: "/projects/installer/hero-3-screens.png", width: 7009, height: 4152 },
     images: ["/projects/installer/hero-3-screens.png"],
     subtitle:
@@ -243,7 +243,7 @@ export const projects: Project[] = [
     year: "2025",
     accent: "#0E7C86",
     accentText: "#0E7C86",
-    hero: { src: "/projects/activation-hero.png", width: 5701, height: 3323 },
+    hero: { src: "/projects/activation-hero.png", width: 11402, height: 6646 },
     images: ["/projects/activation.png"],
     subtitle:
       "Replacing an expert-only, support-dependent activation with a self-serve workflow any admin can run - designed embedded with engineering through build and design QA.",
@@ -432,7 +432,7 @@ export const projects: Project[] = [
     year: "2023–2024",
     accent: "#0066FF",
     accentText: "#0066FF",
-    hero: { src: "/projects/designgrid-hero.png", width: 5765, height: 3340 },
+    hero: { src: "/projects/designgrid-hero.png", width: 11529, height: 6680 },
     overlayHero: { src: "/projects/designgrid/hero.png", width: 6960, height: 3914 },
     images: ["/projects/designgrid.png"],
     subtitle:
@@ -590,7 +590,7 @@ export const projects: Project[] = [
     inProgress: true,
     accent: "#00970F",
     accentText: "#00970F",
-    hero: { src: "/projects/cocreate-hero.png", width: 2117, height: 4452 },
+    hero: { src: "/projects/cocreate-hero.png", width: 4234, height: 8903 },
     images: ["/projects/cocreate.png"],
     subtitle:
       "Seamless collaboration between artisans, merchandisers, and designers - empowering 30,000+ women artisans to showcase their work and earn income.",

@@ -22,9 +22,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # Project site lives at /<repo>. Change this if you add a custom domain
-      # (a custom domain serves from the root, so set it to an empty string).
-      NEXT_PUBLIC_BASE_PATH: /Misty-mountains
+      # User Pages repo (jainsim/jainsim.github.io) serves from the root.
+      # Project site lives at / (custom domain). Set basePath to empty.
+      NEXT_PUBLIC_BASE_PATH: ""
     steps:
       - name: Checkout
         uses: actions/checkout@v4
