@@ -143,9 +143,9 @@ export default function Hero() {
               Get in touch
             </a>
             <a
-              href="https://drive.google.com/file/d/1E-4IRFXxPkJ6GRpmqj5wGp1_sO7ZdMW4/view?usp=sharing"
+              href="/seema-jain-resume.pdf"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener"
               className="rounded-pill border border-white/25 px-lg py-sm text-body-lg font-medium text-fjord-text transition-colors hover:border-fjord-text hover:bg-white/10"
             >
               Resume
