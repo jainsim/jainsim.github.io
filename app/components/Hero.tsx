@@ -126,11 +126,11 @@ export default function Hero() {
             Seema Jain
           </h1>
           <p className="mt-lg max-w-xl text-body-lg text-fjord-text/80">
-            Senior Product Designer - turning complex enterprise data into
+            Senior Product Designer, turning complex enterprise data into
             clarity.
           </p>
           <p className="mt-sm max-w-xl text-body-md text-fjord-mute">
-            Based in Salzburg, Austria - open to relocate · EU Blue Card visa
+            Based in Salzburg, Austria · open to relocate · EU Blue Card visa
             holder.
           </p>
 
@@ -160,14 +160,14 @@ export default function Hero() {
           </div>
           {/* Credit line - centered under the scroll indicator on small screens */}
           <p className="eyebrow mt-sm text-center text-mute sm:hidden">
-            V1.0 - Vibe-coded with Claude
+            V1.0 · Vibe-coded with Claude
           </p>
         </div>
 
         {/* Credit line - bottom-right, sharing the scroll indicator's baseline
             (offsets mirror the container's px-lg / py-2xl padding tokens) */}
         <p className="eyebrow absolute bottom-2xl right-lg hidden text-mute sm:block">
-          V1.0 - Vibe-coded with Claude
+          V1.0 · Vibe-coded with Claude
         </p>
       </div>
     </section>

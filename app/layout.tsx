@@ -5,7 +5,7 @@ import SmoothScroll from "./components/SmoothScroll";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "Seema Jain - Senior Product Designer",
+  title: "Seema Jain, Senior Product Designer",
   description:
     "Senior Product Designer turning complex enterprise data into clarity. B2B SaaS, native mobile, and design systems.",
 };
