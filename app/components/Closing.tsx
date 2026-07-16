@@ -93,12 +93,22 @@ export default function Closing() {
       {/* Footer */}
       <footer className="border-t border-hairline bg-canvas">
         <div className="mx-auto flex max-w-container flex-col items-start justify-between gap-md px-lg py-3xl md:flex-row md:items-center">
-          <span className="text-label-sm font-semibold text-ink">
-            Seema Jain
-          </span>
-          <span className="font-mono text-mono-eyebrow text-mute">
-            © 2026 - Salzburg, AT
-          </span>
+          <div className="flex flex-col items-start gap-xs sm:flex-row sm:items-center sm:gap-md">
+            <span className="text-label-sm font-semibold text-ink">
+              Seema Jain
+            </span>
+            <span className="font-mono text-mono-eyebrow text-mute">
+              © 2026 - Salzburg, AT
+            </span>
+          </div>
+          <a
+            href="https://www.linkedin.com/in/seema-sampathraj/"
+            target="_blank"
+            rel="noopener"
+            className="font-mono text-mono-eyebrow text-mute transition-colors hover:text-ink"
+          >
+            LinkedIn ↗
+          </a>
         </div>
       </footer>
     </>
