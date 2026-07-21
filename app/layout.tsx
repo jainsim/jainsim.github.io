@@ -5,9 +5,9 @@ import SmoothScroll from "./components/SmoothScroll";
 import "../styles/globals.css";
 
 // Absolute-URL base for OG/Twitter tags. Domain-agnostic: set
-// NEXT_PUBLIC_SITE_URL when moving to a custom domain; defaults to the
-// current Pages origin. All internal links stay root-relative.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://jainsim.github.io";
+// NEXT_PUBLIC_SITE_URL to override; defaults to the custom domain.
+// All internal links stay root-relative.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://seema-jain.com";
 
 const description =
   "Senior Product Designer turning complex enterprise data into clarity. B2B SaaS, native mobile, and design systems.";

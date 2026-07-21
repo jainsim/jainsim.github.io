@@ -98,9 +98,9 @@ export default function Closing() {
               Seema Jain
             </span>
             <span className="font-mono text-mono-eyebrow text-mute">
-              © 2026 · Salzburg, AT
+              · © 2026 · Salzburg, AT
             </span>
-            <span className="font-mono text-mono-eyebrow text-mute">
+            <span className="font-mono text-mono-eyebrow text-mute/70">
               V1.0
             </span>
           </div>
