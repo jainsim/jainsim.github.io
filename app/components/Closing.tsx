@@ -43,7 +43,7 @@ export default function Closing() {
                   ["Location", "Salzburg, Austria"],
                   ["Relocation", "Open, across Europe"],
                   ["Visa", "EU Blue Card holder"],
-                  ["Looking for", "Senior IC · B2B SaaS"],
+                  ["Looking for", "Senior IC · Product Design"],
                 ].map(([label, value]) => (
                   <div
                     key={label}
