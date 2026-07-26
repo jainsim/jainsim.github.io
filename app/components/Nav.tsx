@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
  * Thin top nav. Transparent over the dark hero, hairline light bar once
  * scrolled into the white body. Links stay inline at every breakpoint.
  */
+// Root-relative base path; empty at the site root, keeping the link domain-agnostic.
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
 
@@ -25,7 +28,20 @@ export default function Nav() {
       }`}
     >
       <nav className="mx-auto flex max-w-container items-center justify-between px-lg py-sm">
-        <a href="#top" className="text-label-sm font-semibold">
+        <a
+          href={`${BASE_PATH}/`}
+          onClick={(e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0)
+              return;
+            e.preventDefault();
+            // Clean root URL (no #top), close any open case study, scroll up.
+            window.history.pushState({}, "", `${BASE_PATH}/`);
+            window.dispatchEvent(new PopStateEvent("popstate"));
+            if (window.lenis?.scrollTo) window.lenis.scrollTo(0);
+            else window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          className="text-label-sm font-semibold"
+        >
           Seema Jain
         </a>
         <div className="flex items-center gap-xs text-body-md">
