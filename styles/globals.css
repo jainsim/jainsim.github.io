@@ -118,5 +118,59 @@ html.lenis-stopped body {
   }
 }
 
+/* Testimonials - horizontal marquee, one full-bleed row. The card set is
+   duplicated and the track translates by exactly one set (-50%) on a slow linear
+   loop, so the seam is invisible. Only transform is animated
+   (will-change: transform); the gap between cards is a static margin, never
+   animated. The viewport masks its left/right edges so cards fade into the page
+   surface instead of hard-cutting at the viewport edge.
+
+   Motion is opt-in: the React component only mounts this markup when motion is
+   allowed, so the reduced-motion path renders a plain static grid in normal
+   flow. The media query below is a belt-and-suspenders stop. */
+.marquee-viewport {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-left var(--marquee-duration, 120s) linear infinite;
+}
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+/* Pause on hover and on keyboard focus within the section. */
+.marquee-scope:hover .marquee-track,
+.marquee-scope:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+    transform: none;
+  }
+}
+
 /* Hero atmosphere is a WebGL canvas (HeroFluid); it self-disables under
    prefers-reduced-motion, leaving a clean still hero. */

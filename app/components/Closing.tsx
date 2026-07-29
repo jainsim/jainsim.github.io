@@ -1,4 +1,5 @@
 import AboutReveal from "./AboutReveal";
+import Testimonials from "./Testimonials";
 
 /**
  * About band → Contact/CTA band → footer. Static server component -
@@ -64,6 +65,9 @@ export default function Closing() {
           </div>
         </div>
       </section>
+
+      {/* What it's like to work with me */}
+      <Testimonials />
 
       {/* CTA / Contact */}
       <section id="contact" className="border-t border-hairline bg-canvas">
