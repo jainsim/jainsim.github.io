@@ -118,6 +118,48 @@ html.lenis-stopped body {
   }
 }
 
+/* About band - pre-treated file (slight desaturation baked in to match the
+   hero's cool range). Full content-width, spanning below both columns, above
+   the section's closing rule. One 2:1 master shown as a 2:1 band on narrow
+   screens and a wider 3:1 band on desktop (object-fit: cover). Fades in with a
+   12px upward translate on scroll. */
+.about-band {
+  margin: 0;
+  margin-top: 64px; /* separate from the columns above */
+  width: 100%;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.about-band[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+.about-band__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1; /* narrow screens: taller band, subject stays legible */
+  object-fit: cover;
+  object-position: center bottom; /* phone sits at the bottom - keep it in frame */
+  border-radius: 2px; /* square-ish; never a circle */
+}
+
+/* Desktop: taller band so the phone at the bottom stays visible (16:9). */
+@media (min-width: 1024px) {
+  .about-band__img {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-band {
+    transition: none;
+  }
+}
+
 /* Testimonials - horizontal marquee, one full-bleed row. The card set is
    duplicated and the track translates by exactly one set (-50%) on a slow linear
    loop, so the seam is invisible. Only transform is animated

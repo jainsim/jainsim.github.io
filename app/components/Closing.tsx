@@ -1,4 +1,5 @@
 import AboutReveal from "./AboutReveal";
+import AboutBand from "./AboutBand";
 import Testimonials from "./Testimonials";
 
 /**
@@ -18,50 +19,55 @@ export default function Closing() {
           <AboutReveal />
         </div>
 
-        {/* Origin story + facts */}
+        {/* Origin story + facts, then a full-width photo band */}
         <div className="border-t border-hairline">
-          <div className="mx-auto grid max-w-container gap-3xl px-lg py-4xl md:grid-cols-2 md:gap-2xl">
-            {/* Left - origin story */}
-            <div>
-              <p className="eyebrow text-mute">Before UX</p>
-              <p className="mt-lg max-w-lg text-body-lg text-body">
-                Before UX, I worked as a fashion consultant for Tommy
-                Hilfiger, Kenneth Cole, and Emporio Armani. Fashion taught me
-                to design under pressure, read what people feel the moment
-                they touch something, and think at a system level.
-              </p>
-              <p className="mt-md max-w-lg text-body-lg text-body">
-                The instincts carried over, the same empathy, faster feedback
-                loops, and products that reach millions.
-              </p>
+          <div className="mx-auto max-w-container px-lg py-4xl">
+            <div className="grid gap-3xl md:grid-cols-2 md:gap-2xl">
+              {/* Left - origin story */}
+              <div>
+                <p className="eyebrow text-mute">Before UX</p>
+                <p className="mt-lg max-w-lg text-body-lg text-body">
+                  Before UX, I worked as a fashion consultant for Tommy
+                  Hilfiger, Kenneth Cole, and Emporio Armani. Fashion taught me
+                  to design under pressure, read what people feel the moment
+                  they touch something, and think at a system level.
+                </p>
+                <p className="mt-md max-w-lg text-body-lg text-body">
+                  The instincts carried over, the same empathy, faster feedback
+                  loops, and products that reach millions.
+                </p>
+              </div>
+
+              {/* Right - facts */}
+              <div>
+                <p className="eyebrow text-mute">At a glance</p>
+                <dl className="mt-lg divide-y divide-hairline border-b border-hairline">
+                  {[
+                    ["Location", "Salzburg, Austria"],
+                    ["Relocation", "Open, across Europe"],
+                    ["Visa", "EU Blue Card holder"],
+                    ["Looking for", "Senior IC · Product Design"],
+                  ].map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="flex items-baseline justify-between gap-md py-sm"
+                    >
+                      <dt className="font-mono text-mono-eyebrow uppercase text-mute">
+                        {label}
+                      </dt>
+                      <dd className="text-body-md text-ink">{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <p className="mt-lg text-body-lg text-mute">
+                  I do my best work where asking hard questions is expected, and
+                  design has a real seat at the table.
+                </p>
+              </div>
             </div>
 
-            {/* Right - facts */}
-            <div>
-              <p className="eyebrow text-mute">At a glance</p>
-              <dl className="mt-lg divide-y divide-hairline border-b border-hairline">
-                {[
-                  ["Location", "Salzburg, Austria"],
-                  ["Relocation", "Open, across Europe"],
-                  ["Visa", "EU Blue Card holder"],
-                  ["Looking for", "Senior IC · Product Design"],
-                ].map(([label, value]) => (
-                  <div
-                    key={label}
-                    className="flex items-baseline justify-between gap-md py-sm"
-                  >
-                    <dt className="font-mono text-mono-eyebrow uppercase text-mute">
-                      {label}
-                    </dt>
-                    <dd className="text-body-md text-ink">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-              <p className="mt-lg text-body-lg text-mute">
-                I do my best work where asking hard questions is expected, and
-                design has a real seat at the table.
-              </p>
-            </div>
+            {/* Full-width band across both columns, above the closing rule */}
+            <AboutBand />
           </div>
         </div>
       </section>
