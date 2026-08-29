@@ -125,13 +125,12 @@ export default function Hero() {
           <h1 className="text-fjord-text text-[length:clamp(3rem,11vw,6rem)] font-semibold leading-[0.95] tracking-[-0.03em]">
             Seema Jain
           </h1>
-          <p className="mt-lg max-w-xl text-body-lg text-fjord-text/80">
-            Senior Product Designer, turning complex enterprise data into
-            clarity.
+          <p className="mt-lg max-w-xl text-heading-md text-fjord-text">
+            I design the software layer around physical infrastructure.
           </p>
-          <p className="mt-sm max-w-xl text-body-md text-fjord-mute">
-            Based in Salzburg, Austria · open to relocate · EU Blue Card visa
-            holder.
+          <p className="mt-sm max-w-xl text-body-lg text-fjord-text/80">
+            Field apps, operator consoles, and the systems between them. Five
+            years in enterprise B2B SaaS and native mobile.
           </p>
 
           {/* CTA row - light-on-dark twins of the Closing pills */}
