@@ -10,12 +10,8 @@ import { gsap } from "@/lib/gsap";
  * slide up in a fast stagger. Honors prefers-reduced-motion.
  */
 
-// The merged About statement - one paragraph, wraps responsively.
-const STATEMENT =
-  "7+ years turning dense enterprise systems into products people can " +
-  "actually use. B2B SaaS platforms, native mobile apps, and design systems, " +
-  "most recently across EV infrastructure at ChargePoint and The Mobility " +
-  "House.";
+// The lead About statement - one line, wraps responsively.
+const STATEMENT = "I design the software layer around physical infrastructure.";
 
 const WORDS = STATEMENT.split(" ");
 

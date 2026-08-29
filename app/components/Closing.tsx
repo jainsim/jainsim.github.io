@@ -17,6 +17,22 @@ export default function Closing() {
         <div className="mx-auto max-w-container px-lg py-section">
           <p className="eyebrow text-mute">About</p>
           <AboutReveal />
+          <div className="mt-2xl max-w-2xl">
+            <p className="text-body-lg text-body">
+              On one side, apps used by electricians and technicians standing in
+              front of a machine with bad signal and no patience. On the other,
+              the operator console where someone in an office has to trust what
+              the field just did.
+            </p>
+            <p className="mt-lg text-body-lg text-body">
+              For five years that was EV charging: a native installer app, a
+              station activation workflow inside a legacy enterprise platform,
+              and the design system that had to hold both together. Most of it
+              was modernisation rather than greenfield. Existing workflows, real
+              users, real consequences, rebuilt without breaking for the people
+              who depend on them.
+            </p>
+          </div>
         </div>
 
         {/* Origin story + facts, then a full-width photo band */}
@@ -27,42 +43,54 @@ export default function Closing() {
               <div>
                 <p className="eyebrow text-mute">Before UX</p>
                 <p className="mt-lg max-w-lg text-body-lg text-body">
-                  Before UX, I worked as a fashion consultant for Tommy
-                  Hilfiger, Kenneth Cole, and Emporio Armani. Fashion taught me
-                  to design under pressure, read what people feel the moment
-                  they touch something, and think at a system level.
+                  Before UX, I was at Tommy Hilfiger, Kenneth Cole, Emporio
+                  Armani, years on the floor as a fashion consultant, reading
+                  what someone felt about a garment in the two seconds before
+                  they said anything.
                 </p>
                 <p className="mt-md max-w-lg text-body-lg text-body">
-                  The instincts carried over, the same empathy, faster feedback
-                  loops, and products that reach millions.
+                  Nobody on a shop floor tells you what&apos;s wrong. You watch
+                  what they pick up and what they put back. That&apos;s still how
+                  I work: I trust what I watch people do over what they say they
+                  want.
                 </p>
               </div>
 
               {/* Right - facts */}
               <div>
                 <p className="eyebrow text-mute">At a glance</p>
-                <dl className="mt-lg divide-y divide-hairline border-b border-hairline">
+                <dl className="mt-lg divide-y divide-hairline border-y border-hairline">
                   {[
-                    ["Location", "Salzburg, Austria"],
-                    ["Relocation", "Open, across Europe"],
-                    ["Visa", "EU Blue Card holder"],
-                    ["Looking for", "Senior IC · Product Design"],
+                    ["Role", "Senior Product Designer, IC"],
+                    ["Experience", "7+ years design, 5 in enterprise B2B SaaS"],
+                    [
+                      "Domains",
+                      "EV charging and energy infrastructure, field service, regulated and safety-critical",
+                    ],
+                    [
+                      "Products",
+                      "Native iOS and Android, enterprise admin and back-office platforms, design systems",
+                    ],
+                    [
+                      "Strengths",
+                      "Legacy system modernisation, complex workflow design, two-sided systems, design tokens and component libraries",
+                    ],
+                    ["Builds", "Prototypes in code"],
+                    ["Based", "Salzburg, Austria"],
+                    ["Authorisation", "EU Blue Card, open to relocation"],
+                    ["Looking for", "Senior IC role in complex enterprise software"],
                   ].map(([label, value]) => (
                     <div
                       key={label}
-                      className="flex items-baseline justify-between gap-md py-sm"
+                      className="flex flex-col gap-xxs py-sm sm:flex-row sm:gap-lg"
                     >
-                      <dt className="font-mono text-mono-eyebrow uppercase text-mute">
+                      <dt className="font-mono text-mono-eyebrow uppercase text-mute sm:w-32 sm:shrink-0 sm:pt-[3px]">
                         {label}
                       </dt>
-                      <dd className="text-body-md text-ink">{value}</dd>
+                      <dd className="text-body-md text-ink sm:flex-1">{value}</dd>
                     </div>
                   ))}
                 </dl>
-                <p className="mt-lg text-body-lg text-mute">
-                  I do my best work where asking hard questions is expected, and
-                  design has a real seat at the table.
-                </p>
               </div>
             </div>
 

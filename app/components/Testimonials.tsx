@@ -52,13 +52,6 @@ const QUOTES: Quote[] = [
   },
   {
     quote:
-      "Her positive energy, structured approach, and openness to feedback made collaboration seamless. She effectively bridged UI/UX and customer support, contributing greatly to our product.",
-    name: "Lisa Scheubeck",
-    title: "Teamlead, Smart Charging Support",
-    company: "The Mobility House",
-  },
-  {
-    quote:
       "Seema excels at crafting intuitive designs and collaborating with developers and PMs to deliver high-quality results on time. She contributed actionable insights and embraced feedback with professionalism.",
     name: "Sushma Subramanyam",
     title: "Product Designer",
@@ -66,30 +59,9 @@ const QUOTES: Quote[] = [
   },
   {
     quote:
-      "Her creativity helped us tremendously in increasing user happiness for our ChargePilot platform, and her reliability was always highly appreciated amongst colleagues.",
-    name: "Heiko Bayer",
-    title: "Chief Operating Officer",
-    company: "The Mobility House",
-  },
-  {
-    quote:
       "Seema's work on the Installer App has been exceptional. Her flexibility, attention to detail, and ability to integrate feedback effectively contributed significantly to the project's success.",
     name: "Lukas Pinieck",
     title: "Teamlead, Commissioning & Rollout",
-    company: "The Mobility House",
-  },
-  {
-    quote:
-      "Seema consistently brought fresh, user-centered solutions to our projects, always keeping both user needs and business goals in mind. Any team would be lucky to have her.",
-    name: "Filipe Monteiro",
-    title: "Product Designer",
-    company: "The Mobility House",
-  },
-  {
-    quote:
-      "Keen attention to detail and a strong customer focus that consistently enhanced our customer experience. Her dedication and positivity made collaboration both productive and enjoyable.",
-    name: "Laura June Grewe",
-    title: "Product Marketer",
     company: "The Mobility House",
   },
 ];
@@ -113,7 +85,7 @@ function Card({
     <blockquote
       aria-hidden={duplicate || undefined}
       className={
-        "flex flex-col rounded-[2px] border border-hairline bg-elevated p-lg shadow-[0_1px_1px_rgba(0,0,0,0.04)] " +
+        "flex flex-col rounded-lg border border-hairline bg-elevated p-lg shadow-[0_1px_1px_rgba(0,0,0,0.04)] " +
         className
       }
     >
