@@ -8,6 +8,7 @@ import type { Project } from "@/data/projects";
 type Props = {
   project: Project;
   onOpen: (slug: string) => void;
+  onOpenPrototype: () => void;
   onActive: (index: number) => void;
   order: number;
 };
@@ -25,9 +26,11 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 export default function ProjectStage({
   project,
   onOpen,
+  onOpenPrototype,
   onActive,
   order,
 }: Props) {
+  const isPrototype = project.kind === "prototype";
   const cardRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -100,21 +103,28 @@ export default function ProjectStage({
       }
       className="stack-card group mt-2xl flex flex-col overflow-hidden rounded-lg border border-hairline bg-canvas px-lg pb-md pt-lg shadow-[0_1px_1px_rgba(0,0,0,0.04)]"
     >
-      {/* Tinted mat - a real /work/<slug> link (crawlable, open-in-new-tab
-          friendly); a plain click is intercepted to open the overlay smoothly
-          without a full navigation. */}
+      {/* Tinted mat. Case studies show a screenshot and open the overlay; the
+          prototype block shows a live, non-interactive embed and opens the
+          full-screen prototype. Both are real links (crawlable / new-tab
+          friendly) whose plain click is intercepted. */}
       <div className="flex flex-1 items-center justify-center">
         <a
-          href={`${BASE_PATH}/work/${project.slug}/`}
+          href={isPrototype ? project.href : `${BASE_PATH}/work/${project.slug}/`}
+          {...(isPrototype ? { target: "_blank", rel: "noopener" } : {})}
           onClick={(e) => {
             // Let modified clicks / new-tab behave natively.
             if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0)
               return;
             e.preventDefault();
-            onOpen(project.slug);
+            if (isPrototype) onOpenPrototype();
+            else onOpen(project.slug);
           }}
-          aria-label={`Open ${project.title} case study`}
-          className="project-stage relative flex items-center justify-center overflow-hidden rounded-md border border-hairline outline-none transition-transform duration-200 focus-visible:ring-2 focus-visible:ring-link focus-visible:ring-offset-2 focus-visible:ring-offset-elevated active:scale-[0.99]"
+          aria-label={
+            isPrototype
+              ? `Launch ${project.title} live prototype`
+              : `Open ${project.title} case study`
+          }
+          className="project-stage group/mat relative flex items-center justify-center overflow-hidden rounded-md border border-hairline outline-none transition-transform duration-200 focus-visible:ring-2 focus-visible:ring-link focus-visible:ring-offset-2 focus-visible:ring-offset-elevated active:scale-[0.99]"
         >
           <span className="project-shot absolute flex items-center justify-center">
             <Image
@@ -127,24 +137,53 @@ export default function ProjectStage({
               className="h-auto max-h-full w-auto max-w-full rounded-sm object-contain"
             />
           </span>
+          {isPrototype ? (
+            <>
+              <span
+                className="absolute left-md top-md inline-flex items-center gap-xs rounded-full border border-hairline bg-canvas/90 px-sm py-xxs font-mono text-mono-eyebrow uppercase backdrop-blur"
+                style={{ color: "var(--accent-text)" }}
+              >
+                <span
+                  aria-hidden
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{ backgroundColor: "var(--accent)" }}
+                />
+                {project.label}
+              </span>
+              <span className="absolute bottom-md right-md rounded-full border border-hairline bg-canvas/90 px-sm py-xxs font-mono text-mono-eyebrow uppercase text-mute backdrop-blur transition-colors group-hover/mat:text-ink">
+                Launch ↗
+              </span>
+            </>
+          ) : null}
         </a>
       </div>
 
-      {/* Caption row - index / title·discipline / year */}
-      <div className="mt-md flex w-full items-baseline justify-between pt-sm">
+      {/* Caption row - index / title·(discipline|blurb) / year|Live */}
+      <div className="mt-md flex w-full items-baseline justify-between gap-md pt-sm">
         <span
-          className="font-mono text-mono-eyebrow"
+          className="shrink-0 font-mono text-mono-eyebrow"
           style={{ color: "var(--accent-text)" }}
         >
           {project.index}
         </span>
         <div className="text-center">
           <p className="text-label-sm text-ink">{project.title}</p>
-          <p className="text-body-sm text-faint">{project.discipline}</p>
+          <p className="text-body-sm text-faint">
+            {isPrototype ? project.blurb : project.discipline}
+          </p>
         </div>
-        <span className="font-mono text-mono-eyebrow text-mute">
-          {project.inProgress ? "In Progress" : `© ${project.year}`}
-        </span>
+        {isPrototype ? (
+          <span
+            className="shrink-0 font-mono text-mono-eyebrow"
+            style={{ color: "var(--accent-text)" }}
+          >
+            Live ↗
+          </span>
+        ) : (
+          <span className="shrink-0 font-mono text-mono-eyebrow text-mute">
+            {project.inProgress ? "In Progress" : `© ${project.year}`}
+          </span>
+        )}
       </div>
     </section>
   );

@@ -37,6 +37,10 @@ export type Project = {
   org: string;
   year: string;
   inProgress?: boolean;
+  kind?: "prototype"; // gallery item that opens a live embed, not a case study
+  href?: string; // live prototype URL (when kind === "prototype")
+  label?: string; // small mono eyebrow on the card (e.g. "Live prototype")
+  blurb?: string; // one-line description shown on the prototype card
   accent: string; // brand hex - 8% tint on the mat
   accentText: string; // brand hex tuned for legible index text (deeper where needed)
   hero: HeroImage; // the home-page stage screenshot (device mockup, native ratio)
@@ -50,7 +54,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "installer",
-    index: "(01)",
+    index: "(02)",
     title: "Installer App",
     role: "Lead UX/UI Designer",
     discipline: "Native Mobile App",
@@ -235,7 +239,7 @@ export const projects: Project[] = [
   },
   {
     slug: "activation",
-    index: "(02)",
+    index: "(03)",
     title: "Station Activation Flow",
     role: "Lead UX/UI Designer",
     discipline: "Enterprise Workflow",
@@ -424,7 +428,7 @@ export const projects: Project[] = [
   },
   {
     slug: "designgrid",
-    index: "(03)",
+    index: "(04)",
     title: "DesignGrid",
     role: "UX/UI Designer",
     discipline: "Design Systems",
@@ -579,36 +583,35 @@ export const projects: Project[] = [
       },
     ],
   },
-  {
-    slug: "cocreate",
-    index: "(04)",
-    title: "CoCreate",
-    role: "Product Designer",
-    discipline: "Product Design",
-    org: "Independent project",
-    year: "2026",
-    inProgress: true,
-    accent: "#00970F",
-    accentText: "#00970F",
-    hero: { src: "/projects/cocreate-hero.png", width: 4234, height: 8903 },
-    images: ["/projects/cocreate.png"],
-    subtitle:
-      "Seamless collaboration between artisans, merchandisers, and designers, empowering 30,000+ women artisans to showcase their work and earn income.",
-    meta: [
-      { label: "Role", value: "Product Designer" },
-      { label: "Status", value: "In Progress" },
-      { label: "Domain", value: "Product Design · Social Impact" },
-      { label: "Partner", value: "Industree Foundation" },
-    ],
-    sections: [
-      {
-        heading: "In Progress",
-        body:
-          "CoCreate connects artisans, merchandisers, and designers in shared collab rooms with transparent costing sheets, built on research that found 80% of profits never reached the artisans.\n\nThe full case study is being written. Reach out and I’ll walk you through it.",
-      },
-    ],
-  },
 ];
+
+/**
+ * Live coded prototype shown as the lead gallery block. Not a case study: it
+ * opens a full-screen embed of the deployed app rather than the overlay, so it
+ * is kept out of `projects` (and therefore out of /work routing and the pager).
+ */
+export const prototypeItem: Project = {
+  slug: "field-commissioning",
+  kind: "prototype",
+  index: "(01)",
+  label: "Live prototype",
+  title: "Field job flow, offline first",
+  blurb:
+    "A working prototype. Handles a failed session, loses connection, recovers. Built in code, not Figma.",
+  href: "https://seema-jain.com/commissioning/",
+  role: "Design & build",
+  discipline: "Coded prototype",
+  org: "Independent",
+  year: "2026",
+  accent: "#2B5BFF",
+  accentText: "#1E42C4",
+  hero: { src: "/projects/field-commissioning-hero.png", width: 778, height: 1600 },
+  images: [],
+  subtitle:
+    "A working prototype. Handles a failed session, loses connection, recovers. Built in code, not Figma.",
+  meta: [],
+  sections: [],
+};
 
 export const projectBySlug = (slug: string) =>
   projects.find((p) => p.slug === slug);
