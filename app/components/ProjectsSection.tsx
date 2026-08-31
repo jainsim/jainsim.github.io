@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { projects, projectBySlug } from "@/data/projects";
+import { projects, prototypeItem, projectBySlug } from "@/data/projects";
 import ProjectStage from "./ProjectStage";
 import CaseStudyOverlay from "./CaseStudyOverlay";
+import PrototypeOverlay from "./PrototypeOverlay";
 
 /**
  * Scene 2 - light Vercel-minimal projects gallery.
@@ -13,6 +14,10 @@ import CaseStudyOverlay from "./CaseStudyOverlay";
 // Root-relative base path (empty at the site root; set only if the site is
 // ever served under a sub-path). Keeps every URL domain-agnostic.
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
+// The prototype block leads the gallery, followed by the case studies. Kept
+// separate from `projects` so /work routing and the pager stay case-study only.
+const galleryItems = [prototypeItem, ...projects];
 
 /** Extract a project slug from a `/work/<slug>` pathname, else null. */
 function slugFromPath(pathname: string): string | null {
@@ -27,6 +32,7 @@ export default function ProjectsSection({
 }) {
   const [active, setActive] = useState(0);
   const [inView, setInView] = useState(false);
+  const [protoOpen, setProtoOpen] = useState(false);
   // Seeded from the route on a /work/<slug> page so the overlay is present in
   // the static HTML (and matches on hydration).
   const [openSlug, setOpenSlug] = useState<string | null>(initialSlug);
@@ -69,6 +75,27 @@ export default function ProjectsSection({
     return () => window.removeEventListener("popstate", sync);
   }, []);
 
+  // Open the live-prototype overlay on the #prototype hash, so links anywhere
+  // on the page (e.g. the hero CTA) can open the same in-site iframe, with its
+  // "Back to portfolio" control, instead of dead-ending on the standalone app.
+  useEffect(() => {
+    const syncProto = () => setProtoOpen(window.location.hash === "#prototype");
+    syncProto();
+    window.addEventListener("hashchange", syncProto);
+    return () => window.removeEventListener("hashchange", syncProto);
+  }, []);
+
+  const closeProto = useCallback(() => {
+    setProtoOpen(false);
+    if (window.location.hash === "#prototype") {
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search
+      );
+    }
+  }, []);
+
   // Show the sticky counter only while the Work section is in view
   useEffect(() => {
     const el = sectionRef.current;
@@ -86,12 +113,13 @@ export default function ProjectsSection({
       <div className="mx-auto max-w-container px-lg pb-2xl">
         <p className="eyebrow py-2xl text-mute">Selected Work</p>
 
-        {projects.map((p, i) => (
+        {galleryItems.map((p, i) => (
           <ProjectStage
             key={p.slug}
             project={p}
             order={i}
             onOpen={open}
+            onOpenPrototype={() => setProtoOpen(true)}
             onActive={setActive}
           />
         ))}
@@ -104,13 +132,20 @@ export default function ProjectsSection({
           inView && !openSlug ? "opacity-100" : "opacity-0"
         }`}
       >
-        {projects[active].index} / (0{projects.length})
+        {galleryItems[active].index} / (0{galleryItems.length})
       </div>
 
       <CaseStudyOverlay
         project={openSlug ? projectBySlug(openSlug) ?? null : null}
         onClose={close}
         onNavigate={open}
+      />
+
+      <PrototypeOverlay
+        open={protoOpen}
+        url={prototypeItem.href ?? ""}
+        title={prototypeItem.title}
+        onClose={closeProto}
       />
     </section>
   );

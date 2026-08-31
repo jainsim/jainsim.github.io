@@ -136,18 +136,16 @@ export default function Hero() {
           {/* CTA row - light-on-dark twins of the Closing pills */}
           <div className="mt-xl flex flex-wrap items-center gap-md">
             <a
-              href="mailto:seemasam2113@gmail.com"
+              href="#prototype"
               className="rounded-pill border border-transparent bg-fjord-text px-lg py-sm text-body-lg font-medium text-fjord-ink transition-opacity hover:opacity-90"
             >
-              Get in touch
+              See a live prototype
             </a>
             <a
-              href="/seema-jain-resume.pdf"
-              target="_blank"
-              rel="noopener"
+              href="#work"
               className="rounded-pill border border-white/25 px-lg py-sm text-body-lg font-medium text-fjord-text transition-colors hover:border-fjord-text hover:bg-white/10"
             >
-              Resume
+              Read the work
             </a>
           </div>
         </div>
