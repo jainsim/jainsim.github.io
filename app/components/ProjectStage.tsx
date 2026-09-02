@@ -170,7 +170,7 @@ export default function ProjectStage({
       ref={cardRef}
       data-slug={project.slug}
       style={{ "--i": order } as CSSProperties}
-      className="stack-card card"
+      className={`stack-card card card--${face.device}`}
     >
       <div className="card__text">
         <div className="card__meta">
