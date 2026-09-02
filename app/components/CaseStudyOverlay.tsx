@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, type CSSProperties } from "react";
 import { adjacentProjects } from "@/data/projects";
 import type { CaseImage, CaseSection, Project } from "@/data/projects";
 
@@ -68,7 +68,7 @@ function Figure({ image }: { image: CaseImage }) {
   return (
     <figure className={`m-0 ${isFull ? "" : "flex flex-col items-center"}`}>
       <span
-        className={`overflow-hidden rounded-lg border border-hairline bg-hairline-soft p-md sm:p-lg ${
+        className={`overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg ${
           isFull ? "block" : "inline-block"
         }`}
       >
@@ -78,7 +78,7 @@ function Figure({ image }: { image: CaseImage }) {
           width={image.width}
           height={image.height}
           sizes="(max-width: 768px) 100vw, 900px"
-          className={`block rounded-md ${
+          className={`block ${
             isFull ? "h-auto w-full" : "h-auto w-auto max-h-[70vh] max-w-full"
           }`}
         />
@@ -138,16 +138,31 @@ function SectionImages({ images }: { images: CaseImage[] }) {
   return <div className="mt-xl flex flex-col gap-xl">{blocks}</div>;
 }
 
-/** Renders body copy, splitting blank-line-separated text into paragraphs. */
-function Prose({ text, className }: { text: string; className: string }) {
+/**
+ * Renders body copy, splitting blank-line-separated text into paragraphs.
+ * The first paragraph can take a distinct `leadClassName` so a section opens
+ * with a darkened lead before settling into body-coloured copy.
+ */
+function Prose({
+  text,
+  className,
+  leadClassName,
+}: {
+  text: string;
+  className: string;
+  leadClassName?: string;
+}) {
   const paragraphs = text.split(/\n\n+/);
   return (
     <>
-      {paragraphs.map((p, i) => (
-        <p key={i} className={i === 0 ? className : `mt-md ${className}`}>
-          {p}
-        </p>
-      ))}
+      {paragraphs.map((p, i) => {
+        const base = i === 0 ? leadClassName ?? className : className;
+        return (
+          <p key={i} className={i === 0 ? base : `mt-md ${base}`}>
+            {p}
+          </p>
+        );
+      })}
     </>
   );
 }
@@ -158,7 +173,11 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
     <section>
       <div className="mx-auto max-w-3xl">
         <h2 className="text-heading-md text-ink">{s.heading}</h2>
-        <Prose text={s.body} className="mt-md text-body-lg text-body" />
+        <Prose
+          text={s.body}
+          leadClassName="mt-md text-body-lg text-ink"
+          className="mt-md text-body-lg text-body"
+        />
 
         {s.points ? (
           <ul className="mt-lg flex flex-col gap-sm">
@@ -285,27 +304,45 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
         {/* Hero image - rendered at its true ratio so nothing crops.
             Portrait heroes (phone screenshots) sit centered on the mat at a
             phone-scale width instead of stretching the full column. */}
-        {(() => {
-          const hero = project.overlayHero ?? project.hero;
-          const isPortrait = hero.height > hero.width;
-          return (
-            <div className="mt-2xl overflow-hidden rounded-lg border border-hairline bg-elevated">
-              <Image
-                src={hero.src}
-                alt={project.title}
-                width={hero.width}
-                height={hero.height}
-                priority
-                sizes={isPortrait ? "(max-width: 768px) 60vw, 360px" : "(max-width: 1200px) 100vw, 1200px"}
-                className={
-                  isPortrait
-                    ? "mx-auto h-auto w-[60%] max-w-[360px] py-2xl"
-                    : "h-auto w-full"
-                }
-              />
+        {project.overlayHeroPhones ? (
+          <div className="mt-2xl overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg">
+            <div className="flex flex-wrap items-start justify-center gap-lg py-xl">
+              {project.overlayHeroPhones.map((p) => (
+                <div key={p.src} className="device device--full">
+                  <div
+                    className="device__screen"
+                    style={{ "--ar": `${p.width}/${p.height}` } as CSSProperties}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={p.src} alt={p.alt} width={p.width} height={p.height} />
+                  </div>
+                </div>
+              ))}
             </div>
-          );
-        })()}
+          </div>
+        ) : (
+          (() => {
+            const hero = project.overlayHero ?? project.hero;
+            const isPortrait = hero.height > hero.width;
+            return (
+              <div className="mt-2xl overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg">
+                <Image
+                  src={hero.src}
+                  alt={project.title}
+                  width={hero.width}
+                  height={hero.height}
+                  priority
+                  sizes={isPortrait ? "(max-width: 768px) 60vw, 360px" : "(max-width: 1200px) 100vw, 1200px"}
+                  className={
+                    isPortrait
+                      ? "mx-auto h-auto w-[60%] max-w-[360px] py-2xl"
+                      : "h-auto w-full"
+                  }
+                />
+              </div>
+            );
+          })()
+        )}
 
         {/* Sections - copy in a narrow reading column, images breathe wider */}
         <div className="mt-3xl flex flex-col gap-3xl">

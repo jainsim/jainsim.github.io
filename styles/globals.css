@@ -415,6 +415,30 @@ html.lenis-stopped body {
   border-radius: 5px 5px 0 0;
 }
 
+/* Whole-phone variant for the case-study overlay: bezel wraps all four sides
+   and the full screen shows (no clip), unlike the top-only peek on the /work
+   stack. Its aspect-ratio comes from the image so nothing is cropped. */
+.device--full {
+  /* Carry the frame tokens locally: they live on .stack-card, which does not
+     wrap the case-study overlay, so var(--frame) would otherwise be empty. */
+  --frame: linear-gradient(152deg, #5b6068 0%, #33373d 42%, #1b1e22 100%);
+  --frame-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 1px 0 0 rgba(255, 255, 255, 0.1),
+    inset -1px 0 0 rgba(0, 0, 0, 0.2),
+    0 20px 38px -24px rgba(20, 24, 28, 0.62);
+  width: 238px;
+  padding: 8px;
+  border-radius: 26px;
+}
+.device--full .device__screen {
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.device--full .device__screen img {
+  object-fit: contain;
+}
+
 /* ---------- responsive ----------
    Breakpoint at 992px, not 900: the 640px laptop needs a visual column ≥ ~580px
    to stay tall enough to clip past the card bottom, which the two-column grid

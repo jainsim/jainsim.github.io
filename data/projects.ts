@@ -45,6 +45,9 @@ export type Project = {
   accentText: string; // brand hex tuned for legible index text (deeper where needed)
   hero: HeroImage; // the home-page stage screenshot (device mockup, native ratio)
   overlayHero?: HeroImage; // wider hero shown at the top of the case-study overlay
+  // When set, the overlay opens with a row of device-framed phones (same frame
+  // chrome as the home-page stack) instead of a single flat hero image.
+  overlayHeroPhones?: { src: string; width: number; height: number; alt: string }[];
   images: string[]; // first is the hero/panel image
   subtitle: string;
   meta: { label: string; value: string }[];
@@ -64,6 +67,26 @@ export const projects: Project[] = [
     accentText: "#D65A00",
     hero: { src: "/projects/installer-hero.png", width: 4234, height: 8655 },
     overlayHero: { src: "/projects/installer/hero-3-screens.png", width: 7009, height: 4152 },
+    overlayHeroPhones: [
+      {
+        src: "/projects/installer/header-home.png",
+        width: 750,
+        height: 1478,
+        alt: "Home: the installer's task list, supported hardware, and install guides.",
+      },
+      {
+        src: "/projects/installer/header-config.png",
+        width: 750,
+        height: 1478,
+        alt: "Config: device configuration captured in the field, step by step.",
+      },
+      {
+        src: "/projects/installer/header-success.png",
+        width: 750,
+        height: 1478,
+        alt: "Success: both stations set up, confirmed in the field.",
+      },
+    ],
     images: ["/projects/installer/hero-3-screens.png"],
     subtitle:
       "Connecting the field to the platform: an end-to-end self-serve installation native mobile app.",
@@ -108,21 +131,21 @@ export const projects: Project[] = [
           {
             src: "/projects/installer/create-site.png",
             width: 375,
-            height: 1054,
+            height: 1022,
             layout: "inline",
             caption: "Create a site: grouping stations by location up front.",
           },
           {
             src: "/projects/installer/station-config.png",
             width: 750,
-            height: 2122,
+            height: 2058,
             layout: "inline",
             caption: "Device configuration captured in the field, step by step.",
           },
           {
             src: "/projects/installer/email-activation.png",
-            width: 2984,
-            height: 4744,
+            width: 2060,
+            height: 4602,
             layout: "wide",
             caption:
               "Email-triggered activation: the owner receives a regional link and station table that deep-links into Polaris Suite.",
@@ -153,28 +176,28 @@ export const projects: Project[] = [
           {
             src: "/projects/installer/skip-org.png",
             width: 662,
-            height: 1474,
+            height: 1178,
             layout: "inline",
             caption: "Org-agnostic flow: the installer can skip Salesforce-dependent org data.",
           },
           {
             src: "/projects/installer/summary-one-station.png",
             width: 375,
-            height: 1684,
+            height: 1652,
             layout: "inline",
             caption: "Setup complete: full system detail sent back to ChargePoint.",
           },
           {
             src: "/projects/installer/summary-cluster.png",
             width: 750,
-            height: 2886,
+            height: 2822,
             layout: "inline",
             caption: "Job Summary: multiple stations rolled into one submission.",
           },
           {
             src: "/projects/installer/loop-or-submit.png",
             width: 2668,
-            height: 3309,
+            height: 3166,
             layout: "wide",
             caption: "Loop back to add another station, or complete the job.",
           },
@@ -187,7 +210,7 @@ export const projects: Project[] = [
           },
           {
             src: "/projects/installer/station-management.png",
-            width: 4222,
+            width: 3448,
             height: 2212,
             layout: "full",
             caption:
@@ -208,7 +231,7 @@ export const projects: Project[] = [
           {
             src: "/projects/installer/success.png",
             width: 375,
-            height: 667,
+            height: 635,
             layout: "phone",
             caption: "Installation confirmed in the field.",
           },

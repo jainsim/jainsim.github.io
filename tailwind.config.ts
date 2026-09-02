@@ -58,6 +58,7 @@ const config: Config = {
         section: "128px",
       },
       borderRadius: {
+        xs: "4px",
         sm: "6px",
         md: "12px",
         lg: "16px",
