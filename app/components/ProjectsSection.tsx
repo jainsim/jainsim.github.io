@@ -110,6 +110,14 @@ export default function ProjectsSection({
 
   return (
     <section id="work" ref={sectionRef} className="relative bg-canvas">
+      {/* Fonts for the device-frame cards (Inter / JetBrains Mono). Loaded once
+          here; Next hoists them to <head>. */}
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet"
+      />
       <div className="mx-auto max-w-container px-lg pb-2xl">
         <p className="eyebrow py-2xl text-mute">Selected Work</p>
 

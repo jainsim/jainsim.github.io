@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import type { Project } from "@/data/projects";
@@ -15,6 +15,78 @@ type Props = {
 
 // Root-relative base path; empty at the site root, keeping links domain-agnostic.
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
+/**
+ * Card face per project - the approved device-frame design (selected-work/work.html).
+ * Keyed by slug because the device-ready screenshots and the "Northbeam" copy are
+ * the design's own, distinct from the case-study data model. `--ar` is the image's
+ * pixel width/height; swapping a file means updating both `ar` and width/height.
+ */
+type Face = {
+  device: "phone" | "laptop";
+  img: string;
+  ar: string;
+  w: number;
+  h: number;
+  title: string;
+  kind: string;
+  desc: string;
+  year: string;
+  badge?: string;
+  alt: string;
+};
+
+const FACE: Record<string, Face> = {
+  "field-commissioning": {
+    device: "phone",
+    img: "/projects/selected-work/northbeam.jpg",
+    ar: "720/1558",
+    w: 720,
+    h: 1558,
+    title: "Northbeam",
+    kind: "Coded prototype",
+    desc: "A working prototype. Handles a failed session, loses connection, recovers. Built in code, not Figma.",
+    year: "2026",
+    badge: "Live prototype",
+    alt: "Northbeam home screen with Install and Service task tiles, a supported-hardware note, and a list of installation guides.",
+  },
+  installer: {
+    device: "phone",
+    img: "/projects/selected-work/installer-app.jpg",
+    ar: "720/1512",
+    w: 720,
+    h: 1512,
+    title: "Installer App",
+    kind: "Native mobile",
+    desc: "Designing for one free hand: an app for electricians commissioning hardware in the field",
+    year: "2025",
+    alt: "Device setup progress screen confirming two stations were set up, each showing MAC address, serial number and model.",
+  },
+  activation: {
+    device: "laptop",
+    img: "/projects/selected-work/station-activation.jpg",
+    ar: "1560/998",
+    w: 1560,
+    h: 998,
+    title: "Station Activation Flow",
+    kind: "Enterprise workflow",
+    desc: "Modernising an activation workflow inside a legacy enterprise platform, four times",
+    year: "2025",
+    alt: "Charging management console with an activate-stations banner, a 70 percent activation progress bar, and a station table showing pending, online and offline states.",
+  },
+  designgrid: {
+    device: "laptop",
+    img: "/projects/selected-work/designgrid.jpg",
+    ar: "1560/1192",
+    w: 1560,
+    h: 1192,
+    title: "DesignGrid",
+    kind: "Design systems",
+    desc: "The design system that had to survive a native field app and an enterprise console at once",
+    year: "2023-2024",
+    alt: "Placeholder: replace with a DesignGrid screen.",
+  },
+};
 
 /**
  * One project in the sticky overlap-stack. Each card is pinned near the top
@@ -90,100 +162,78 @@ export default function ProjectStage({
     return () => ctx.revert();
   }, [onActive, order]);
 
+  const face = FACE[project.slug];
+  const index = `(0${order + 1})`;
+
   return (
     <section
       ref={cardRef}
       data-slug={project.slug}
-      style={
-        {
-          "--i": order,
-          "--accent": project.accent,
-          "--accent-text": project.accentText,
-        } as React.CSSProperties
-      }
-      className="stack-card group mt-2xl flex flex-col overflow-hidden rounded-lg border border-hairline bg-canvas px-lg pb-md pt-lg shadow-[0_1px_1px_rgba(0,0,0,0.04)]"
+      style={{ "--i": order } as CSSProperties}
+      className="stack-card card"
     >
-      {/* Tinted mat. Case studies show a screenshot and open the overlay; the
-          prototype block shows a live, non-interactive embed and opens the
-          full-screen prototype. Both are real links (crawlable / new-tab
-          friendly) whose plain click is intercepted. */}
-      <div className="flex flex-1 items-center justify-center">
-        <a
-          href={isPrototype ? project.href : `${BASE_PATH}/work/${project.slug}/`}
-          {...(isPrototype ? { target: "_blank", rel: "noopener" } : {})}
-          onClick={(e) => {
-            // Let modified clicks / new-tab behave natively.
-            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0)
-              return;
-            e.preventDefault();
-            if (isPrototype) onOpenPrototype();
-            else onOpen(project.slug);
-          }}
-          aria-label={
-            isPrototype
-              ? `Launch ${project.title} live prototype`
-              : `Open ${project.title} case study`
-          }
-          className="project-stage group/mat relative flex items-center justify-center overflow-hidden rounded-md border border-hairline outline-none transition-transform duration-200 focus-visible:ring-2 focus-visible:ring-link focus-visible:ring-offset-2 focus-visible:ring-offset-elevated active:scale-[0.99]"
-        >
-          <span className="project-shot absolute flex items-center justify-center">
-            <Image
-              src={project.hero.src}
-              alt={project.title}
-              width={project.hero.width}
-              height={project.hero.height}
-              sizes="(max-width: 768px) 90vw, 736px"
-              loading="lazy"
-              className="h-auto max-h-full w-auto max-w-full rounded-sm object-contain"
-            />
-          </span>
-          {isPrototype ? (
-            <>
-              <span
-                className="absolute left-md top-md inline-flex items-center gap-xs rounded-full border border-hairline bg-canvas/90 px-sm py-xxs font-mono text-mono-eyebrow uppercase backdrop-blur"
-                style={{ color: "var(--accent-text)" }}
-              >
-                <span
-                  aria-hidden
-                  className="h-1.5 w-1.5 rounded-full"
-                  style={{ backgroundColor: "var(--accent)" }}
-                />
-                {project.label}
-              </span>
-              <span className="absolute bottom-md right-md rounded-full border border-hairline bg-canvas/90 px-sm py-xxs font-mono text-mono-eyebrow uppercase text-mute backdrop-blur transition-colors group-hover/mat:text-ink">
-                Launch ↗
-              </span>
-            </>
-          ) : null}
-        </a>
+      <div className="card__text">
+        <div className="card__meta">
+          <span className="card__index">{index}</span>
+          {face.badge ? <span className="card__badge">{face.badge}</span> : null}
+        </div>
+        <h3 className="card__title">{face.title}</h3>
+        <div className="card__kind">{face.kind}</div>
+        <p className="card__desc">{face.desc}</p>
+        {/* Whole card is not a link; this footer link is the only interactive
+            target. Case studies open the overlay; the prototype opens its
+            full-screen embed. Real href stays crawlable / new-tab friendly. */}
+        <div className="card__foot">
+          <a
+            className="card__link"
+            href={
+              isPrototype ? project.href : `${BASE_PATH}/work/${project.slug}/`
+            }
+            {...(isPrototype ? { target: "_blank", rel: "noopener" } : {})}
+            onClick={(e) => {
+              if (
+                e.metaKey ||
+                e.ctrlKey ||
+                e.shiftKey ||
+                e.altKey ||
+                e.button !== 0
+              )
+                return;
+              e.preventDefault();
+              if (isPrototype) onOpenPrototype();
+              else onOpen(project.slug);
+            }}
+            aria-label={
+              isPrototype
+                ? `Launch ${face.title} live prototype`
+                : `Open ${face.title} case study`
+            }
+          >
+            View project
+          </a>
+          <span className="card__year">{face.year}</span>
+        </div>
       </div>
 
-      {/* Caption row - index / title·(discipline|blurb) / year|Live */}
-      <div className="mt-md flex w-full items-baseline justify-between gap-md pt-sm">
-        <span
-          className="shrink-0 font-mono text-mono-eyebrow"
-          style={{ color: "var(--accent-text)" }}
-        >
-          {project.index}
-        </span>
-        <div className="text-center">
-          <p className="text-label-sm text-ink">{project.title}</p>
-          <p className="text-body-sm text-faint">
-            {isPrototype ? project.blurb : project.discipline}
-          </p>
-        </div>
-        {isPrototype ? (
-          <span
-            className="shrink-0 font-mono text-mono-eyebrow"
-            style={{ color: "var(--accent-text)" }}
+      <div className="card__visual">
+        <div className="stage">
+          <div
+            className={`device ${
+              face.device === "phone" ? "device--phone" : "device--laptop"
+            }`}
           >
-            Live ↗
-          </span>
-        ) : (
-          <span className="shrink-0 font-mono text-mono-eyebrow text-mute">
-            {project.inProgress ? "In Progress" : `© ${project.year}`}
-          </span>
-        )}
+            <div className="device__screen" style={{ "--ar": face.ar } as CSSProperties}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={face.img}
+                alt={face.alt}
+                loading="lazy"
+                width={face.w}
+                height={face.h}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
