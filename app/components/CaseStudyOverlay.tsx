@@ -306,7 +306,7 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
             phone-scale width instead of stretching the full column. */}
         {project.overlayHeroPhones ? (
           <div className="mt-2xl overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg">
-            <div className="flex flex-wrap items-start justify-center gap-lg py-xl">
+            <div className="hero-phones py-xl">
               {project.overlayHeroPhones.map((p) => (
                 <div key={p.src} className="device device--full">
                   <div
@@ -319,6 +319,19 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
                 </div>
               ))}
             </div>
+          </div>
+        ) : project.overlayHeroFramed ? (
+          <div className="mt-2xl overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg">
+            <span className="framed-shot">
+              <Image
+                src={(project.overlayHero ?? project.hero).src}
+                alt={project.title}
+                width={(project.overlayHero ?? project.hero).width}
+                height={(project.overlayHero ?? project.hero).height}
+                priority
+                sizes="(max-width: 1200px) 100vw, 1000px"
+              />
+            </span>
           </div>
         ) : (
           (() => {

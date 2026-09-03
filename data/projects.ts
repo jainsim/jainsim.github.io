@@ -48,6 +48,9 @@ export type Project = {
   // When set, the overlay opens with a row of device-framed phones (same frame
   // chrome as the home-page stack) instead of a single flat hero image.
   overlayHeroPhones?: { src: string; width: number; height: number; alt: string }[];
+  // When true, the overlay hero (a laptop/desktop shot) renders inside the
+  // dark bezel stroke instead of flat on the mat.
+  overlayHeroFramed?: boolean;
   images: string[]; // first is the hero/panel image
   subtitle: string;
   meta: { label: string; value: string }[];
@@ -271,6 +274,8 @@ export const projects: Project[] = [
     accent: "#0E7C86",
     accentText: "#0E7C86",
     hero: { src: "/projects/activation-hero.png", width: 11402, height: 6646 },
+    overlayHero: { src: "/projects/activation/overlay-hero.png", width: 3410, height: 2212 },
+    overlayHeroFramed: true,
     images: ["/projects/activation.png"],
     subtitle:
       "Replacing an expert-only, support-dependent activation with a self-serve workflow any admin can run, designed embedded with engineering through build and design QA.",
@@ -309,8 +314,8 @@ export const projects: Project[] = [
         images: [
           {
             src: "/projects/activation/walked-into.png",
-            width: 2625,
-            height: 651,
+            width: 1750,
+            height: 434,
             layout: "full",
             caption:
               "Reshaping the work: one MVP workstream split into four topic-scoped phases, each with its own handoff, UAT, and CX testing across the year.",
@@ -330,19 +335,19 @@ export const projects: Project[] = [
         images: [
           {
             src: "/projects/activation/entry-point.png",
-            width: 13482,
-            height: 4164,
+            width: 10486,
+            height: 3978,
             layout: "full",
             caption:
-              "The entry point: a Charger Management banner surfaces stations ready to activate; the list groups them by model family and site address.",
+              "The entry point: a Charger Management banner surfaces stations ready to activate. The list groups them by model family and common address, so twenty identical chargers read as one card, the foundation bulk activation would later be built on.",
           },
           {
             src: "/projects/activation/wizard-steps.png",
-            width: 7352,
-            height: 3244,
+            width: 5864,
+            height: 3048,
             layout: "full",
             caption:
-              "The three-step wizard (Org & Plan, then Energy Management) with recommended defaults prefilled.",
+              "Step 1, Org & Plan: recommended policies and warranties prefilled, so the reader’s first real choice is whether to accept defaults, not whether to learn the data model. Step 2, Energy Management: the user can email the installer to fill in this deeply technical section.",
           },
         ],
       },
@@ -363,18 +368,18 @@ export const projects: Project[] = [
         images: [
           {
             src: "/projects/activation/copy-config.png",
-            width: 6454,
-            height: 4872,
+            width: 5264,
+            height: 4726,
             layout: "full",
             caption: "Copy / Import Configuration reuses an activated station’s plan, policy, and group settings.",
           },
           {
             src: "/projects/activation/advanced-token.png",
-            width: 5182,
-            height: 6376,
-            layout: "wide",
+            width: 10552,
+            height: 3494,
+            layout: "full",
             caption:
-              "Advanced Token Selection with sales-order and date detail, and the token-mismatch recovery dialog that turns a dead end into a fixable state.",
+              "Advanced Token Selection: the sales order, token start date, end date, and purchase order behind each token. The token-mismatch dialog turns a dead end into a fixable state.",
           },
         ],
       },
@@ -389,17 +394,19 @@ export const projects: Project[] = [
         images: [
           {
             src: "/projects/activation/failure-states.png",
-            width: 3982,
-            height: 2874,
+            width: 5160,
+            height: 4798,
             layout: "full",
-            caption: "Pre-activation blockers surfaced early: uncommissioned hardware, gateway offline, GPS pending.",
+            caption:
+              "Pre-activation blockers surfaced early: (1) incomplete pinpointing, (2) a warning for a missing gateway, and (3) a hard block for uncommissioned DC stations.",
           },
           {
             src: "/projects/activation/async-progress.png",
-            width: 5274,
-            height: 2244,
+            width: 6968,
+            height: 3670,
             layout: "full",
-            caption: "Async activation progress, so a long-running activation reads as progress, not a frozen screen.",
+            caption:
+              "Per-station status that persists across page reloads, so operators stop wondering if the system is stuck. The modal gives explicit success, in-progress, and failure states, with retry on the failures that need it.",
           },
         ],
       },
@@ -410,10 +417,11 @@ export const projects: Project[] = [
         images: [
           {
             src: "/projects/activation/dc-cluster.png",
-            width: 3800,
-            height: 3370,
+            width: 5160,
+            height: 5686,
             layout: "full",
-            caption: "Cluster ports nested under their parent Chargebox.",
+            caption:
+              "A 13-port DC cluster collapsed under one parent Chargebox. What used to be thirteen rows is now one.",
           },
         ],
       },
