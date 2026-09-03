@@ -496,10 +496,11 @@ export const projects: Project[] = [
         images: [
           {
             src: "/projects/designgrid/before-site-setup.png",
-            width: 14232,
-            height: 4332,
+            width: 6408,
+            height: 1974,
             layout: "full",
-            caption: "Site setup: before.",
+            caption:
+              "Site setup, before: configuration hidden inside extended settings. A non-responsive UI that also compromised scalability across the different apps.",
           },
         ],
       },
@@ -524,8 +525,8 @@ export const projects: Project[] = [
         images: [
           {
             src: "/projects/designgrid/accessibility-before-after.png",
-            width: 3294,
-            height: 1263,
+            width: 3276,
+            height: 1239,
             layout: "full",
             caption: "Contrast audit: before and after.",
           },
@@ -536,9 +537,9 @@ export const projects: Project[] = [
         body:
           "Atoms. The base layer: buttons, inputs, labels, icons, avatars. Once you define what a button is, every component that needs a button inherits that decision.\n\nMolecules. Simple combinations: form groups (label + input + helper text), navigation items (icon + label), action cards. This is where you start to see how atoms cooperate.\n\nOrganisms. Complex, multi-part systems: modals, tables, dashboards, data forms. This is where the leverage shows: you’re not starting from scratch, you’re assembling tested pieces.\n\nTemplates. Page-level skeletons: the arrangement of organisms into a working view. A template decides where the navigation sits, where the primary table lands, how a configuration panel relates to the content behind it.",
         images: [
-          { src: "/projects/designgrid/atoms.png", width: 3960, height: 464, layout: "full", caption: "Atoms" },
-          { src: "/projects/designgrid/molecules.png", width: 5372, height: 1400, layout: "full", caption: "Molecules" },
-          { src: "/projects/designgrid/organisms.png", width: 3348, height: 2656, layout: "full", caption: "Organisms" },
+          { src: "/projects/designgrid/atoms.png", width: 3960, height: 304, layout: "full", caption: "Atoms" },
+          { src: "/projects/designgrid/molecules.png", width: 5372, height: 1240, layout: "full", caption: "Molecules" },
+          { src: "/projects/designgrid/organisms.png", width: 3348, height: 2496, layout: "full", caption: "Organisms" },
           { src: "/projects/designgrid/templates.png", width: 5760, height: 3792, layout: "full", caption: "Templates" },
         ],
       },
@@ -554,8 +555,8 @@ export const projects: Project[] = [
         images: [
           {
             src: "/projects/designgrid/tables-before.png",
-            width: 2424,
-            height: 483,
+            width: 1586,
+            height: 466,
             layout: "full",
             caption: "The old table: before DesignGrid.",
           },
@@ -575,10 +576,11 @@ export const projects: Project[] = [
           },
           {
             src: "/projects/designgrid/after-site-setup.png",
-            width: 10251,
-            height: 4107,
+            width: 6006,
+            height: 2572,
             layout: "full",
-            caption: "Site setup: after.",
+            caption:
+              "Site setup, after: the full data model in one view. (1) Main distribution with power consumption, power production, and meter connection, (2) sub distribution, and (3) charging station.",
           },
         ],
       },
