@@ -25,12 +25,17 @@ export default function Closing() {
               the field just did.
             </p>
             <p className="mt-lg text-body-lg text-body">
-              For five years that was EV charging: a native installer app, a
-              station activation workflow inside a legacy enterprise platform,
-              and the design system that had to hold both together. Most of it
-              was modernisation rather than greenfield. Existing workflows, real
-              users, real consequences, rebuilt without breaking for the people
-              who depend on them.
+              Five years of high-consequence enterprise work taught me the same
+              three things repeat: dense technical data, configuration that lives
+              in one team&apos;s heads, and legacy workflows nobody can rebuild
+              from scratch.
+            </p>
+            <p className="mt-lg text-body-lg text-body">
+              That happened in EV charging: a native installer app, a station
+              activation workflow inside a legacy enterprise platform, and the
+              design system that held both together. Modernisation, not
+              greenfield. Existing workflows, real users, real consequences,
+              rebuilt without breaking the people who depend on them.
             </p>
           </div>
         </div>

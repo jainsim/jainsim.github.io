@@ -129,8 +129,9 @@ export default function Hero() {
             I design the software layer around physical infrastructure.
           </p>
           <p className="mt-sm max-w-xl text-body-lg text-fjord-text/80">
-            Field apps, operator consoles, and the systems between them. Five
-            years in enterprise B2B SaaS and native mobile.
+            Multi-role enterprise platforms, legacy modernisation, and the
+            design systems that hold them together. 7+ years across enterprise
+            B2B SaaS and native mobile.
           </p>
 
           {/* CTA row - light-on-dark twins of the Closing pills */}

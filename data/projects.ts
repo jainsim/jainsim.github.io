@@ -60,10 +60,10 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "installer",
-    index: "(02)",
+    index: "(04)",
     title: "Installer App",
     role: "Lead UX/UI Designer",
-    discipline: "Native Mobile App",
+    discipline: "Native mobile",
     org: "ChargePoint",
     year: "2025",
     accent: "#F06800",
@@ -265,10 +265,10 @@ export const projects: Project[] = [
   },
   {
     slug: "activation",
-    index: "(03)",
+    index: "(01)",
     title: "Station Activation Flow",
     role: "Lead UX/UI Designer",
-    discipline: "Enterprise Workflow",
+    discipline: "Enterprise workflow",
     org: "ChargePoint",
     year: "2025",
     accent: "#0E7C86",
@@ -459,10 +459,10 @@ export const projects: Project[] = [
   },
   {
     slug: "designgrid",
-    index: "(04)",
+    index: "(03)",
     title: "DesignGrid",
     role: "UX/UI Designer",
-    discipline: "Design Systems",
+    discipline: "Design systems",
     org: "The Mobility House",
     year: "2023–2024",
     accent: "#0066FF",
@@ -626,9 +626,9 @@ export const projects: Project[] = [
 export const prototypeItem: Project = {
   slug: "field-commissioning",
   kind: "prototype",
-  index: "(01)",
+  index: "(02)",
   label: "Live prototype",
-  title: "Field job flow, offline first",
+  title: "Northbeam",
   blurb:
     "A working prototype. Handles a failed session, loses connection, recovers. Built in code, not Figma.",
   href: "https://seema-jain.com/commissioning/",
@@ -649,11 +649,26 @@ export const prototypeItem: Project = {
 export const projectBySlug = (slug: string) =>
   projects.find((p) => p.slug === slug);
 
-/** Previous/next projects in gallery order, wrapping around the ends. */
+// Display order is driven entirely by each item's `index` ("(0N)"), so the
+// numbering, the gallery sequence, and the pager can never drift apart.
+const byIndex = (a: { index: string }, b: { index: string }) =>
+  a.index.localeCompare(b.index);
+
+/**
+ * The full home-gallery sequence in index order: the live prototype interleaved
+ * among the case studies at its numbered slot, not hardwired to the front.
+ */
+export const galleryOrder: Project[] = [...projects, prototypeItem].sort(byIndex);
+
+/** Case studies alone, in index order (the prototype isn't a case study). */
+const caseStudyOrder: Project[] = [...projects].sort(byIndex);
+
+/** Previous/next case studies in gallery order, wrapping around the ends. */
 export const adjacentProjects = (slug: string) => {
-  const i = projects.findIndex((p) => p.slug === slug);
+  const i = caseStudyOrder.findIndex((p) => p.slug === slug);
   if (i === -1) return { prev: null, next: null };
-  const prev = projects[(i - 1 + projects.length) % projects.length];
-  const next = projects[(i + 1) % projects.length];
+  const n = caseStudyOrder.length;
+  const prev = caseStudyOrder[(i - 1 + n) % n];
+  const next = caseStudyOrder[(i + 1) % n];
   return { prev, next };
 };

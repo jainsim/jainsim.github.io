@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { projects, prototypeItem, projectBySlug } from "@/data/projects";
+import { galleryOrder, prototypeItem, projectBySlug } from "@/data/projects";
 import ProjectStage from "./ProjectStage";
 import CaseStudyOverlay from "./CaseStudyOverlay";
 import PrototypeOverlay from "./PrototypeOverlay";
@@ -15,9 +15,9 @@ import PrototypeOverlay from "./PrototypeOverlay";
 // ever served under a sub-path). Keeps every URL domain-agnostic.
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-// The prototype block leads the gallery, followed by the case studies. Kept
-// separate from `projects` so /work routing and the pager stay case-study only.
-const galleryItems = [prototypeItem, ...projects];
+// Full gallery sequence in index order (prototype interleaved at its numbered
+// slot). Kept out of /work routing and the pager, which stay case-study only.
+const galleryItems = galleryOrder;
 
 /** Extract a project slug from a `/work/<slug>` pathname, else null. */
 function slugFromPath(pathname: string): string | null {
