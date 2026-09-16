@@ -304,7 +304,7 @@ export const projects: Project[] = [
         metrics: [
           { value: "3–5 days", label: "average time from hardware install to station live, before self-serve" },
           { value: "Same day (target)", label: "target time-to-live with self-serve activation via Polaris Suite" },
-          { value: "< 40% (est.)", label: "of CX activation tickets estimated to be eliminated through self-serve" },
+          { value: "~40% (est.)", label: "of CX activation tickets estimated to be eliminated through self-serve" },
         ],
       },
       {
@@ -326,7 +326,7 @@ export const projects: Project[] = [
         heading: "Iteration 1: MVP",
         body:
           "A three-step wizard for the simplest case: single stations, one site, default everything.\n\nBefore Polaris Suite, every activation ran through a ChargePoint Deployment Specialist: activation form, email, wait, confirm. The MVP compressed that into something an Org Admin could do themselves: a Charger Management view with an “Activate Stations” banner, a Ready-for-Activation list grouped by model family and site address, and a three-step wizard (Org & Plan → Energy Management → Summary).\n\nUAT · round 1. The round validated speed but not experience. The 4.5/5 score was misleading me: experienced specialists could finish fast because they already knew the data model, so what UAT actually measured was efficiency for experts, not learnability for new users. It also surfaced two gaps that went straight into Iteration 2: bulk activation didn’t exist yet (everyone asked “now how do I do fifty?”), and token validity timing (sales-order date vs. activation date) was opaque from the UI.",
-        points: ["Overall rating: 4.5 / 5", "Average activation time: under 5 minutes"],
+        points: ["Overall rating: 4.5 / 5", "Average activation time in later UAT: 3 to 4 minutes"],
         callout: {
           label: "Design decision · wizard over flat form",
           body:

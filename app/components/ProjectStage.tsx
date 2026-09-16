@@ -70,7 +70,7 @@ const FACE: Record<string, Face> = {
     h: 998,
     title: "Station Activation Flow",
     kind: "Enterprise workflow",
-    desc: "Specialist-only site configuration, 3 to 5 days down to minutes",
+    desc: "Specialist-only site configuration, 3 to 5 days to same-day self-serve",
     year: "2025",
     alt: "Charging management console with an activate-stations banner, a 70 percent activation progress bar, and a station table showing pending, online and offline states.",
   },
