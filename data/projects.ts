@@ -102,34 +102,43 @@ export const projects: Project[] = [
     ],
     sections: [
       {
+        heading: "Outcome",
+        body:
+          "A station commissioned in the field now shows up in Polaris ready to activate, with no CX involved. White-glove activation stays available as a chargeable premium service rather than the default, which turns agent cost from overhead into a revenue line.",
+        metrics: [
+          { value: "0", label: "CX touches on the self-serve path" },
+          { value: "1", label: "activation event per site & org, not per station" },
+          { value: "2", label: "clean activation routes: enterprise pre-assign + VAR hyperlink" },
+        ],
+      },
+      {
         heading: "Context",
         body:
-          "ChargePoint runs one of the world’s largest commercial EV charging networks. For its first decade it ran a direct-sales model, a tightly managed pipeline where every station activation was choreographed by an in-house team. Four years ago it shifted to a Value-Added Reseller model, and today roughly 90% of sales flow through partners like EATON. The activation process never caught up.\n\nThe result was two people living in two separate worlds. The electrician shows up on-site, mounts the hardware, scans serial numbers, confirms connectivity, and leaves: everything through the Installer App. The org admin never touches hardware; they manage policies, pricing, and activation afterward in Polaris Suite. Before this work, those two worlds didn’t talk, and a Customer Experience agent had to bridge every single handoff by hand.",
+          "ChargePoint runs one of the world’s largest commercial EV charging networks. Four years ago it moved from direct sales to a Value-Added Reseller model, and today roughly 90% of sales flow through partners like EATON. The activation process never caught up.\n\nTwo people live in two separate worlds. The electrician mounts the hardware, scans serial numbers, confirms connectivity, and leaves, all through the Installer App. The org admin never touches hardware; they manage policies, pricing, and activation afterward in Polaris Suite. Before this work, a Customer Experience agent had to bridge every handoff between them by hand.",
       },
       {
         heading: "The problem",
         body:
-          "Because the field app and the platform never shared a clean data handoff, every activation stalled at the seam between them. What should have been a premium, self-serve experience became recurring operational overhead.",
+          "The field app and the platform never shared a clean data handoff, so every activation stalled at the seam between them.",
         points: [
-          "Stations arrived on the platform with no owner attached: nothing linked a deployed device to the organization that bought it.",
-          "A CX agent had to step in on every activation to manually identify the owner and connect the stations.",
-          "Installing 10 stations at one location meant running the same standalone flow 10 times.",
+          "No owner: stations arrived on the platform with nothing linking them to the organization that bought them.",
+          "Manual bridging: a CX agent stepped in on every activation to find the owner and connect the stations.",
+          "No grouping: installing 10 stations at one site meant running the same flow 10 times.",
         ],
+      },
+      {
+        heading: "Research & Discovery",
+        body:
+          "I interviewed the CX agents who had been bridging every handoff, then mapped the data flow between field and platform end to end.\n\n**The critical insight:** the first challenge wasn’t screens, it was timing. At what point in the physical workflow is org identity even knowable? Mapping the deployment showed three gaps the CX agents had been covering by hand, and those became the first release.",
       },
       {
         heading: "Iteration 1: MVP",
         body:
-          "I started by mapping the data handoff between field and platform end to end. The first challenge wasn’t screens. It was flow: at what point in the physical workflow is org identity even knowable? Mapping the deployment surfaced three gaps the CX agent had been bridging, and the first release closed them.",
-        points: [
-          "Sites concept: a physical address becomes the unit of work, so stations installed together stay together.",
-          "CMS declaration upfront: ChargePoint cloud or a third-party system (be.ENERGISED, Studio); the two paths diverge immediately.",
-          "Org pre-assignment: org identity pushed from Salesforce and shown on the installer’s summary as a read-only signal.",
-          "Email-triggered activation: a regional link (US/EU/CA, Prod/QA) sent to the org admin the moment the job is marked complete.",
-        ],
+          "**What I built:**\n\n- Sites: a physical address becomes the unit of work, so stations installed together stay together.\n- CMS declaration upfront: ChargePoint cloud or a third-party system (be.ENERGISED, Studio); the two paths split immediately.\n- Org pre-assignment: org identity pushed from Salesforce and shown on the installer’s summary as a read-only signal.\n- Email-triggered activation: a regional link sent to the org admin the moment the job is complete.\n\n**What worked:** the release closed the three gaps CX had been bridging by hand.\n\n**What didn’t:** stakeholder review surfaced four failures.\n\n- Silent pre-assignment failure: when the API org link broke, the installer saw “Org ✓” while the admin received nothing.\n- No asset visibility: admins couldn’t confirm from Polaris what had been installed.\n- Per-station email didn’t scale: a 30-station site fired 30 separate emails.\n- Meaningless site names: an auto-generated string like 450haciendacalifornia meant nothing to the admin.",
         callout: {
           label: "Design decision · CMS selection screen",
           body:
-            "ChargePoint hardware can be registered with a third-party CMS. If the activation email fires for a non-ChargePoint-managed station, the admin lands in Polaris with a station that can never be activated there. So I added a CMS selection step that forks the flow before any data is sent.\n\nThe trade-off: it costs the installer one redundant tap in the 90%+ ChargePoint-managed case. I considered auto-detecting CMS from the hardware scan and rejected it: API coverage was incomplete, and non-ChargePoint hardware could still be provisioned in ChargePoint’s cloud, so a scan couldn’t reliably tell the two apart. One deliberate tap was cheaper than the most expensive failure in the old flow: a misrouted activation email.",
+            "**Decision:** Add a CMS selection step that forks the flow before any data is sent.\n\n**Alternative:** Auto-detect the CMS from the hardware scan.\n\n**Why:** API coverage was incomplete, and non-ChargePoint hardware could still be provisioned in ChargePoint’s cloud, so a scan couldn’t reliably tell the two apart. The cost is one redundant tap in the 90%+ ChargePoint case, which is cheaper than the most expensive failure in the old flow: a misrouted activation email.",
         },
         images: [
           {
@@ -137,14 +146,16 @@ export const projects: Project[] = [
             width: 375,
             height: 1022,
             layout: "inline",
-            caption: "Create a site: grouping stations by location up front.",
+            caption:
+              "Create a site: grouping stations by location up front.",
           },
           {
             src: "/projects/installer/station-config.png",
             width: 750,
             height: 2058,
             layout: "inline",
-            caption: "Device configuration captured in the field, step by step.",
+            caption:
+              "Device configuration captured in the field, step by step.",
           },
           {
             src: "/projects/installer/email-activation.png",
@@ -157,24 +168,20 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "Stakeholder review: what the MVP got wrong",
-        body: "Taking the MVP to review surfaced four failures that reshaped the next iteration:",
-        points: [
-          'Silent pre-assignment failure: when the API org link broke, there was no error feedback. The installer saw “Org ✓” while the admin received nothing.',
-          "No asset visibility: the admin had no way to confirm from Polaris what had actually been installed.",
-          "Per-station email didn’t scale: a 30-station site fired 30 separate emails. Still manual, just a different shape.",
-          "Meaningless default site name: an auto-generated string like 450haciendacalifornia meant nothing to the admin; it needed a clear naming convention or a mandatory rename.",
-        ],
-      },
-      {
         heading: "Iteration 2: Refinement",
         body:
-          "Iteration 1 exposed two problems: a per-station email model that broke at scale, and an org pre-assignment flow that leaned on Salesforce data missing in about 30% of VAR transactions. Iteration 2 fixed both, and removing the dependency entirely turned out to be cleaner than improving the error state around it.",
-        points: [
-          'Org-agnostic completion: the install finishes cleanly regardless of Salesforce data. The station queues in Polaris as “Ready for Activation” immediately, and the admin gets a regional link to attach it to their org afterward.',
-          "Job Summary screen: all installed devices grouped into one submit event. One activation per site, not per station.",
-          "Add more stations + cluster devices: after commissioning the first device, installers can loop back and add each subsequent station to the same job before submitting.",
-          "Regional self-activation links: sent to admins once the job is complete.",
+          "Pre-assignment leaned on Salesforce data that was missing in about 30% of VAR transactions, and per-station emails broke at scale. Iteration 2 fixed both.\n\n**What I built:**\n\n- Org-agnostic completion: the install finishes cleanly without Salesforce data. The station queues in Polaris as “Ready for Activation”, and the admin gets a regional link to attach it to their org.\n- Job Summary: all installed devices grouped into one submit event.\n- Add more stations + cluster devices: installers loop back and add each station to the same job before submitting.\n\n**What worked:** stations now arrive in Polaris ready to activate, with no CX touch and no dependency on Salesforce data.",
+        callouts: [
+          {
+            label: "Design decision",
+            body:
+              "**Decision:** Remove the org dependency and let the install complete without it.\n\n**Alternative:** Keep pre-assignment and design better error states around it.\n\n**Why:** Salesforce data was missing in about 30% of VAR transactions. Better errors would still leave a third of installs stuck. Designing the absence was more robust than designing the recovery.",
+          },
+          {
+            label: "Design decision",
+            body:
+              "**Decision:** One activation email per site.\n\n**Alternative:** One email per station.\n\n**Why:** A 30-station site fired 30 emails. That was still manual work, just in a different shape.",
+          },
         ],
         images: [
           {
@@ -182,35 +189,40 @@ export const projects: Project[] = [
             width: 662,
             height: 1178,
             layout: "inline",
-            caption: "Org-agnostic flow: the installer can skip Salesforce-dependent org data.",
+            caption:
+              "Org-agnostic flow: the installer can skip Salesforce-dependent org data.",
           },
           {
             src: "/projects/installer/summary-one-station.png",
             width: 375,
             height: 1652,
             layout: "inline",
-            caption: "Setup complete: full system detail sent back to ChargePoint.",
+            caption:
+              "Setup complete: full system detail sent back to ChargePoint.",
           },
           {
             src: "/projects/installer/summary-cluster.png",
             width: 750,
             height: 2822,
             layout: "inline",
-            caption: "Job Summary: multiple stations rolled into one submission.",
+            caption:
+              "Job Summary: multiple stations rolled into one submission.",
           },
           {
             src: "/projects/installer/loop-or-submit.png",
             width: 2668,
             height: 3166,
             layout: "wide",
-            caption: "Loop back to add another station, or complete the job.",
+            caption:
+              "Loop back to add another station, or complete the job.",
           },
           {
             src: "/projects/installer/summary-drawer.png",
             width: 1858,
             height: 2886,
             layout: "wide",
-            caption: "Cluster summary with a node-detail drawer for multi-port stations.",
+            caption:
+              "Cluster summary with a node-detail drawer for multi-port stations.",
           },
           {
             src: "/projects/installer/station-management.png",
@@ -223,13 +235,18 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "Outcome",
+        heading: "How AI fit in",
         body:
-          "The handoff between field deployment and platform management became a single, unified data flow: a station commissioned in the field now shows up in Polaris ready to activate, with no CX involved. Enterprise accounts get their org pre-assigned via API; the VAR channel (90% of sales) gets a regional activation link by email. Both routes land in the same place, on the admin’s own timeline.\n\nWhite-glove activation stays available, now as a chargeable premium service rather than the default. That shifts agent cost from operational overhead to a revenue line.",
-        metrics: [
-          { value: "0", label: "CX touches on the self-serve path" },
-          { value: "1", label: "activation event per site & org, not per station" },
-          { value: "2", label: "clean activation routes: enterprise pre-assign + VAR hyperlink" },
+          "**Microsoft Copilot (company-approved):** summarising interview notes, drafting specs and Jira tickets, and first drafts of UX copy.\n\n**Figma Make:** prototyping installer screens to test flow variations quickly. It was new to the team, so the first weeks went into learning what it could and couldn’t do.",
+      },
+      {
+        heading: "What I learned",
+        body:
+          "Both iterations came down to letting go of an assumption. The first version assumed org identity had to be resolved at the moment of install, and that one belief made the whole flow fragile. Once I stopped defending it, the design got simpler and sturdier.\n\nThis app is the upstream half of a two-part system. The activation flow in Polaris only works because this app captures the right data, in the right shape, at the right moment. That seam, not the app, is what I was designing.",
+        points: [
+          "Design for the data you have, not the data you need. Designing from what was reliably present (the station MAC, the site address, the installer’s job record) produced a flow that survived reality.",
+          "The handoff point is the design. Designing the installer-to-admin handoff explicitly, instead of routing it through a CX agent, is what made self-serve viable.",
+          "If I did it again: I’d get engineering into the PRD earlier. The “sites” grouping shaped two iterations before engineering review found it wasn’t buildable as written.",
         ],
         images: [
           {
@@ -237,30 +254,10 @@ export const projects: Project[] = [
             width: 375,
             height: 635,
             layout: "phone",
-            caption: "Installation confirmed in the field.",
+            caption:
+              "Installation confirmed in the field.",
           },
         ],
-      },
-      {
-        heading: "What two iterations taught me",
-        body:
-          "Both iterations came down to the same move: letting go of an assumption I’d been designing around. The first version assumed org identity had to be resolved at the moment of install, and that one belief drove the whole flow into fragility. Once I stopped defending it, the design got simpler and sturdier. The pattern that mattered wasn’t fixing screens; it was finding the locked assumption underneath them.",
-        points: [
-          "Design for the data you have, not the data you need. Pre-assignment assumed clean Salesforce data at install time. The field didn’t have it. Designing from what was reliably present (the station MAC, the site address, the installer’s job record) produced a flow that survived contact with reality.",
-          "The handoff point is the design. This was never about screens; it was about who holds responsibility at each point in a multi-party workflow. Designing the installer-to-admin handoff explicitly, instead of routing it through a CX agent, was the single decision that made self-serve viable.",
-          'A PRD without engineering input isn’t a requirement: it’s an assumption. The “sites” grouping sat in the PRD from day one and shaped two iterations before engineering review found it wasn’t buildable as written. Earlier alignment between PM, dev, and design on what’s actually shippable would have caught it before it set the direction.',
-          "Two users in one flow means two jobs to honour. The installer’s job is physical; the admin’s is operational. Demanding org identity at install time coupled them and violated both. Decoupling honoured both.",
-        ],
-        callout: {
-          label: "What I chose not to do",
-          body:
-            "I didn’t try to rescue the broken org pre-assignment with better error states. The cleaner call was to remove the dependency entirely and let the install complete without it. Designing the absence was more robust than designing the recovery.",
-        },
-      },
-      {
-        heading: "The bigger picture",
-        body:
-          "I didn’t just design a field tool. I designed what it feeds. The Installer App is the upstream half of a two-part system; the activation flow in Polaris Suite only works because this app captures the right data, in the right shape, at the right moment. The decisions that mattered most never show up in the UI: decoupling org identity from the install event, making the job record the unit of work instead of the individual station, letting the install complete cleanly even when Salesforce data wasn’t there. That seam, not the app, is what I was designing.",
       },
     ],
   },

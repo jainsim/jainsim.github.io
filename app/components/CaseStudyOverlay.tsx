@@ -138,11 +138,25 @@ function SectionImages({ images }: { images: CaseImage[] }) {
   return <div className="mt-xl flex flex-col gap-xl">{blocks}</div>;
 }
 
+function BulletList({ items, className }: { items: string[]; className: string }) {
+  return (
+    <ul className={`${className} flex flex-col gap-sm`}>
+      {items.map((p) => (
+        <li key={p} className="flex gap-sm text-body-lg text-body">
+          <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-mute" />
+          <span>{p}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /**
  * Renders body copy, splitting blank-line-separated text into paragraphs.
  * The first paragraph can take a distinct `leadClassName` so a section opens
  * with a darkened lead before settling into body-coloured copy.
- * A paragraph opening with `**Label:**` renders that label as an ink run-in.
+ * A paragraph opening with `**Label:**` renders that label as an ink run-in,
+ * and a paragraph made only of `- ` lines renders as a bullet list.
  */
 function Prose({
   text,
@@ -157,6 +171,12 @@ function Prose({
   return (
     <>
       {paragraphs.map((p, i) => {
+        const lines = p.split("\n");
+        if (lines.every((l) => l.startsWith("- "))) {
+          return (
+            <BulletList key={i} items={lines.map((l) => l.slice(2))} className="mt-md" />
+          );
+        }
         const base = i === 0 ? leadClassName ?? className : className;
         const runIn = p.match(/^\*\*(.+?)\*\*\s*/);
         return (
@@ -202,16 +222,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
           </dl>
         ) : null}
 
-        {s.points ? (
-          <ul className="mt-lg flex flex-col gap-sm">
-            {s.points.map((p) => (
-              <li key={p} className="flex gap-sm text-body-lg text-body">
-                <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-mute" />
-                <span>{p}</span>
-              </li>
-            ))}
-          </ul>
-        ) : null}
+        {s.points ? <BulletList items={s.points} className="mt-lg" /> : null}
 
         {callouts.map((c, i) => (
           <aside key={i} className="mt-xl rounded-md border border-hairline bg-elevated p-lg">
