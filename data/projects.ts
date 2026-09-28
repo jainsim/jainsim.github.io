@@ -9,6 +9,7 @@ export type CaseImage = {
   //  wide   - a portrait/composite shot, centered at a medium width
   //  full   - a landscape UI shot spanning the full image column
   layout?: "inline" | "phone" | "wide" | "full";
+  scale?: number; // inline only: fraction of the shared phone width (e.g. 0.75)
 };
 
 export type CaseMetric = { value: string; label: string };
@@ -189,6 +190,7 @@ export const projects: Project[] = [
             width: 662,
             height: 1178,
             layout: "inline",
+            scale: 0.85,
             caption:
               "Org-agnostic flow: the installer can skip Salesforce-dependent org data.",
           },

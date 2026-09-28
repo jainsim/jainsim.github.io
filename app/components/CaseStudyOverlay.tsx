@@ -63,14 +63,17 @@ function ProjectPager({
 function Figure({ image }: { image: CaseImage }) {
   // Landscape UI shots fill the column width; tall portrait/phone screens are
   // capped to the viewport height so they never overflow a laptop screen, and
-  // the matte card hugs the image instead of stretching it.
+  // the matte card hugs the image instead of stretching it. Phone screens in a
+  // grid row share one width so long scroll captures keep the same scale.
   const isFull = image.layout === "full";
+  const isInline = (image.layout ?? "inline") === "inline";
   return (
     <figure className={`m-0 ${isFull ? "" : "flex flex-col items-center"}`}>
       <span
         className={`overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg ${
-          isFull ? "block" : "inline-block"
+          isFull ? "block" : isInline ? "block w-full" : "inline-block"
         }`}
+        style={isInline && image.scale ? { width: `${image.scale * 100}%` } : undefined}
       >
         <Image
           src={image.src}
@@ -79,7 +82,7 @@ function Figure({ image }: { image: CaseImage }) {
           height={image.height}
           sizes="(max-width: 768px) 100vw, 900px"
           className={`block ${
-            isFull ? "h-auto w-full" : "h-auto w-auto max-h-[70vh] max-w-full"
+            isFull || isInline ? "h-auto w-full" : "h-auto w-auto max-h-[70vh] max-w-full"
           }`}
         />
       </span>
@@ -107,12 +110,15 @@ function SectionImages({ images }: { images: CaseImage[] }) {
 
   const flushRun = (key: string) => {
     if (run.length === 0) return;
-    const cols =
-      run.length >= 3 ? "sm:grid-cols-3" : run.length === 2 ? "sm:grid-cols-2" : "";
+    // Six-column track, two per screen: every phone screen gets a third of the
+    // row, and shorter runs are centred instead of stretching wider.
+    const start = run.length === 1 ? "sm:col-start-3" : run.length === 2 ? "sm:col-start-2" : "";
     blocks.push(
-      <div key={key} className={`grid grid-cols-1 items-start gap-lg ${cols}`}>
-        {run.map((img) => (
-          <Figure key={img.src} image={img} />
+      <div key={key} className="grid grid-cols-1 items-start gap-lg sm:grid-cols-6">
+        {run.map((img, i) => (
+          <div key={img.src} className={`sm:col-span-2 ${i === 0 ? start : ""}`}>
+            <Figure image={img} />
+          </div>
         ))}
       </div>,
     );
