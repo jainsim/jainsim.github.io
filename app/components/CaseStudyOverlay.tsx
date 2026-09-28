@@ -142,6 +142,7 @@ function SectionImages({ images }: { images: CaseImage[] }) {
  * Renders body copy, splitting blank-line-separated text into paragraphs.
  * The first paragraph can take a distinct `leadClassName` so a section opens
  * with a darkened lead before settling into body-coloured copy.
+ * A paragraph opening with `**Label:**` renders that label as an ink run-in.
  */
 function Prose({
   text,
@@ -157,9 +158,17 @@ function Prose({
     <>
       {paragraphs.map((p, i) => {
         const base = i === 0 ? leadClassName ?? className : className;
+        const runIn = p.match(/^\*\*(.+?)\*\*\s*/);
         return (
           <p key={i} className={i === 0 ? base : `mt-md ${base}`}>
-            {p}
+            {runIn ? (
+              <>
+                <span className="font-medium text-ink">{runIn[1]}</span>{" "}
+                {p.slice(runIn[0].length)}
+              </>
+            ) : (
+              p
+            )}
           </p>
         );
       })}
@@ -169,36 +178,17 @@ function Prose({
 
 /** One case-study section: reading column of copy + wider image column. */
 function SectionBlock({ section: s }: { section: CaseSection }) {
+  const callouts = [...(s.callout ? [s.callout] : []), ...(s.callouts ?? [])];
   return (
     <section>
       <div className="mx-auto max-w-3xl">
         <h2 className="text-heading-md text-ink">{s.heading}</h2>
-        <Prose
-          text={s.body}
-          leadClassName="mt-md text-body-lg text-ink"
-          className="mt-md text-body-lg text-body"
-        />
-
-        {s.points ? (
-          <ul className="mt-lg flex flex-col gap-sm">
-            {s.points.map((p) => (
-              <li key={p} className="flex gap-sm text-body-lg text-body">
-                <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-mute" />
-                <span>{p}</span>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-
-        {s.callout ? (
-          <aside className="mt-xl rounded-md border border-hairline bg-elevated p-lg">
-            {s.callout.label ? (
-              <p className="font-mono text-mono-eyebrow uppercase text-mute">
-                {s.callout.label}
-              </p>
-            ) : null}
-            <Prose text={s.callout.body} className="mt-sm text-body-lg text-body" />
-          </aside>
+        {s.body ? (
+          <Prose
+            text={s.body}
+            leadClassName="mt-md text-body-lg text-ink"
+            className="mt-md text-body-lg text-body"
+          />
         ) : null}
 
         {s.metrics ? (
@@ -211,6 +201,26 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
             ))}
           </dl>
         ) : null}
+
+        {s.points ? (
+          <ul className="mt-lg flex flex-col gap-sm">
+            {s.points.map((p) => (
+              <li key={p} className="flex gap-sm text-body-lg text-body">
+                <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-mute" />
+                <span>{p}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
+        {callouts.map((c, i) => (
+          <aside key={i} className="mt-xl rounded-md border border-hairline bg-elevated p-lg">
+            {c.label ? (
+              <p className="font-mono text-mono-eyebrow uppercase text-mute">{c.label}</p>
+            ) : null}
+            <Prose text={c.body} className="mt-sm text-body-lg text-body" />
+          </aside>
+        ))}
       </div>
 
       {s.images ? (

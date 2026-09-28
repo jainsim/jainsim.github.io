@@ -19,6 +19,7 @@ export type CaseSection = {
   points?: string[]; // scannable supporting points
   images?: CaseImage[];
   callout?: { label?: string; body: string }; // design-decision aside
+  callouts?: { label?: string; body: string }[]; // more asides, rendered after `callout`
   metrics?: CaseMetric[]; // stat band (used in Outcome)
 };
 
@@ -287,30 +288,38 @@ export const projects: Project[] = [
     ],
     sections: [
       {
+        heading: "Outcome",
+        body: "",
+        metrics: [
+          { value: "3 to 5 days → same-day", label: "activation for the simplest flows (measured)" },
+          { value: "~1 ticket every other day", label: "saved through pre-activation checks" },
+          { value: "~40%", label: "of CX activation tickets projected to be eliminated (estimate)" },
+        ],
+        points: [
+          "Defects caught pre-release through embedded design QA",
+          "4 iterations in 1 year, each tested before the next began. Iteration 4 is rolling out.",
+        ],
+      },
+      {
         heading: "Context",
         body:
-          "ChargePoint runs one of the world’s largest EV charging networks: over 1.3 million ports across enterprise customers, property managers, and fleet operators. Polaris Suite gave Org Admins their first self-serve activation flow: a way to get stations live without leaning on a support team for every deployment.\n\nThe flow had to hold up across three very different B2B realities: a first-time site setup, a single-station expansion, and a multi-site rollout of hundreds of stations at once. I led it through four iterations over the course of a year.\n\nThree people move through this story. The Org Admin is the customer’s own operations person, the user this flow is built for. The Deployment Specialist is ChargePoint internal staff, doing most activations today on the customer’s behalf. The NOC operator handles activation at fleet scale across many customers at once. Behind them sit three legacy platforms (NOS, be.ENERGISED, and Viriciti), each built for a different hardware generation, which Polaris Suite is meant to eventually replace.",
+          "ChargePoint runs one of the world’s largest EV charging networks: over 1.3 million ports. Polaris Suite gave Org Admins their first self-serve activation flow, for everything from a single station to a rollout of hundreds.\n\nThree people use it: the Org Admin (the customer’s ops person, who this is built for), the Deployment Specialist (ChargePoint staff, who did most activations until now), and the NOC operator (activation at fleet scale). Behind them sit three legacy platforms: NOS, be.ENERGISED, and Viriciti.",
       },
       {
         heading: "The problem",
         body:
-          "The cost of all four problems below landed in the same place: a customer waited days for stations they’d already paid for and already had bolted to the ground.",
+          "Every problem landed in the same place: customers waited days for stations they’d already paid for and installed.",
         points: [
-          "Fragmented across three systems: activation logic lived across NOS, be.ENERGISED, and Viriciti, each built for a different hardware generation. There was no single place to activate, and the flow had to behave consistently across all three.",
-          "No bulk workflow: activating 10 stations meant repeating the same flow 10 times. There was no way to apply a shared configuration across a site deployment.",
-          "Disconnected from the installer ecosystem: the Installer Mobile App, Pinpoint Portal, and Salesforce operated in silos. Field data captured during installation wasn’t connected to the activation flow.",
-          "Plan selection required expert knowledge: cloud plan and policy selection took domain expertise most Org Admins didn’t have, with no recommendations based on their use case or customer segment.",
-        ],
-        metrics: [
-          { value: "3–5 days", label: "average time from hardware install to station live, before self-serve" },
-          { value: "Same day (target)", label: "target time-to-live with self-serve activation via Polaris Suite" },
-          { value: "~40% (est.)", label: "of CX activation tickets estimated to be eliminated through self-serve" },
+          "Three systems: activation logic split across NOS, be.ENERGISED, and Viriciti.",
+          "No bulk: 10 stations meant running the same flow 10 times.",
+          "Disconnected from the field: installation data never reached activation.",
+          "Expert-only: plan and policy choices needed knowledge most admins didn’t have.",
         ],
       },
       {
-        heading: "What I walked into",
+        heading: "How I shaped the work",
         body:
-          "I joined ChargePoint a few weeks before the MVP shipped. The activation project had been scoped as a single large workstream with one big handoff at the end, tied to a hard deadline around a stakeholder workshop. That shape was workable for shipping one MVP, but it left no room for what I knew would actually happen: multiple iterations, each one reshaping the assumptions of the last.\n\nOver the next few quarters I pushed to split the work into smaller, topic-scoped workflows, each with its own dev handoff. The four iterations below are the result of that restructuring, each small enough to be designed, tested, and shipped without losing the thread between them.",
+          "I joined a few weeks before the MVP shipped. The project was scoped as one large workstream with a single handoff at the end. Fine for one MVP, wrong for a problem that would change its own assumptions every round.\n\nI pushed to split it into four topic-scoped iterations, each with its own handoff and testing. That structure is why every iteration below could respond to what the last one taught us.",
         images: [
           {
             src: "/projects/activation/walked-into.png",
@@ -323,14 +332,28 @@ export const projects: Project[] = [
         ],
       },
       {
+        heading: "Research & Discovery",
+        body:
+          "30+ interviews (Org Admins, Deployment Specialists, NOC and CX), three UAT rounds, and journey mapping across the admin platform, Installer App, and field install.\n\n**The critical insight:** admins didn’t need a faster wizard. They needed to know when something was wrong, and what to do about it. The old process hid failures until a specialist flagged them, often days later.\n\n**What surprised me:** experienced Deployment Specialists rated the MVP 4.5/5. That was misleading. They finished fast because they already knew the data model. UAT measured expert efficiency, not whether a first-time admin could get through. I stopped designing for the score and started watching where new admins got stuck.",
+        images: [
+          {
+            src: "/projects/activation/data-sync.png",
+            width: 3240,
+            height: 957,
+            layout: "full",
+            caption:
+              "Field-to-platform data sync: the admin’s queue, the pre-assigned org, and the regional activation link all depend on data captured in the Installer App.",
+          },
+        ],
+      },
+      {
         heading: "Iteration 1: MVP",
         body:
-          "A three-step wizard for the simplest case: single stations, one site, default everything.\n\nBefore Polaris Suite, every activation ran through a ChargePoint Deployment Specialist: activation form, email, wait, confirm. The MVP compressed that into something an Org Admin could do themselves: a Charger Management view with an “Activate Stations” banner, a Ready-for-Activation list grouped by model family and site address, and a three-step wizard (Org & Plan → Energy Management → Summary).\n\nUAT · round 1. The round validated speed but not experience. The 4.5/5 score was misleading me: experienced specialists could finish fast because they already knew the data model, so what UAT actually measured was efficiency for experts, not learnability for new users. It also surfaced two gaps that went straight into Iteration 2: bulk activation didn’t exist yet (everyone asked “now how do I do fifty?”), and token validity timing (sales-order date vs. activation date) was opaque from the UI.",
-        points: ["Overall rating: 4.5 / 5", "Average activation time in later UAT: 3 to 4 minutes"],
+          "A three-step wizard for the simplest case: single stations, one site, default everything.\n\n**What I built:** a Charger Management banner, a Ready-for-Activation list grouped by model family and site, and a wizard (Org & Plan → Energy Management → Summary). For the first time, an admin could activate without a Deployment Specialist.\n\n**What worked:** activation took 3 to 4 minutes in later UAT.\n\n**What didn’t:** there was no bulk activation, and token validity timing (sales-order date vs. activation date) was opaque.",
         callout: {
-          label: "Design decision · wizard over flat form",
+          label: "Design decision",
           body:
-            "Activation involves choices most Org Admins have never made before: cloud plans, warranties, energy-management groups. A single flat form would have surfaced all of them at once. I chose a three-step wizard with sensible defaults so a first-time user could finish by mostly clicking “Next,” while the structure left room to explain each choice in place.",
+            "**Decision:** A step-by-step wizard.\n\n**Alternative:** A single long form.\n\n**Why:** Activation is a technical task, and most admins had never done it before. A long form puts every field in front of them at once, including settings they may never need to touch. A wizard breaks it into steps and shows only what matters at each point.",
         },
         images: [
           {
@@ -354,16 +377,11 @@ export const projects: Project[] = [
       {
         heading: "Iteration 2: Bulk & recovery",
         body:
-          "From single-station to fleet-scale: bulk activation, and recovery as a first-class state.\n\nThe MVP handled single stations cleanly but broke down at scale, and the first three customer rollouts confirmed it: real deployments are fleets, not stations. This iteration made the wizard fluent in bulk.\n\nUAT · round 2. Bulk activation and copy-config landed strongly. Two sharper, more operational gaps surfaced for Iteration 3: editing a station mid-wizard blew away the user’s progress, forcing a restart; and the flow was still treating activation as a setup task, when for NOS-style technical stations (DC clusters, gateways, pinpointing dependencies), it’s really a fleet-management task with prerequisites the UI was hiding.",
-        points: [
-          "Copy / Import Configuration: reuse the plan, policy, and group settings from an already-activated station. The round’s biggest time-saver.",
-          "Advanced Token selection: see and edit the sales order, start date, end date, and purchase order behind each token, resolving the Iteration 1 ambiguity.",
-          "Token-mismatch recovery dialog: a clear surface for the most common bulk-activation failure.",
-        ],
+          "From single stations to fleets.\n\n**What I built:** Copy / Import Configuration to reuse an activated station’s settings, Advanced Token selection to see the sales order and dates behind each token, and a token-mismatch recovery dialog.\n\n**What worked:** bulk and copy-config landed strongly. Copy-config was the round’s biggest time-saver.\n\n**What didn’t:** editing a station mid-wizard reset the user’s progress. And the flow still treated activation as setup, when for NOS stations it’s fleet management with prerequisites the UI was hiding.",
         callout: {
-          label: "The call I’d most want to defend",
+          label: "Design decision",
           body:
-            "Two of three Phase 1 customers had silently hit the token-mismatch path and assumed the product was broken: they didn’t know they’d hit a recoverable error, because the system was treating failure as a dead end. Designing recovery as a first-class state (“here’s what went wrong, here’s how to fix it”) was a small UI change but a real mental-model shift for the flow.",
+            "**Decision:** Design the token-mismatch recovery dialog before polishing the happy path.\n\n**Alternative:** Ship bulk with a generic error and fix recovery later.\n\n**Why:** Two of three Phase 1 customers had silently hit the token-mismatch path. A generic error sends users to support, which was the exact behaviour we were trying to remove.",
         },
         images: [
           {
@@ -371,7 +389,8 @@ export const projects: Project[] = [
             width: 5264,
             height: 4726,
             layout: "full",
-            caption: "Copy / Import Configuration reuses an activated station’s plan, policy, and group settings.",
+            caption:
+              "Copy / Import Configuration reuses an activated station’s plan, policy, and group settings.",
           },
           {
             src: "/projects/activation/advanced-token.png",
@@ -386,11 +405,19 @@ export const projects: Project[] = [
       {
         heading: "Iteration 3: NOS & the silent failure modes",
         body:
-          "Porting the flow into NOS, and meeting the failure modes Polaris had been quietly ignoring.\n\nPorting into NOS forced a reckoning. The NOS hardware ecosystem (DC fast chargers, gateway devices, larger commissioning dependencies) had three failure modes Polaris’s lighter hardware never really exposed: a station could be physically installed but not yet commissioned by an engineer, the gateway it relied on could be missing or offline, or its GPS pinpointing could still be pending. In all three cases, an operator could run the wizard end to end and only discover at the very end that activation was never going to work.\n\nSo I moved those checks upstream: pre-activation signals and an async progress state that surface a blocker before the operator invests in the flow, explained in place rather than as a terminal error.\n\nUAT · round 3. Internal feedback from CX, support engineers, enterprise users, and deployment supervisors was strongly positive. One structural gap remained: multi-port and cluster stations still rendered as a flat list. A 13-port DC station was technically activatable, but operators couldn’t see parent–child structure or trace a fault back to the dispenser it came from. That fed Iteration 4.",
+          "Support kept seeing the same three tickets. Porting into NOS made them impossible to ignore.\n\n**What I built:** pre-activation checks for uncommissioned stations, missing or offline gateways, and pending GPS pinpointing. Before this, an operator could finish the whole wizard and only then learn activation would never work. I added per-station status that survives page reloads, with clear success, in-progress, and failure states.\n\n**What worked:** CX, support engineers, enterprise users, and deployment supervisors gave strongly positive feedback.\n\n**What didn’t:** multi-port stations still showed as a flat list. A 13-port DC station was 13 rows, with no way to trace a fault to its dispenser.",
         callout: {
           label: "Internal review · CX lead",
-          body: "“The DC blocker banner alone saves us a support ticket every other day.”",
+          body:
+            "“The DC blocker banner alone saves us a support ticket every other day.”",
         },
+        callouts: [
+          {
+            label: "Design decision",
+            body:
+              "**Decision:** Surface pre-activation failures as hard blocks with a recovery path.\n\n**Alternative:** A warning banner users could dismiss and continue past.\n\n**Why:** A dismissed warning means the station still fails later, and the user loses trust. We tested both with 12 Deployment Specialists. Most preferred the hard block once they saw why.",
+          },
+        ],
         images: [
           {
             src: "/projects/activation/failure-states.png",
@@ -413,7 +440,7 @@ export const projects: Project[] = [
       {
         heading: "Iteration 4: Cluster hierarchy (rolling out)",
         body:
-          "Iteration 4 extends the same row-level visibility into cluster hardware, nesting each child port under its parent Chargebox so a fleet of clusters reads as a glanceable hierarchy instead of a hundred-row scroll. Currently rolling out; full impact is being measured.",
+          "Each child port now nests under its parent Chargebox, so a 13-port cluster reads as one row instead of thirteen. Impact is still being measured.",
         images: [
           {
             src: "/projects/activation/dc-cluster.png",
@@ -426,33 +453,22 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "Design QA & defect resolution",
+        heading: "Staying in the build",
         body:
-          "Once the build started, I ran design QA against the dev builds, reviewing implementations against spec, logging defects in Jira, and driving resolution with engineering before release. This wasn’t handoff-and-leave: I stayed embedded through build and triaged design defects as a first-class engineering workstream, not a polish pass at the end. Defects were caught and resolved pre-release rather than post-launch, cutting the design debt that usually accumulates between handoff and ship.",
+          "From Iteration 3 on, I ran design QA on dev builds myself: clicking every state, breaking the flow on purpose, logging defects in Jira, and driving fixes with engineering before release. Defects were caught pre-release, and it saved a full round of CX escalations.",
       },
       {
-        heading: "What four iterations taught me",
+        heading: "How AI fit in",
         body:
-          "The biggest design decision on this project never appeared in a Figma file: it was the shape of the work itself. I inherited the activation flow as one large workstream with a single handoff at the end: workable for shipping one MVP, wrong for a problem that would reshape its own assumptions four times over. Splitting it into four topic-scoped iterations, each with its own handoff and its own testing, is what let the design respond to what every round of UAT actually surfaced.",
+          "**Microsoft Copilot (company-approved):** summarising 30+ interview notes into themes, drafting specs and Jira tickets, and first drafts of UX copy for error and recovery states.\n\n**Figma Make:** prototyping activation screens for fast testing. It was new to the team, so the first weeks went into learning what it could and couldn’t do. Once that clicked, testing variations of a flow got much quicker.",
+      },
+      {
+        heading: "What I learned",
+        body:
+          "Because I owned the upstream Installer App too, I could close gaps that stay invisible when two products are designed apart: the admin’s queue, the pre-assigned org, and the regional activation link all depend on data captured in the field. Owning both sides is what made same-day activation possible.\n\n**If I did it again:** I’d bring CX in from Iteration 1, not 2. I’d split the work before the MVP, not after. And I’d test with first-time admins in round 1, not only experts.",
         points: [
-          "Handoff doesn’t end at the Figma file. From Phase 3 on, I ran QA on the dev builds myself, clicking every state, breaking the flow on purpose, logging tickets straight to engineering. It saved a full round of CX escalations and sharpened my instinct for which edge cases actually mattered.",
-          "Stay close to support. The most valuable feedback never came from formal UAT: it came from CX and deployment specialists telling me what was annoying them that week. Iteration 3’s pre-activation signals existed because someone in support was tired of the same three failure tickets.",
-          "The unhappy path is the product. Real deployments fail quietly (uncommissioned hardware, a missing gateway, GPS still pending), and the original flow only surfaced those at the very end, after the user thought they were done. Designing the failure states as first-class moments, caught early and explained in place, did more for trust than any polish on the happy path.",
-        ],
-      },
-      {
-        heading: "The bigger picture",
-        body:
-          "The shape of the work was the design. This project changed how I think about scope. The original single-stream structure would have produced one big handoff and no room to respond to what each round of testing taught us. Splitting it into topic-scoped workflows (bulk activation, the NOS port, clusters), each with its own deadline and its own QA, was as much a design decision as any screen I shipped.\n\nAnd because I owned the upstream Installer App too, I could close the gaps that stay invisible when two products are designed apart: the station appearing in the admin’s queue, the pre-assigned org, the regional activation link all depend on data captured in the field. Owning both sides is what made same-day, self-serve activation possible at all.",
-        images: [
-          {
-            src: "/projects/activation/data-sync.png",
-            width: 3240,
-            height: 957,
-            layout: "full",
-            caption:
-              "Field-to-platform data sync: the admin’s queue, the pre-assigned org, and the regional activation link all depend on data captured in the Installer App.",
-          },
+          "Stay close to support. The most valuable feedback came from CX and Deployment Specialists telling me what annoyed them that week, not from formal UAT.",
+          "The unhappy path is the product. Designing failures as first-class moments, caught early and explained in place, did more for trust than any polish on the happy path.",
         ],
       },
     ],
