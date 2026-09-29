@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { projectBySlug } from "@/data/projects";
+import { galleryItemBySlug } from "@/data/projects";
 
 /**
  * Static-export 404 → GitHub Pages serves this file for any path without a
@@ -16,7 +16,7 @@ export default function NotFound() {
     const BP = process.env.NEXT_PUBLIC_BASE_PATH || "";
     const path = window.location.pathname.slice(BP.length);
     const m = path.match(/^\/work\/([^/]+)\/?$/);
-    if (m && projectBySlug(m[1])) {
+    if (m && galleryItemBySlug(m[1])) {
       window.location.replace(`${BP}/work/${m[1]}/`);
     } else {
       window.location.replace(`${BP}/`);

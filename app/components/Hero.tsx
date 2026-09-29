@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import HeroFluid from "./hero/HeroFluid";
+import { prototypeItem } from "@/data/projects";
 
 /**
  * Scene 1 - dark cinematic Fjord hero.
@@ -137,7 +138,18 @@ export default function Hero() {
           {/* CTA row - light-on-dark twins of the Closing pills */}
           <div className="mt-xl flex flex-wrap items-center gap-md">
             <a
-              href="#prototype"
+              href={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/work/${prototypeItem.slug}/`}
+              onClick={(e) => {
+                // Open the in-site embed smoothly; the real /work/<slug>/ URL is
+                // the fallback for modified clicks and no-JS. A synthetic
+                // popstate lets ProjectsSection pick up the pushed path.
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0)
+                  return;
+                e.preventDefault();
+                const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
+                window.history.pushState({}, "", `${base}/work/${prototypeItem.slug}/`);
+                window.dispatchEvent(new PopStateEvent("popstate"));
+              }}
               className="rounded-pill border border-transparent bg-fjord-text px-lg py-sm text-body-lg font-medium text-fjord-ink transition-opacity hover:opacity-90"
             >
               See a live prototype

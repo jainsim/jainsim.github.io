@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, type CSSProperties } from "react";
-import { adjacentProjects } from "@/data/projects";
+import { adjacentGalleryItems } from "@/data/projects";
 import type { CaseImage, CaseSection, Project } from "@/data/projects";
 
 type Props = {
@@ -22,7 +22,7 @@ function ProjectPager({
   slug: string;
   onNavigate: (slug: string) => void;
 }) {
-  const { prev, next } = adjacentProjects(slug);
+  const { prev, next } = adjacentGalleryItems(slug);
 
   const Link = ({ project: p, dir }: { project: Project; dir: "prev" | "next" }) => (
     <a

@@ -675,6 +675,21 @@ const byIndex = (a: { index: string }, b: { index: string }) =>
  */
 export const galleryOrder: Project[] = [...projects, prototypeItem].sort(byIndex);
 
+/** Resolve any gallery item (case study or the prototype) by slug. */
+export const galleryItemBySlug = (slug: string) =>
+  galleryOrder.find((p) => p.slug === slug);
+
+/** Previous/next across the whole gallery (prototype included), wrapping. */
+export const adjacentGalleryItems = (slug: string) => {
+  const i = galleryOrder.findIndex((p) => p.slug === slug);
+  if (i === -1) return { prev: null, next: null };
+  const n = galleryOrder.length;
+  return {
+    prev: galleryOrder[(i - 1 + n) % n],
+    next: galleryOrder[(i + 1) % n],
+  };
+};
+
 /** Case studies alone, in index order (the prototype isn't a case study). */
 const caseStudyOrder: Project[] = [...projects].sort(byIndex);
 

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SiteShell from "@/app/components/SiteShell";
-import { projects, projectBySlug } from "@/data/projects";
+import { galleryOrder, galleryItemBySlug } from "@/data/projects";
 
 type Params = { slug: string };
 
 /** Pre-render one static HTML file per project at build time. */
 export async function generateStaticParams(): Promise<Params[]> {
-  return projects.map((p) => ({ slug: p.slug }));
+  return galleryOrder.map((p) => ({ slug: p.slug }));
 }
 
 // Only the known project slugs exist; anything else is a real 404.
@@ -15,7 +15,7 @@ export const dynamicParams = false;
 
 /** Per-page title + OG/Twitter, baked into each project's static HTML. */
 export function generateMetadata({ params }: { params: Params }): Metadata {
-  const p = projectBySlug(params.slug);
+  const p = galleryItemBySlug(params.slug);
   if (!p) return {};
 
   const title = `${p.title} · Seema Jain`;
@@ -34,6 +34,6 @@ export function generateMetadata({ params }: { params: Params }): Metadata {
 }
 
 export default function WorkPage({ params }: { params: Params }) {
-  if (!projectBySlug(params.slug)) notFound();
+  if (!galleryItemBySlug(params.slug)) notFound();
   return <SiteShell initialSlug={params.slug} />;
 }

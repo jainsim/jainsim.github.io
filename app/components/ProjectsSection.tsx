@@ -32,10 +32,13 @@ export default function ProjectsSection({
 }) {
   const [active, setActive] = useState(0);
   const [inView, setInView] = useState(false);
-  const [protoOpen, setProtoOpen] = useState(false);
-  // Seeded from the route on a /work/<slug> page so the overlay is present in
-  // the static HTML (and matches on hydration).
-  const [openSlug, setOpenSlug] = useState<string | null>(initialSlug);
+  // Seeded from the route so the right overlay is present in the static HTML
+  // (and matches on hydration): a case-study slug opens CaseStudyOverlay, the
+  // prototype slug opens the live embed.
+  const [protoOpen, setProtoOpen] = useState(initialSlug === prototypeItem.slug);
+  const [openSlug, setOpenSlug] = useState<string | null>(
+    initialSlug && projectBySlug(initialSlug) ? initialSlug : null
+  );
   const sectionRef = useRef<HTMLElement>(null);
 
   // Push a real path route so each case study is a shareable, crawlable URL.
@@ -46,6 +49,7 @@ export default function ProjectsSection({
 
   const open = useCallback(
     (slug: string) => {
+      setProtoOpen(false);
       setOpenSlug(slug);
       setUrl(slug);
     },
@@ -56,6 +60,29 @@ export default function ProjectsSection({
     setOpenSlug(null);
     setUrl(null);
   }, [setUrl]);
+
+  // The prototype is URL-addressable like a case study: opening pushes
+  // /work/<slug>/ and closing returns to /, so it deep-links and Back works.
+  const openPrototype = useCallback(() => {
+    setOpenSlug(null);
+    setProtoOpen(true);
+    setUrl(prototypeItem.slug);
+  }, [setUrl]);
+
+  const closePrototype = useCallback(() => {
+    setProtoOpen(false);
+    setUrl(null);
+  }, [setUrl]);
+
+  // One pager navigation across the whole gallery: route to the right overlay
+  // depending on whether the target is the prototype or a case study.
+  const navigate = useCallback(
+    (slug: string) => {
+      if (slug === prototypeItem.slug) openPrototype();
+      else open(slug);
+    },
+    [open, openPrototype]
+  );
 
   // Resolve the open project from the path on load + browser back/forward, and
   // transparently upgrade legacy `?project=<slug>` links to the new path.
@@ -68,32 +95,12 @@ export default function ProjectsSection({
         slug = legacy;
         window.history.replaceState({}, "", `${BASE_PATH}/work/${slug}/`);
       }
+      setProtoOpen(slug === prototypeItem.slug);
       setOpenSlug(slug && projectBySlug(slug) ? slug : null);
     };
     sync();
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);
-  }, []);
-
-  // Open the live-prototype overlay on the #prototype hash, so links anywhere
-  // on the page (e.g. the hero CTA) can open the same in-site iframe, with its
-  // "Back to portfolio" control, instead of dead-ending on the standalone app.
-  useEffect(() => {
-    const syncProto = () => setProtoOpen(window.location.hash === "#prototype");
-    syncProto();
-    window.addEventListener("hashchange", syncProto);
-    return () => window.removeEventListener("hashchange", syncProto);
-  }, []);
-
-  const closeProto = useCallback(() => {
-    setProtoOpen(false);
-    if (window.location.hash === "#prototype") {
-      window.history.replaceState(
-        null,
-        "",
-        window.location.pathname + window.location.search
-      );
-    }
   }, []);
 
   // Show the sticky counter only while the Work section is in view
@@ -127,7 +134,7 @@ export default function ProjectsSection({
             project={p}
             order={i}
             onOpen={open}
-            onOpenPrototype={() => setProtoOpen(true)}
+            onOpenPrototype={openPrototype}
             onActive={setActive}
           />
         ))}
@@ -137,7 +144,7 @@ export default function ProjectsSection({
       <div
         aria-hidden
         className={`pointer-events-none fixed bottom-lg left-lg z-30 font-mono text-mono-eyebrow text-mute transition-opacity duration-500 max-md:hidden ${
-          inView && !openSlug ? "opacity-100" : "opacity-0"
+          inView && !openSlug && !protoOpen ? "opacity-100" : "opacity-0"
         }`}
       >
         {galleryItems[active].index} / (0{galleryItems.length})
@@ -146,14 +153,16 @@ export default function ProjectsSection({
       <CaseStudyOverlay
         project={openSlug ? projectBySlug(openSlug) ?? null : null}
         onClose={close}
-        onNavigate={open}
+        onNavigate={navigate}
       />
 
       <PrototypeOverlay
         open={protoOpen}
+        slug={prototypeItem.slug}
         url={prototypeItem.href ?? ""}
         title={prototypeItem.title}
-        onClose={closeProto}
+        onClose={closePrototype}
+        onNavigate={navigate}
       />
     </section>
   );

@@ -186,10 +186,7 @@ export default function ProjectStage({
         <div className="card__foot">
           <a
             className="card__link"
-            href={
-              isPrototype ? project.href : `${BASE_PATH}/work/${project.slug}/`
-            }
-            {...(isPrototype ? { target: "_blank", rel: "noopener" } : {})}
+            href={`${BASE_PATH}/work/${project.slug}/`}
             onClick={(e) => {
               if (
                 e.metaKey ||
