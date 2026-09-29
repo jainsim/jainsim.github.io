@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, type CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { adjacentGalleryItems } from "@/data/projects";
 import type { CaseImage, CaseSection, Project } from "@/data/projects";
 
@@ -202,13 +202,51 @@ function Prose({
   );
 }
 
+/**
+ * Same-origin live prototype. Its own page background, intro line, padding and
+ * drop shadow are stripped, and the frame fills the iframe so it sits flat on
+ * the mat like the screenshots.
+ */
+const EMBED_CSS =
+  "html,body{background:transparent!important}.concept{display:none!important}.stage,.stage>:not(.concept){height:100%;max-width:none!important;padding:0!important}.frame{height:100%!important;min-height:0!important;box-shadow:none!important}";
+
+function EmbedFrame({ src, title, height }: { src: string; title: string; height: number }) {
+  const ref = useRef<HTMLIFrameElement>(null);
+  const flatten = () => {
+    const doc = ref.current?.contentDocument;
+    if (!doc?.head || doc.getElementById("embed-flat")) return;
+    const style = doc.createElement("style");
+    style.id = "embed-flat";
+    style.textContent = EMBED_CSS;
+    doc.head.appendChild(style);
+  };
+  // The iframe can finish loading before hydration attaches onLoad.
+  useEffect(() => {
+    if (ref.current?.contentDocument?.readyState === "complete") flatten();
+  });
+  return (
+    <iframe
+      ref={ref}
+      src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${src}`}
+      title={title}
+      // 600px tall on narrow screens, the configured height from 640px up
+      className="block h-[600px] w-full bg-transparent sm:h-[var(--embed-h)]"
+      style={{ "--embed-h": `${height}px` } as CSSProperties}
+      onLoad={flatten}
+    />
+  );
+}
+
 /** One case-study section: reading column of copy + wider image column. */
 function SectionBlock({ section: s }: { section: CaseSection }) {
   const callouts = [...(s.callout ? [s.callout] : []), ...(s.callouts ?? [])];
   return (
-    <section>
+    <section id={s.id} className={s.id ? "scroll-mt-3xl" : undefined}>
       <div className="mx-auto max-w-3xl">
         <h2 className="text-heading-md text-ink">{s.heading}</h2>
+        {s.label ? (
+          <p className="mt-xs font-mono text-mono-eyebrow uppercase text-mute">{s.label}</p>
+        ) : null}
         {s.body ? (
           <Prose
             text={s.body}
@@ -244,6 +282,27 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
         <div className="mx-auto max-w-5xl">
           <SectionImages images={s.images} />
         </div>
+      ) : null}
+
+      {s.embed ? (
+        <>
+          <figure className="mx-auto mt-xl max-w-5xl">
+            {/* Same bordered mat as the screenshots */}
+            <span className="block overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg">
+              <EmbedFrame src={s.embed.src} title={s.embed.title} height={s.embed.height} />
+            </span>
+            {s.embed.caption ? (
+              <figcaption className="mt-sm font-mono text-body-sm leading-5 text-mute">
+                {s.embed.caption}
+              </figcaption>
+            ) : null}
+          </figure>
+          {s.embed.after ? (
+            <div className="mx-auto mt-xl max-w-3xl">
+              <Prose text={s.embed.after} className="text-body-lg text-body" />
+            </div>
+          ) : null}
+        </>
       ) : null}
     </section>
   );
@@ -314,6 +373,24 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
             {project.title}
           </h1>
           <p className="mt-lg text-body-lg text-body">{project.subtitle}</p>
+          {project.introNote ? (
+            <p className="mt-sm text-body-sm text-mute">
+              {project.introNote.text}{" "}
+              <a
+                href={project.introNote.href}
+                onClick={(e) => {
+                  // Scroll inside the overlay; skip the hash so routing stays put.
+                  e.preventDefault();
+                  document
+                    .querySelector(project.introNote!.href)
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="text-ink underline underline-offset-4 hover:text-link"
+              >
+                {project.introNote.linkLabel}
+              </a>
+            </p>
+          ) : null}
         </header>
 
         {/* Meta strip */}

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Station activation: AI-assisted setup (concept prototype)</title>
+<style>
+:root{--bg:#F4F6F9;--panel:#FFFFFF;--fg:#0B0F14;--mut:#5A6672;--line:#D8DEE5;--soft:#F4F6F9;--pri:#2B5BFF;--pridk:#1E42C4;--prifg:#FFFFFF;--tint:#ECF0FF;--warn:#9A5B00;--warnsoft:#FFF0D6;--rail:#FFFFFF;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0B0F14;--panel:#141a22;--fg:#E8ECF1;--mut:#9AA6B2;--line:#2A333E;--soft:#1B222C;--pri:#6E8FFF;--pridk:#9DB2FF;--prifg:#0B0F14;--tint:#1C2748;--warn:#F2B55A;--warnsoft:#33280F;--rail:#10151c}}
+:root[data-theme="dark"]{--bg:#0B0F14;--panel:#141a22;--fg:#E8ECF1;--mut:#9AA6B2;--line:#2A333E;--soft:#1B222C;--pri:#6E8FFF;--pridk:#9DB2FF;--prifg:#0B0F14;--tint:#1C2748;--warn:#F2B55A;--warnsoft:#33280F;--rail:#10151c}
+*{box-sizing:inherit}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;font-size:14px;line-height:1.45}
+.stage{max-width:1100px;margin:0 auto;padding:24px 16px}
+.concept{font-size:13px;color:var(--mut);margin:0 0 12px}
+.frame{display:flex;height:min(760px,calc(100vh - 48px));min-height:520px;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(11,15,20,.10)}
+.rail{width:52px;flex:none;border-right:1px solid var(--line);background:var(--rail);display:flex;flex-direction:column;align-items:center;gap:14px;padding:14px 0}
+.rail .logo{width:26px;height:26px;border-radius:50%;background:var(--pri)}
+.rail i{width:18px;height:18px;border-radius:4px;background:var(--line);display:block}
+.rail i.on{background:var(--pri);opacity:.35}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.top{flex:none;padding:14px 22px 0;border-bottom:1px solid var(--line)}
+.crumb{font-size:12px;color:var(--mut)}
+h1{font-size:18px;margin:4px 0 12px}
+.stepper{display:flex;align-items:center;gap:10px;padding:0 0 14px;overflow-x:auto}
+.st{display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:14px}
+.st .n{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:13px;color:var(--mut);flex:none}
+.st.on .n{background:var(--pri);border-color:var(--pri);color:var(--prifg)}
+.st.done .n{background:var(--tint);border-color:var(--pri);color:var(--pri)}
+.bar{flex:1;min-width:30px;height:2px;background:var(--line)}
+.bar.on{background:var(--pri)}
+.scroll{flex:1;overflow-y:auto;background:var(--soft);padding:16px 22px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px}
+.bottom{flex:none;display:flex;justify-content:space-between;align-items:center;padding:12px 22px;border-top:1px solid var(--line);background:var(--panel)}
+.row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.f{flex:1;min-width:200px}
+label.l,.l{display:block;font-size:12px;font-weight:600;margin-bottom:4px}
+select,.selbtn{width:100%;font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:7px 10px}
+select:disabled{background:var(--soft);color:var(--mut)}
+select.sm{max-width:220px}
+.dd{position:relative}
+.selbtn:disabled{background:var(--soft);color:var(--mut);cursor:not-allowed}
+.selbtn{display:flex;justify-content:space-between;align-items:center;cursor:pointer;text-align:left}
+.menu{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--panel);border:1px solid var(--line);border-radius:6px;box-shadow:0 8px 22px rgba(11,15,20,.14);z-index:5;padding:4px}
+.menu button{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;background:none;border:0;color:var(--fg);font:inherit;padding:8px 10px;border-radius:4px;cursor:pointer;text-align:left}
+.menu button:hover,.menu button:focus-visible{background:var(--soft)}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;border-radius:10px;padding:1px 8px;white-space:nowrap}
+.chip.ai,.chip.tok{background:var(--tint);color:var(--pridk)}
+.chip.you{border:1px dashed var(--mut);color:var(--mut)}
+.aihead{display:flex;align-items:center;gap:8px;margin:20px 0 8px}
+.aihead h2{font-size:16px;margin:0}
+.aihead h2 b{color:var(--pri)}
+.banner{border:1px solid;border-left-width:4px;border-radius:4px;padding:9px 12px;margin-bottom:12px}
+.banner.ai{border-color:var(--pri);background:var(--tint)}
+.banner.info{border-color:var(--line);border-left-color:var(--mut);background:var(--panel)}
+.banner.warn{border-color:var(--warn);background:var(--warnsoft)}
+.card{border:1px solid var(--line);border-radius:6px;padding:14px;margin-bottom:12px;background:var(--panel)}
+.card.editing{border:1px solid var(--mut)}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.ch h3{font-size:15px;margin:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.acts{display:flex;gap:14px}
+.link{background:none;border:0;padding:0;color:var(--pri);font:inherit;font-size:13px;font-weight:500;cursor:pointer}
+.link:hover{text-decoration:underline}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px 16px}
+.kv span{display:block;font-size:12px;color:var(--mut)}
+.kv span.chip{display:inline-flex;font-size:11px;color:var(--pridk)}
+.opt{border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin-bottom:8px}
+.opt.sel{border-color:var(--pri)}
+.opt>label{display:flex;align-items:center;gap:8px;cursor:pointer}
+input[type=radio],input[type=checkbox]{accent-color:var(--pri);width:16px;height:16px}
+.optbody{margin:10px 0 2px 26px}
+.sub{font-size:13px;font-weight:600;margin:14px 0 8px}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+th{font-size:12px;color:var(--mut);font-weight:600}
+td a{color:var(--pri)}
+details{border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin-top:10px}
+summary{cursor:pointer;font-weight:600}
+.btn{font:inherit;font-weight:500;border-radius:4px;padding:8px 18px;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
+.btn.p{background:var(--pri);border-color:var(--pri);color:var(--prifg)}
+.btn.p:hover{background:var(--pridk);border-color:var(--pridk)}
+.cardfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.toastwrap{position:relative}
+.toast{position:absolute;left:50%;transform:translateX(-50%);bottom:12px;background:var(--fg);color:var(--panel);border-radius:8px;padding:10px 14px;display:flex;gap:16px;align-items:center;max-width:calc(100% - 32px);box-shadow:0 6px 20px rgba(0,0,0,.25);font-size:13px;z-index:10}
+.toast button{background:none;border:0;color:inherit;font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
+.sumrow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.muted{color:var(--mut);font-size:12px}
+:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+@media (max-width:640px){.stage{padding:8px}.concept{font-size:12px;margin-bottom:8px}.frame{border-radius:12px;min-height:480px}.rail{display:none}.top,.scroll,.bottom{padding-left:14px;padding-right:14px}.scroll{padding-top:12px}.panel{padding:14px}.st:not(.on) .lbl{display:none}.stepper{gap:8px}.bar{min-width:16px}.optbody{margin-left:0}.card{padding:12px}select.sm{max-width:none}.menu button{padding:10px}.kv{grid-template-columns:1fr 1fr;gap:10px 12px}}
+</style>
+</head><body><div class="stage"><div id="app"></div></div>
+<script>
+const D=['1 year','3 year','5 year'];
+const CATS={restricted:{label:'Commercial with restricted access',ai:true},public:{label:'Commercial with public access',ai:false}};
+const SITES={na1:{label:'Amazon NA 1',hours:false},na2:{label:'Amazon NA 2',hours:true}};
+const PLANS={commercial:'Commercial plan',enterprise:'Enterprise Plan',power:'Power Plan'};
+const SUPPORT={extended:'Extended Parts Warranty',assurepro:'Assure Pro',assure:'Assure'};
+const ADDONS={safeguard:'Safeguard care',remote:'Remote Support Plan',critical:'Remote Support Plan Critical',premier:'Premier Care'};
+const TITLES={cloud:'Cloud plan',support:'Warranties & support plan',policies:'Policies'};
+const AI={
+ cloud:{plan:'commercial',duration:'5 year'},
+ support:{plan:'assurepro',duration:'5 year',addons:{safeguard:{on:true,duration:'5 year'},remote:{on:true,duration:'5 year'},critical:{on:false,duration:'5 year'},premier:{on:false,duration:'5 year'}}},
+ policies:{usable:'All drivers (Default)',visible:'None',pricing:'$3 (Default)',session:'None',waitlist:'None',message:'None',ads:'None'}
+};
+const cp=o=>JSON.parse(JSON.stringify(o));
+const eq=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+let S={step:1,cat:'restricted',site:'na1',values:cp(AI),src:{cloud:'ai',support:'ai',policies:'ai'},editing:{},drafts:{},menu:false,toast:null};
+let tt;
+function snap(){const {toast,menu,...r}=S;return cp(r)}
+function toast(msg,undo){clearTimeout(tt);S.toast={msg,undo};tt=setTimeout(()=>{S.toast=null;render()},7000)}
+const isAI=()=>CATS[S.cat].ai;
+const catLabel=()=>CATS[S.cat].label;
+
+function sel(card,path,val,opts,cls=''){return `<select class="${cls}" data-card="${card}" data-path="${path}">${opts.map(o=>`<option ${o===val?'selected':''}>${o}</option>`).join('')}</select>`}
+function aiChip(card,path,val){if(!isAI())return '';let v=AI[card];path.split('.').forEach(p=>v=v[p]);return v===val?' <span class="muted">suggested</span>':''}
+
+function cloudForm(d){return Object.entries(PLANS).map(([k,n])=>`<div class="opt ${d.plan===k?'sel':''}"><label><input type="radio" name="plan" data-card="cloud" data-path="plan" value="${k}" ${d.plan===k?'checked':''}> <span>${n}${aiChip('cloud','plan',k)}</span></label>
+ ${d.plan===k?`<div class="optbody"><label class="l">Plan duration</label>${sel('cloud','duration',d.duration,D,'sm')}
+ <div class="kv" style="margin-top:10px">${k==='commercial'?'<div><span>Level</span>L2</div>':''}<div><span>Plan end date</span>2026-06-06</div>${k==='commercial'?'<div><span>Tokens</span><span class="chip tok">✓ 20 tokens applied</span></div>':''}</div></div>`:''}</div>`).join('')}
+function cloudSum(d){return `<div class="kv"><div><span>Plan</span>${PLANS[d.plan]}</div><div><span>Duration</span>${d.duration}</div>${d.plan==='commercial'?'<div><span>Level</span>L2</div>':''}<div><span>Plan end date</span>2026-06-06</div>${d.plan==='commercial'?'<div><span>Tokens</span><span class="chip tok">✓ 20 tokens applied</span></div>':''}</div>`}
+
+function hoursWarn(){return SITES[S.site].hours?'':`<div class="banner warn">⚠ Site operating hours are missing for ${SITES[S.site].label}. Add them in the site information.</div>`}
+function supportForm(d){return `${hoursWarn()}<div class="sub" style="margin-top:0">Standard warranty</div><div class="kv"><div><span>Plan duration</span>2 years</div><div><span>Warranty coverage</span>Parts only</div><div><span>Plan end date</span>2026-06-06</div></div>
+ <div class="sub">Support plan</div>${Object.entries(SUPPORT).map(([k,n])=>`<div class="opt ${d.plan===k?'sel':''}"><label><input type="radio" name="support" data-card="support" data-path="plan" value="${k}" ${d.plan===k?'checked':''}> <span>${n}${aiChip('support','plan',k)}</span></label>
+ ${d.plan===k?`<div class="optbody"><label class="l">Plan duration</label>${sel('support','duration',d.duration,D,'sm')}<div class="kv" style="margin-top:10px"><div><span>Coverage</span>Parts only</div><div><span>Plan end date</span>2026-06-06</div>${k==='assurepro'?'<div><span>Partner name</span>Voltrek</div><div><span>Service level</span>Response time</div>':''}</div></div>`:''}</div>`).join('')}
+ <div class="sub">Support plan add ons</div><div class="muted" style="margin-bottom:8px">Site name: ${SITES[S.site].label}</div>
+ ${Object.entries(ADDONS).map(([k,n])=>{const a=d.addons[k];return `<div class="opt ${a.on?'sel':''}"><label><input type="checkbox" data-card="support" data-path="addons.${k}.on" ${a.on?'checked':''}> <span>${n}${isAI()&&AI.support.addons[k].on?' <span class="muted">suggested</span>':''}</span></label>
+ ${a.on?`<div class="optbody"><label class="l">Plan duration</label>${sel('support',`addons.${k}.duration`,a.duration,D,'sm')}<div class="kv" style="margin-top:10px"><div><span>Coverage</span>Parts only</div><div><span>Plan end date</span>2026-06-06</div><div><span>Maintenance frequency</span>Annual</div></div></div>`:''}</div>`}).join('')}`}
+function supportSum(d){const on=Object.entries(d.addons).filter(([,a])=>a.on).map(([k])=>ADDONS[k]);return `${hoursWarn()}<div class="kv"><div><span>Standard warranty</span>2 years, parts only</div><div><span>Support plan</span>${SUPPORT[d.plan]}, ${d.duration}</div>${d.plan==='assurepro'?'<div><span>Partner</span>Voltrek</div><div><span>Service level</span>Response time</div>':''}<div><span>Add ons</span>${on.length?on.join(', '):'None'}</div><div><span>Maintenance</span>Annual</div></div>`}
+
+const USABLE=['All drivers (Default)','Driver group 01','Fleet groups 01'],VIS=['None','Driver group 01','Fleet groups 01'],PRICE=['$3 (Default)','Free'],NONE=['None','Custom'];
+function policiesForm(d){return `<div class="banner info">Station policies can be created in the policy builders and applied to new and activated stations. You can change them any time after activation.</div>
+ <div class="row"><div class="f"><label class="l">Usable by</label>${sel('policies','usable',d.usable,USABLE)}</div><div class="f"><label class="l">Visible to</label>${sel('policies','visible',d.visible,VIS)}</div></div>
+ <label class="l">Pricing policy</label>${sel('policies','pricing',d.pricing,PRICE,'sm')}
+ <div class="tbl"><table><thead><tr><th>Driver / fleet groups</th><th>Pricing rule</th></tr></thead><tbody>${['Driver group 01','Fleet groups 01','CPE'].map(g=>`<tr><td>${g}</td><td><a href="#" onclick="return false">Pricing rule name</a></td></tr>`).join('')}</tbody></table></div>
+ <details><summary>Advanced policies</summary><div class="row" style="margin-top:10px"><div class="f"><label class="l">Session limit</label>${sel('policies','session',d.session,NONE)}</div><div class="f"><label class="l">Waitlist policy</label>${sel('policies','waitlist',d.waitlist,NONE)}</div></div><div class="row"><div class="f"><label class="l">Station message</label>${sel('policies','message',d.message,NONE)}</div><div class="f"><label class="l">Video ads</label>${sel('policies','ads',d.ads,NONE)}</div></div></details>`}
+function policiesSum(d){const adv=['session','waitlist','message','ads'].filter(k=>d[k]!=='None').length;return `<div class="kv"><div><span>Usable by</span>${d.usable}</div><div><span>Visible to</span>${d.visible}</div><div><span>Pricing policy</span>${d.pricing}</div><div><span>Advanced policies</span>${adv?adv+' set':'None set'}</div></div>`}
+const FORM={cloud:cloudForm,support:supportForm,policies:policiesForm},SUM={cloud:cloudSum,support:supportSum,policies:policiesSum};
+
+function card(k){
+ const ai=isAI(),ed=ai?!!S.editing[k]:true,d=ai&&ed?S.drafts[k]:S.values[k];
+ let tag='',acts='';
+ if(ai){tag=S.src[k]==='user'&&!ed?'<span class="chip you">Edited by you</span>':'';
+  if(!ed)acts=`<div class="acts">${S.src[k]==='user'?`<button class="link" data-act="reset" data-k="${k}">Reset to AI suggestion</button>`:''}<button class="link" data-act="edit" data-k="${k}">Edit</button></div>`;}
+ return `<section class="card ${ai&&ed?'editing':''}" aria-label="${TITLES[k]}"><div class="ch"><h3>${TITLES[k]} ${tag}</h3>${acts}</div>
+ ${ed?FORM[k](d):SUM[k](d)}
+ ${ai&&ed?`<div class="cardfoot"><button class="btn" data-act="cancel" data-k="${k}">Cancel</button><button class="btn p" data-act="save" data-k="${k}">Save</button></div>`:''}</section>`}
+
+function catDD(){const lock=Object.keys(S.editing).length>0;return `<div class="dd"><button class="selbtn" data-act="menu" aria-haspopup="listbox" aria-expanded="${S.menu}" ${lock?'disabled aria-describedby="catlock"':''}><span>${catLabel()}</span><span>▾</span></button>
+ ${S.menu?`<div class="menu" role="listbox">${Object.entries(CATS).map(([k,c])=>`<button role="option" aria-selected="${k===S.cat}" data-act="cat" data-k="${k}"><span>${c.label}</span>${c.ai?'<span class="chip ai">✦ Suggestion</span>':'<span class="muted" style="white-space:nowrap">No history</span>'}</button>`).join('')}</div>`:''}</div>`}
+
+function step1(){return `<div class="panel">
+ <div class="row"><div class="f"><label class="l">Organisation</label><select disabled><option>Amazon</option></select></div>
+ <div class="f"><label class="l" for="site">Site</label><select id="site" data-site="1">${Object.entries(SITES).map(([k,s])=>`<option value="${k}" ${k===S.site?'selected':''}>${s.label}</option>`).join('')}</select></div></div>
+ <div class="row"><div class="f"><span class="l">Usage category *</span>${catDD()}${Object.keys(S.editing).length?'<div id="catlock" class="muted" style="margin-top:4px">Save or cancel your changes to switch category.</div>':''}</div></div>
+ ${isAI()?`<div class="banner ai" style="margin-top:18px"><b>✦ Suggested by AI.</b> Amazon has activated CP6000 stations before under ${catLabel()} with Commercial plan L2, Assure Pro and these policies, so this is the same setup for your CP6000 stations.</div>`
+ :`<div class="banner info" style="margin-top:18px"><b>No suggestion for this category.</b> Amazon hasn't activated CP6000 stations under ${catLabel()} before, so choose the setup below.</div>`}
+ ${['cloud','support','policies'].map(card).join('')}
+ </div>`}
+
+function step3(){const lab=k=>isAI()&&S.src[k]==='user'?'<span class="chip you">Edited by you</span>':'';const ne=['cloud','support','policies'].filter(k=>S.src[k]==='user').length;
+ return `<div class="panel"><div class="muted" style="margin-bottom:6px">Step 2 Energy management is skipped in this prototype.</div>
+ ${isAI()?`<div class="banner ai"><b>✦ Suggested by AI</b>${ne?`, ${ne} section${ne>1?'s':''} edited by you`:''}.</div>`:''}<div class="sumrow"><div><b>Stations</b><div class="muted">CP6000, Amazon, ${SITES[S.site].label}, ${catLabel()}</div></div></div>
+ ${['cloud','support','policies'].map(k=>`<div class="sumrow"><div style="flex:1;min-width:240px"><b>${TITLES[k]}</b><div style="margin-top:8px">${SUM[k](S.values[k])}</div></div>${lab(k)}</div>`).join('')}
+ </div>`}
+
+function render(){
+ const st=S.step,sc=document.querySelector('.scroll'),y=sc?sc.scrollTop:0;
+ const step=(n,label)=>`<div class="st ${st===n?'on':st>n?'done':''}"><span class="n">${st>n?'✓':n}</span><span class="lbl">${label}</span></div>`;
+ document.getElementById('app').innerHTML=`<div class="frame"><div class="rail" aria-hidden="true"><span class="logo"></span><i></i><i></i><i></i><i></i><i class="on"></i><i></i></div>
+ <div class="main"><div class="top"><div class="crumb">← Back to Reports</div><h1>Station Activation</h1>
+ <div class="stepper">${step(1,'Cloud plan &amp; Policies')}<span class="bar ${st>1?'on':''}"></span>${step(2,'Energy Management')}<span class="bar ${st>2?'on':''}"></span>${step(3,'Summary')}</div></div>
+ <div class="scroll">${st===1?step1():step3()}</div>
+ <div class="toastwrap">${S.toast?`<div class="toast" role="status"><span>${S.toast.msg}</span>${S.toast.undo?'<button data-act="undo">Undo</button>':''}</div>`:''}</div>
+ <div class="bottom">${st===1?'<button class="btn">Back</button><button class="btn p" data-act="next">Next</button>':'<button class="btn" data-act="back">Back</button><button class="btn p" data-act="activate">Activate stations</button>'}</div></div></div>`;
+ const n=document.querySelector('.scroll');if(n&&!S.jump)n.scrollTop=y;S.jump=false;
+}
+
+function setPath(o,p,v){const ks=p.split('.');let t=o;ks.slice(0,-1).forEach(k=>t=t[k]);t[ks.at(-1)]=v}
+
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-act]');
+ if(!b){if(S.menu&&!e.target.closest('.dd')){S.menu=false;render()}return}
+ const a=b.dataset.act,k=b.dataset.k;
+ if(a==='menu'){if(!Object.keys(S.editing).length)S.menu=!S.menu}
+ else if(a==='cat'){S.menu=false;if(k!==S.cat){const u=snap();S.cat=k;S.values=cp(AI);S.src={cloud:'ai',support:'ai',policies:'ai'};S.editing={};S.drafts={};
+  toast(CATS[k].ai?'AI suggestion loaded for '+CATS[k].label+'.':'No past activations for this category. Showing all options.',u)}}
+ else if(a==='edit'){S.menu=false;S.drafts[k]=cp(S.values[k]);S.editing[k]=true}
+ else if(a==='cancel'){delete S.editing[k];delete S.drafts[k]}
+ else if(a==='save'){S.values[k]=S.drafts[k];S.src[k]=eq(S.values[k],AI[k])?'ai':'user';delete S.editing[k];delete S.drafts[k]}
+ else if(a==='reset'){const u=snap();S.values[k]=cp(AI[k]);S.src[k]='ai';toast(TITLES[k]+' reset to AI suggestion.',u)}
+ else if(a==='undo'){const u=S.toast.undo;Object.assign(S,u);S.toast=null;clearTimeout(tt)}
+ else if(a==='next'){S.step=3;S.jump=true}
+ else if(a==='back'){S.step=1;S.jump=true}
+ else if(a==='activate'){toast('Prototype ends here. In the real flow the stations would go live.',null)}
+ render();
+});
+document.addEventListener('change',e=>{
+ const t=e.target;
+ if(t.dataset.site){S.site=t.value;render();return}
+ if(!t.dataset.card)return;
+ const k=t.dataset.card,obj=isAI()?S.drafts[k]:S.values[k];
+ setPath(obj,t.dataset.path,t.type==='checkbox'?t.checked:t.value);
+ render();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.menu){S.menu=false;render()}});
+render();
+</script></body></html>

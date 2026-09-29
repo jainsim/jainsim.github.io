@@ -22,6 +22,10 @@ export type CaseSection = {
   callout?: { label?: string; body: string }; // design-decision aside
   callouts?: { label?: string; body: string }[]; // more asides, rendered after `callout`
   metrics?: CaseMetric[]; // stat band (used in Outcome)
+  id?: string; // anchor target (e.g. "ai-concept")
+  label?: string; // small mono eyebrow under the heading
+  // live prototype embedded after the body, with a caption and closing copy
+  embed?: { src: string; title: string; height: number; caption?: string; after?: string };
 };
 
 export type HeroImage = {
@@ -55,6 +59,8 @@ export type Project = {
   overlayHeroFramed?: boolean;
   images: string[]; // first is the hero/panel image
   subtitle: string;
+  // small line under the intro linking to an anchor further down the page
+  introNote?: { text: string; linkLabel: string; href: string };
   meta: { label: string; value: string }[];
   sections: CaseSection[];
 };
@@ -279,6 +285,7 @@ export const projects: Project[] = [
     images: ["/projects/activation.png"],
     subtitle:
       "Replacing an expert-only, support-dependent activation with a self-serve workflow any admin can run, designed embedded with engineering through build and design QA.",
+    introNote: { text: "Includes an interactive AI concept.", linkLabel: "Jump to it", href: "#ai-concept" },
     meta: [
       { label: "Role", value: "Lead UX/UI Designer" },
       { label: "Duration", value: "1 year · 4 iterations" },
@@ -460,6 +467,20 @@ export const projects: Project[] = [
         heading: "How AI fit in",
         body:
           "**Microsoft Copilot (company-approved):** summarising 30+ interview notes into themes, drafting specs and Jira tickets, and first drafts of UX copy for error and recovery states.\n\n**Figma Make:** prototyping activation screens for fast testing. It was new to the team, so the first weeks went into learning what it could and couldn’t do. Once that clicked, testing variations of a flow got much quicker.",
+      },
+      {
+        id: "ai-concept",
+        heading: "What I’d do now: AI-assisted setup",
+        label: "Concept, not built.",
+        body:
+          "Copy Configuration was Iteration 2’s biggest time-saver, but it only works if the admin knows which station to copy. First-time admins usually don’t. Here the AI finds the org’s past setup for the same hardware and usage category, suggests it, and says why. Copy Config stays for admins who know what they want.\n\nWhen there’s no history, the AI steps back and shows all options. Guessing would cost more trust than it saves time.",
+        embed: {
+          src: "/prototypes/activation-ai.html",
+          title: "AI-assisted setup prototype",
+          height: 820,
+          caption: "Try it: switch the usage category, edit a card, then reset it.",
+          after: "What I’d measure: acceptance rate, which cards get edited most, and how often reset is used.",
+        },
       },
       {
         heading: "What I learned",
