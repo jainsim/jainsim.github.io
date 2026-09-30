@@ -25,13 +25,13 @@ export default function Closing() {
               the field just did.
             </p>
             <p className="mt-lg text-body-lg text-body">
-              Five years of high-consequence enterprise work taught me the same
-              three things repeat: dense technical data, configuration that lives
-              in one team&apos;s heads, and legacy workflows nobody can rebuild
-              from scratch.
+              Nearly four years of high-consequence enterprise work taught me the
+              same three things repeat: dense technical data, configuration that
+              lives in one team&apos;s heads, and legacy workflows nobody can
+              rebuild from scratch.
             </p>
             <p className="mt-lg text-body-lg text-body">
-              That happened in EV charging: a native installer app, a station
+              In EV charging that meant a native installer app, a station
               activation workflow inside a legacy enterprise platform, and the
               design system that held both together. Modernisation, not
               greenfield. Existing workflows, real users, real consequences,
