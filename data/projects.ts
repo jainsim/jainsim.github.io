@@ -355,7 +355,7 @@ export const projects: Project[] = [
         {
           label: "Role",
           value:
-            "Lead UX/UI Designer (Sole Designer)\nEnd-to-end design, user research, design QA on dev builds, user testing, prototyping",
+            "UX/UI Designer (Design Lead)\nEnd-to-end design, user research, design QA on dev builds, user testing, prototyping",
         },
         { label: "Team", value: "5 Engineers, 1 PM, 1 Customer Experience Specialist" },
         { label: "Timeline", value: "Apr 25– Apr 26" },
