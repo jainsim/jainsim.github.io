@@ -335,7 +335,7 @@ export const projects: Project[] = [
     subtitle:
       "From a specialist-led flow to a simple self-serve wizard for non-experts.",
     headline:
-      "Charger activation: simplifying an enterprise workflow led by a specialist from 3 to 5 days to self-serve in minutes.",
+      "Replacing a 5-day specialist-led charger activation workflow with a 4-minute guided wizard.",
     logo: { src: "/projects/activation/chargepoint-logo.svg", alt: "ChargePoint" },
     meta: [
       { label: "Role", value: "Lead UX/UI Designer" },
