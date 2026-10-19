@@ -515,6 +515,12 @@ html.lenis-stopped body {
   }
 }
 
+/* Larger sub-heading for a lead block such as "Problem" (section titles are 32px). */
+.para-header--lg {
+  font-size: 32px;
+  line-height: 1.3;
+}
+
 /* No single-word last lines in case-study copy. */
 [role="dialog"] p,
 [role="dialog"] h2,

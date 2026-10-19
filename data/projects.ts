@@ -48,6 +48,7 @@ export type CaseSection = {
   subsAfter?: {
     heading?: string;
     body?: string;
+    headingLarge?: boolean; // uses the larger .para-header--lg style
     bodyLarge?: boolean; // larger paragraph size, for a lead-in
     quote?: string; // pull quote on a mat
     quoteBy?: string; // who said it, shown under the quote
@@ -436,6 +437,7 @@ export const projects: Project[] = [
           },
           {
             heading: "Problem",
+            headingLarge: true,
             items: [
               {
                 title: "Expensive by default",

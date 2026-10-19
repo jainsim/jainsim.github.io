@@ -616,7 +616,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
         <div key={i} className="mx-auto mt-3xl max-w-5xl">
           {sub.heading ? (
             <h3
-              className="max-w-3xl para-header"
+              className={`max-w-3xl para-header${sub.headingLarge ? " para-header--lg" : ""}`}
             >
               {sub.heading}
             </h3>
