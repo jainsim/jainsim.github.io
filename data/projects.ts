@@ -3,12 +3,14 @@ export type CaseImage = {
   width: number; // native px - feeds next/image so ratios stay exact
   height: number;
   caption?: string;
+  alt?: string; // accessible description; falls back to caption when omitted
   // how the image sits in the reading flow:
   //  inline - grouped 2–3 across in a grid beside/after the copy (phone screens)
   //  phone  - a single small phone screen, centered, not stretched
   //  wide   - a portrait/composite shot, centered at a medium width
   //  full   - a landscape UI shot spanning the full image column
-  layout?: "inline" | "phone" | "wide" | "full";
+  //  half   - landscape shots paired two across the image column
+  layout?: "inline" | "phone" | "wide" | "full" | "half";
   scale?: number; // inline only: fraction of the shared phone width (e.g. 0.75)
 };
 
@@ -26,6 +28,40 @@ export type CaseSection = {
   label?: string; // small mono eyebrow under the heading
   // live prototype embedded after the body, with a caption and closing copy
   embed?: { src: string; title: string; height: number; caption?: string; after?: string };
+  // smaller heading + copy after the body, inside the same section
+  sub?: { heading: string; body: string };
+  // numbered feature rows: image on a mat with its text beside it; several
+  // images crossfade like the slides
+  features?: {
+    heading: string;
+    items: {
+      title: string;
+      body: string;
+      caption?: string;
+      images: { src: string; width: number; height: number; alt: string }[];
+    }[];
+  };
+  // design-decision aside placed after the feature rows
+  decision?: string;
+  // more subheadings placed after the slides: copy, an image, and/or
+  // title + paragraph items
+  subsAfter?: {
+    heading?: string;
+    body?: string;
+    bodyLarge?: boolean; // larger paragraph size, for a lead-in
+    quote?: string; // pull quote on a mat
+    quoteBy?: string; // who said it, shown under the quote
+    image?: { src: string; width: number; height: number; alt: string };
+    items?: { title: string; body: string; tag?: string }[];
+    itemsCols?: 2 | 3; // 3 centres each item under an image above
+  }[];
+  // auto-advancing crossfade of images on a mat, each paired with a step
+  // that highlights while its image shows
+  slides?: {
+    title: string;
+    caption?: string;
+    items: { src: string; width: number; height: number; alt: string; step: string }[];
+  };
 };
 
 export type HeroImage = {
@@ -59,6 +95,18 @@ export type Project = {
   overlayHeroFramed?: boolean;
   images: string[]; // first is the hero/panel image
   subtitle: string;
+  // Case-study page header in the title + client-logo form: a statement
+  // headline replaces the eyebrow, title and subtitle, logo sits top-right.
+  headline?: string;
+  logo?: { src: string; alt: string };
+  // Intro block under the hero: summary + key results on the left, project
+  // facts on the right. Replaces the meta strip when present.
+  intro?: {
+    body: string;
+    results: { value: string; label: string; badge?: string }[];
+    facts: { label: string; value: string; href?: string }[];
+    image?: { src: string; width: number; height: number; alt: string };
+  };
   // small line under the intro linking to an anchor further down the page
   introNote?: { text: string; linkLabel: string; href: string };
   meta: { label: string; value: string }[];
@@ -272,223 +320,373 @@ export const projects: Project[] = [
   {
     slug: "activation",
     index: "(01)",
-    title: "Station Activation Flow",
+    title: "Charging station activation",
     role: "Lead UX/UI Designer",
-    discipline: "Enterprise workflow",
+    discipline: "",
     org: "ChargePoint",
     year: "2025",
     accent: "#0E7C86",
     accentText: "#0E7C86",
     hero: { src: "/projects/activation-hero.png", width: 11402, height: 6646 },
-    overlayHero: { src: "/projects/activation/overlay-hero.png", width: 3410, height: 2212 },
+    overlayHero: { src: "/projects/activation/overlay-hero-station-setup.webp", width: 2000, height: 824 },
     overlayHeroFramed: true,
     images: ["/projects/activation.png"],
     subtitle:
-      "Replacing an expert-only, support-dependent activation with a self-serve workflow any admin can run, designed embedded with engineering through build and design QA.",
-    introNote: { text: "Includes an interactive AI concept.", linkLabel: "Jump to it", href: "#ai-concept" },
+      "From a specialist-led flow to a simple self-serve wizard for non-experts.",
+    headline:
+      "Charger activation: simplifying an enterprise workflow led by a specialist from 3 to 5 days to self-serve in minutes.",
+    logo: { src: "/projects/activation/chargepoint-logo.svg", alt: "ChargePoint" },
     meta: [
       { label: "Role", value: "Lead UX/UI Designer" },
       { label: "Duration", value: "1 year · 4 iterations" },
       { label: "Domain", value: "B2B Enterprise SaaS" },
       { label: "Client", value: "ChargePoint" },
     ],
+    intro: {
+      body:
+        "ChargePoint sells EV charging hardware and runs one of the world’s largest charging networks: over **1.3 million charging ports**. Every day a station isn’t activated is a day it’s not earning.\n\nActivation used to take 5 days and a dedicated specialist. I designed a guided wizard any organisation admin can run in 4 minutes.",
+      results: [
+        { value: "4 minutes", label: "activation time, down from 5 days", badge: "Beta" },
+        { value: "4 iterations in 1 year", label: "each tested before the next began" },
+        { value: "40+ defects caught", label: "pre-release through embedded design QA on dev builds" },
+      ],
+      facts: [
+        {
+          label: "Role",
+          value:
+            "Lead UX/UI Designer (Sole Designer)\nEnd-to-end design, user research, design QA on dev builds, user testing, prototyping",
+        },
+        { label: "Team", value: "5 Engineers, 1 PM, 1 Customer Experience Specialist" },
+        { label: "Timeline", value: "Apr 25– Apr 26" },
+        { label: "Interactive AI Concept", value: "View", href: "#ai-concept" },
+      ],
+      image: {
+        src: "/projects/activation/intro-laptop-stations.jpg",
+        width: 1215,
+        height: 864,
+        alt: "A laptop on a wooden desk showing the Charging Management stations table.",
+      },
+    },
     sections: [
       {
-        heading: "Outcome",
-        body: "",
-        metrics: [
-          { value: "3 to 5 days → same-day", label: "activation for the simplest flows (measured)" },
-          { value: "~1 ticket every other day", label: "saved through pre-activation checks" },
-          { value: "~40%", label: "of CX activation tickets projected to be eliminated (estimate)" },
-        ],
-        points: [
-          "Defects caught pre-release through embedded design QA",
-          "4 iterations in 1 year, each tested before the next began. Iteration 4 is rolling out.",
-        ],
-      },
-      {
         heading: "Context",
-        body:
-          "ChargePoint runs one of the world’s largest EV charging networks: over 1.3 million ports. Polaris Suite gave Org Admins their first self-serve activation flow, for everything from a single station to a rollout of hundreds.\n\nThree people use it: the Org Admin (the customer’s ops person, who this is built for), the Deployment Specialist (ChargePoint staff, who did most activations until now), and the NOC operator (activation at fleet scale). Behind them sit three legacy platforms: NOS, be.ENERGISED, and Viriciti.",
-      },
-      {
-        heading: "The problem",
-        body:
-          "Every problem landed in the same place: customers waited days for stations they’d already paid for and installed.",
-        points: [
-          "Three systems: activation logic split across NOS, be.ENERGISED, and Viriciti.",
-          "No bulk: 10 stations meant running the same flow 10 times.",
-          "Disconnected from the field: installation data never reached activation.",
-          "Expert-only: plan and policy choices needed knowledge most admins didn’t have.",
-        ],
-      },
-      {
-        heading: "How I shaped the work",
-        body:
-          "I joined a few weeks before the MVP shipped. The project was scoped as one large workstream with a single handoff at the end. Fine for one MVP, wrong for a problem that would change its own assumptions every round.\n\nI pushed to split it into four topic-scoped iterations, each with its own handoff and testing. That structure is why every iteration below could respond to what the last one taught us.",
-        images: [
+        body: "",
+        sub: {
+          heading: "How activation worked before",
+          body: "Electricians filled out a 3-page paper form by hand and emailed it to CX.",
+        },
+        slides: {
+          title: "Activation form",
+          caption: "The 3-page paper form electricians filled out and emailed to CX.",
+          items: [
           {
-            src: "/projects/activation/walked-into.png",
-            width: 1750,
-            height: 434,
-            layout: "full",
-            caption:
-              "Reshaping the work: one MVP workstream split into four topic-scoped phases, each with its own handoff, UAT, and CX testing across the year.",
+            src: "/projects/activation/paper-form-1.jpg",
+            width: 1545,
+            height: 2000,
+            alt: "Page 1 of the paper activation form: installer and organization names, primary contact fields, and a checklist of company categories.",
+            step: "Welcome page - org details, contact info of station owner, and company category.",
+          },
+          {
+            src: "/projects/activation/paper-form-2.jpg",
+            width: 1545,
+            height: 2000,
+            alt: "Page 2 of the paper activation form: a 20-row table asking for station name, address, location, MAC address or serial, and gateway.",
+            step: "Station details - One row per station, same 5 fields repeated up to 20 times or more.",
+          },
+          {
+            src: "/projects/activation/paper-form-3.jpg",
+            width: 1545,
+            height: 2000,
+            alt: "Page 3 of the paper activation form: pricing model checkboxes, access control, waitlist, and a comments box.",
+            step: "Configuration: Pricing, access control, and waitlist settings routed through a deployment specialist",
+          },
+          ],
+        },
+        subsAfter: [
+          {
+            heading: "Three legacy platforms, one new suite",
+            body: "Activation logic was split across three legacy platforms. Polaris Suite is the new enterprise platform that replaces all three.",
+          },
+          {
+            heading: "The people involved",
+            image: {
+              src: "/projects/activation/people-involved-illustrations.webp",
+              width: 2000,
+              height: 118,
+              alt: "The handoff chain: a CX agent with the paper form and an envelope, arrow to deployment specialists at three screens, arrow to an org admin at a desk.",
+            },
+            itemsCols: 3,
+            items: [
+              {
+                title: "1. CX agents (Customer experience)",
+                body: "Receives the paper form and coordinates between org admins, field teams and the platform.",
+                tag: "(secondary persona)",
+              },
+              {
+                title: "2. Deployment specialists",
+                body: "Configures stations across 3 legacy platforms. The only ones who can activate.",
+                tag: "(secondary persona)",
+              },
+              {
+                title: "3. Org admin",
+                body: "Customer site manager. Wants instant self-serve setup without relying on specialists.",
+                tag: "(primary persona)",
+              },
+            ],
+          },
+          {
+            heading: "Problem",
+            items: [
+              {
+                title: "Expensive by default",
+                body: "Every activation required a specialist, costing an estimated 2,000+ specialist hours per year.",
+              },
+              { title: "Three systems, one task", body: "No shared flow across the three legacy platforms." },
+              { title: "No bulk activation", body: "10 stations meant running the wizard 10 times." },
+              { title: "Expert-only settings", body: "Most admins couldn’t choose the right plan or policy alone." },
+            ],
+          },
+          {
+            quote:
+              "How do you let a non-expert activate charging stations on their own, whether it’s one or a hundred?",
+          },
+          {
+            heading: "What I walked into",
+            body: "I joined weeks before the MVP shipped. No time for research. A two-day dev workshop to understand the system, then ship.",
+            bodyLarge: true,
           },
         ],
+      },
+      {
+        heading: "01 The Wizard (MVP)",
+        body: "A three-step wizard for the simplest case.",
+        features: {
+          heading: "What I built",
+          items: [
+            {
+              title: "Charger Management banner",
+              body: "Notification that stations are ready for activation in the suite.",
+              images: [
+                {
+                  src: "/projects/activation/mvp-banner.png",
+                  width: 1258,
+                  height: 176,
+                  alt: "Activate stations banner: there is 1 charging station ready to be activated, with an Activate stations button.",
+                },
+              ],
+              caption: "The banner surfaces stations ready to activate.",
+            },
+            {
+              title: "Ready-for-Activation",
+              body: "List grouped by model family and site.",
+              images: [
+                {
+                  src: "/projects/activation/mvp-ready-list.webp",
+                  width: 2000,
+                  height: 929,
+                  alt: "Site details for Amazon 2 with its address, station model CP6000, group membership tags, and a table of five online stations.",
+                },
+              ],
+            },
+            {
+              title: "A wizard (Org & Plan → Energy Management → Summary)",
+              body: "A three-step wizard with plans, warranties and policies pre-selected. Most admins confirm the defaults and move on.",
+              images: [
+                {
+                  src: "/projects/activation/mvp-step-1.png",
+                  width: 1054,
+                  height: 760,
+                  alt: "Step 1, Org Information, Cloud plan and Policies: org name, usage category, and a pre-selected Commercial plan.",
+                },
+                {
+                  src: "/projects/activation/mvp-step-2.webp",
+                  width: 2000,
+                  height: 1442,
+                  alt: "Step 2, Energy management: a new energy management group with panel capacity settings, or set up later.",
+                },
+                {
+                  src: "/projects/activation/mvp-step-3.webp",
+                  width: 2000,
+                  height: 1442,
+                  alt: "Step 3, Summary: site address, station model, group membership, the stations being activated, and their pins on a satellite map.",
+                },
+              ],
+            },
+          ],
+        },
       },
       {
         heading: "Research & Discovery",
-        body:
-          "30+ interviews (Org Admins, Deployment Specialists, NOC and CX), three UAT rounds, and journey mapping across the admin platform, Installer App, and field install.\n\n**The critical insight:** admins didn’t need a faster wizard. They needed to know when something was wrong, and what to do about it. The old process hid failures until a specialist flagged them, often days later.\n\n**What surprised me:** experienced Deployment Specialists rated the MVP 4.5/5. That was misleading. They finished fast because they already knew the data model. UAT measured expert efficiency, not whether a first-time admin could get through. I stopped designing for the score and started watching where new admins got stuck.",
-        images: [
+        body: "Real research started after MVP.",
+        subsAfter: [
           {
-            src: "/projects/activation/data-sync.png",
-            width: 3240,
-            height: 957,
-            layout: "full",
-            caption:
-              "Field-to-platform data sync: the admin’s queue, the pre-assigned org, and the regional activation link all depend on data captured in the Installer App.",
+            heading: "Insight",
+            body: "30+ interviews with org admins, deployment specialists, and CX. The finding that shaped everything after: admins didn’t need a faster wizard. They needed to know when something was wrong and what to do about it.",
+          },
+          {
+            heading: "Two products, one handoff",
+            body: "I also designed the Installer App. That meant I could close the gap between field and platform myself: data captured by the technician on site flows into Polaris Suite, so the admin starts with a station that is already pre-filled.",
+            image: {
+              src: "/projects/activation/field-to-admin.png",
+              width: 914,
+              height: 311,
+              alt: "Data sync from field to admin. In the Installer App, the electrician scans the station, pinpoints GPS, confirms the address, and logs model and ports. In Polaris Suite, the org admin gets the station pre-pinpointed, address pre-filled, name auto-generated, groups assigned, and plans and policies recommended.",
+            },
           },
         ],
       },
       {
-        heading: "Iteration 1: MVP",
-        body:
-          "A three-step wizard for the simplest case: single stations, one site, default everything.\n\n**What I built:** a Charger Management banner, a Ready-for-Activation list grouped by model family and site, and a wizard (Org & Plan → Energy Management → Summary). For the first time, an admin could activate without a Deployment Specialist.\n\n**What worked:** activation took 3 to 4 minutes in later UAT.\n\n**What didn’t:** there was no bulk activation, and token validity timing (sales-order date vs. activation date) was opaque.",
-        callout: {
-          label: "Design decision",
-          body:
-            "**Decision:** A step-by-step wizard.\n\n**Alternative:** A single long form.\n\n**Why:** Activation is a technical task, and most admins had never done it before. A long form puts every field in front of them at once, including settings they may never need to touch. A wizard breaks it into steps and shows only what matters at each point.",
+        heading: "02 Bulk and recovery",
+        body: "",
+        features: {
+          heading: "What I built",
+          items: [
+            {
+              title: "Copy/Import Configuration",
+              body: "Large activations repeat the same setup, so admins can reuse an activated station’s settings across new ones.",
+              images: [
+                {
+                  src: "/projects/activation/bulk-copy-config.webp",
+                  width: 2000,
+                  height: 520,
+                  alt: "Station table with three stations selected and an Import configuration settings dropdown listing existing charging stations to copy from.",
+                },
+              ],
+            },
+            {
+              title: "Token (license) selection",
+              body: "Every station needs a token (license) to go online. The right one is now pre-selected. When an admin needs to override, they see which token fits before choosing.",
+              images: [
+                {
+                  src: "/projects/activation/bulk-token-select.webp",
+                  width: 2000,
+                  height: 1145,
+                  alt: "Advanced Token Selection dialog: 2 stations are selected, select 4 tokens, one for each charging port. A table lists tokens with organisation, sales order, dates and purchase order.",
+                },
+              ],
+            },
+            {
+              title: "Token-mismatch recovery",
+              body: "Incase wrong or expired token (license) selected, the system failed activation. The admin had to call support. Now the system tells them what went wrong and how to fix it in place.",
+              images: [
+                {
+                  src: "/projects/activation/bulk-token-mismatch.png",
+                  width: 960,
+                  height: 627,
+                  alt: "Token mismatch error: the number of stations selected and tokens available don't match. Deselect a few stations or verify tokens were purchased and assigned, with Contact Support and View Token Inventory actions.",
+                },
+              ],
+            },
+          ],
         },
-        images: [
-          {
-            src: "/projects/activation/entry-point.png",
-            width: 10486,
-            height: 3978,
-            layout: "full",
-            caption:
-              "The entry point: a Charger Management banner surfaces stations ready to activate. The list groups them by model family and common address, so twenty identical chargers read as one card, the foundation bulk activation would later be built on.",
-          },
-          {
-            src: "/projects/activation/wizard-steps.png",
-            width: 5864,
-            height: 3048,
-            layout: "full",
-            caption:
-              "Step 1, Org & Plan: recommended policies and warranties prefilled, so the reader’s first real choice is whether to accept defaults, not whether to learn the data model. Step 2, Energy Management: the user can email the installer to fill in this deeply technical section.",
-          },
-        ],
+        decision:
+          "**Why recovery before polish:** two of three early customers had silently hit the token mismatch. A generic error that sends them to support, which was exactly what we were replacing.",
       },
       {
-        heading: "Iteration 2: Bulk & recovery",
-        body:
-          "From single stations to fleets.\n\n**What I built:** Copy / Import Configuration to reuse an activated station’s settings, Advanced Token selection to see the sales order and dates behind each token, and a token-mismatch recovery dialog.\n\n**What worked:** bulk and copy-config landed strongly. Copy-config was the round’s biggest time-saver.\n\n**What didn’t:** editing a station mid-wizard reset the user’s progress. And the flow still treated activation as setup, when for NOS stations it’s fleet management with prerequisites the UI was hiding.",
-        callout: {
-          label: "Design decision",
-          body:
-            "**Decision:** Design the token-mismatch recovery dialog before polishing the happy path.\n\n**Alternative:** Ship bulk with a generic error and fix recovery later.\n\n**Why:** Two of three Phase 1 customers had silently hit the token-mismatch path. A generic error sends users to support, which was the exact behaviour we were trying to remove.",
+        heading: "03 Pre-activation checks",
+        body: "Admins could finish the entire wizard and only then discover the station couldn’t activate. Once the backend supported it, the system now checks before they start.",
+        features: {
+          heading: "What I built",
+          items: [
+            {
+              title: "Blockers caught early",
+              body: "(1) pending GPS/ location co-ordinates of the station (pinpoint), (2) missing gateways, (3) unsupported hardware. Surfaced before the wizard.",
+              images: [
+                {
+                  src: "/projects/activation/precheck-blockers.webp",
+                  width: 2000,
+                  height: 515,
+                  alt: "Three warnings: the station pinpoint is missing, the gateway device is missing or inactive, and a DC station is not commissioned, with a ChargePoint support button.",
+                },
+              ],
+            },
+            {
+              title: "Activation progress",
+              body: "**Before:** the admin pressed Activate and waited. No feedback, no way to tell if it worked, failed, or was still running.\n\n**Now:** per-station status with success, failure, and in-progress, a resolve button on failures, and a progress bar that persists across page reloads.",
+              images: [
+                {
+                  src: "/projects/activation/precheck-progress.webp",
+                  width: 2000,
+                  height: 789,
+                  alt: "Charging Management with an Activation progress banner at 70 percent; View opens a panel listing each station as activated, failed with a Resolve button, or in progress, plus an energy management setup error.",
+                },
+              ],
+            },
+          ],
         },
-        images: [
+        decision:
+          "**Why hard blocks, not warnings:** a dismissed warning means the station still fails later. Tested with 30+ users. Most preferred the block once they saw why.",
+        subsAfter: [
           {
-            src: "/projects/activation/copy-config.png",
-            width: 5264,
-            height: 4726,
-            layout: "full",
-            caption:
-              "Copy / Import Configuration reuses an activated station’s plan, policy, and group settings.",
-          },
-          {
-            src: "/projects/activation/advanced-token.png",
-            width: 10552,
-            height: 3494,
-            layout: "full",
-            caption:
-              "Advanced Token Selection: the sales order, token start date, end date, and purchase order behind each token. The token-mismatch dialog turns a dead end into a fixable state.",
+            quote: "The DC blocker banner alone saves us a support ticket every other day.",
+            quoteBy: "CX lead",
           },
         ],
       },
       {
-        heading: "Iteration 3: NOS & the silent failure modes",
-        body:
-          "Support kept seeing the same three tickets. Porting into NOS made them impossible to ignore.\n\n**What I built:** pre-activation checks for uncommissioned stations, missing or offline gateways, and pending GPS pinpointing. Before this, an operator could finish the whole wizard and only then learn activation would never work. I added per-station status that survives page reloads, with clear success, in-progress, and failure states.\n\n**What worked:** CX, support engineers, enterprise users, and deployment supervisors gave strongly positive feedback.\n\n**What didn’t:** multi-port stations still showed as a flat list. A 13-port DC station was 13 rows, with no way to trace a fault to its dispenser.",
-        callout: {
-          label: "Internal review · CX lead",
-          body:
-            "“The DC blocker banner alone saves us a support ticket every other day.”",
-        },
-        callouts: [
-          {
-            label: "Design decision",
-            body:
-              "**Decision:** Surface pre-activation failures as hard blocks with a recovery path.\n\n**Alternative:** A warning banner users could dismiss and continue past.\n\n**Why:** A dismissed warning means the station still fails later, and the user loses trust. We tested both with 12 Deployment Specialists. Most preferred the hard block once they saw why.",
-          },
-        ],
+        heading: "04 Clusters",
+        body: "A charging station is called a cluster when it has 10+ outlets (dispensers) sharing one charger ID. Instead of listing each separately, the hierarchy groups them under one parent so the admin sees one station.",
         images: [
           {
-            src: "/projects/activation/failure-states.png",
-            width: 5160,
-            height: 4798,
-            layout: "full",
-            caption:
-              "Pre-activation blockers surfaced early: (1) incomplete pinpointing, (2) a warning for a missing gateway, and (3) a hard block for uncommissioned DC stations.",
+            src: "/projects/activation/cluster-table.png",
+            width: 1108,
+            height: 758,
+            layout: "half",
+            caption: "Ready for activation table with nested outlets/ dispensers expanded",
           },
           {
-            src: "/projects/activation/async-progress.png",
-            width: 6968,
-            height: 3670,
-            layout: "full",
-            caption:
-              "Per-station status that persists across page reloads, so operators stop wondering if the system is stuck. The modal gives explicit success, in-progress, and failure states, with retry on the failures that need it.",
-          },
-        ],
-      },
-      {
-        heading: "Iteration 4: Cluster hierarchy (rolling out)",
-        body:
-          "Each child port now nests under its parent Chargebox, so a 13-port cluster reads as one row instead of thirteen. Impact is still being measured.",
-        images: [
-          {
-            src: "/projects/activation/dc-cluster.png",
-            width: 5160,
-            height: 5686,
-            layout: "full",
-            caption:
-              "A 13-port DC cluster collapsed under one parent Chargebox. What used to be thirteen rows is now one.",
+            src: "/projects/activation/cluster-overview.png",
+            width: 1108,
+            height: 524,
+            layout: "half",
+            caption: "Cluster overview",
           },
         ],
       },
       {
         heading: "Staying in the build",
         body:
-          "From Iteration 3 on, I ran design QA on dev builds myself: clicking every state, breaking the flow on purpose, logging defects in Jira, and driving fixes with engineering before release. Defects were caught pre-release, and it saved a full round of CX escalations.",
-      },
-      {
-        heading: "How AI fit in",
-        body:
-          "**Microsoft Copilot (company-approved):** summarising 30+ interview notes into themes, drafting specs and Jira tickets, and first drafts of UX copy for error and recovery states.\n\n**Figma Make:** prototyping activation screens for fast testing. It was new to the team, so the first weeks went into learning what it could and couldn’t do. Once that clicked, testing variations of a flow got much quicker.",
+          "From iteration 3 on, I ran design QA on every dev build myself: clicking every state, breaking the flow on purpose, logging defects in Jira. 20+ defects caught pre-release per iteration, before they reached the users.",
       },
       {
         id: "ai-concept",
-        heading: "What I’d do now: AI-assisted setup",
-        label: "Concept, not built.",
-        body:
-          "Copy Configuration was Iteration 2’s biggest time-saver, but it only works if the admin knows which station to copy. First-time admins usually don’t. Here the AI finds the org’s past setup for the same hardware and usage category, suggests it, and says why. Copy Config stays for admins who know what they want.\n\nWhen there’s no history, the AI steps back and shows all options. Guessing would cost more trust than it saves time.",
+        heading: "How AI fits in",
+        body: "",
+        subsAfter: [
+          {
+            heading: "In the process",
+            body: "Copilot for summarising 30+ interview notes and drafting specs.",
+          },
+          {
+            heading: "As a concept",
+            body: "Copy Config only works if you know which station details to copy. The AI concept finds the org’s past setup for matching hardware and suggests plans, warranties and policies. When there’s no history, it shows all options instead of guessing.",
+          },
+        ],
         embed: {
           src: "/prototypes/activation-ai.html",
           title: "AI-assisted setup prototype",
           height: 820,
           caption: "Try it: switch the usage category, edit a card, then reset it.",
-          after: "What I’d measure: acceptance rate, which cards get edited most, and how often reset is used.",
         },
       },
       {
         heading: "What I learned",
-        body:
-          "Because I owned the upstream Installer App too, I could close gaps that stay invisible when two products are designed apart: the admin’s queue, the pre-assigned org, and the regional activation link all depend on data captured in the field. Owning both sides is what made same-day activation possible.\n\n**If I did it again:** I’d bring CX in from Iteration 1, not 2. I’d split the work before the MVP, not after. And I’d test with first-time admins in round 1, not only experts.",
-        points: [
-          "Stay close to support. The most valuable feedback came from CX and Deployment Specialists telling me what annoyed them that week, not from formal UAT.",
-          "The unhappy path is the product. Designing failures as first-class moments, caught early and explained in place, did more for trust than any polish on the happy path.",
+        body: "",
+        subsAfter: [
+          {
+            heading: "Stay close to support",
+            body: "The most valuable feedback came from CX telling me what annoyed them that week, not from formal UAT.",
+            image: {
+              src: "/projects/activation/precheck-blockers.webp",
+              width: 2000,
+              height: 515,
+              alt: "Three warnings: the station pinpoint is missing, the gateway device is missing or inactive, and a DC station is not commissioned, with a ChargePoint support button.",
+            },
+          },
+          {
+            heading: "The unhappy path is the product",
+            body: "Designing failures as first-class moments did more for trust than any polish on the happy path.",
+          },
         ],
       },
     ],

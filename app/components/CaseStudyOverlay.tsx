@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { adjacentGalleryItems } from "@/data/projects";
 import type { CaseImage, CaseSection, Project } from "@/data/projects";
 
@@ -65,7 +65,7 @@ function Figure({ image }: { image: CaseImage }) {
   // capped to the viewport height so they never overflow a laptop screen, and
   // the matte card hugs the image instead of stretching it. Phone screens in a
   // grid row share one width so long scroll captures keep the same scale.
-  const isFull = image.layout === "full";
+  const isFull = image.layout === "full" || image.layout === "half";
   const isInline = (image.layout ?? "inline") === "inline";
   return (
     <figure className={`m-0 ${isFull ? "" : "flex flex-col items-center"}`}>
@@ -77,7 +77,7 @@ function Figure({ image }: { image: CaseImage }) {
       >
         <Image
           src={image.src}
-          alt={image.caption ?? ""}
+          alt={image.alt ?? image.caption ?? ""}
           width={image.width}
           height={image.height}
           sizes="(max-width: 768px) 100vw, 900px"
@@ -125,7 +125,27 @@ function SectionImages({ images }: { images: CaseImage[] }) {
     run = [];
   };
 
+  let pair: CaseImage[] = [];
+  const flushPair = (key: string) => {
+    if (pair.length === 0) return;
+    // Landscape shots two across, each half the image column.
+    blocks.push(
+      <div key={key} className="grid grid-cols-1 items-start gap-lg sm:grid-cols-2">
+        {pair.map((img) => (
+          <Figure key={img.src} image={img} />
+        ))}
+      </div>,
+    );
+    pair = [];
+  };
+
   images.forEach((img, i) => {
+    if (img.layout === "half") {
+      flushRun(`run-${i}`);
+      pair.push(img);
+      return;
+    }
+    flushPair(`pair-${i}`);
     if ((img.layout ?? "inline") === "inline") {
       run.push(img);
       return;
@@ -140,6 +160,7 @@ function SectionImages({ images }: { images: CaseImage[] }) {
     );
   });
   flushRun("run-final");
+  flushPair("pair-final");
 
   return <div className="mt-xl flex flex-col gap-xl">{blocks}</div>;
 }
@@ -186,7 +207,8 @@ function Prose({
         const base = i === 0 ? leadClassName ?? className : className;
         const runIn = p.match(/^\*\*(.+?)\*\*\s*/);
         return (
-          <p key={i} className={i === 0 ? base : `mt-md ${base}`}>
+          // later paragraphs swap the caller's top margin for the paragraph gap
+          <p key={i} className={i === 0 ? base : `mt-md ${base.replace(/(^|\s)mt-\S+/g, "")}`}>
             {runIn ? (
               <>
                 <span className="font-medium text-ink">{runIn[1]}</span>{" "}
@@ -230,10 +252,283 @@ function EmbedFrame({ src, title, height }: { src: string; title: string; height
       src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${src}`}
       title={title}
       // 600px tall on narrow screens, the configured height from 640px up
-      className="block h-[600px] w-full bg-transparent sm:h-[var(--embed-h)]"
+      className="block h-[600px] w-full bg-transparent sm:h-[min(var(--embed-h),70vh)]"
       style={{ "--embed-h": `${height}px` } as CSSProperties}
       onLoad={flatten}
     />
+  );
+}
+
+/** Intro under the hero: summary + key results left, project facts right. */
+function IntroBlock({ intro }: { intro: NonNullable<Project["intro"]> }) {
+  return (
+    // Columns stretch to one height; result rows share the left column's
+    // spare height so its last row lands level with the facts column.
+    <section className="mt-2xl grid gap-2xl md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] md:gap-3xl">
+      <div className="flex flex-col">
+        {intro.body.split(/\n\n+/).map((para, i) => (
+          <p key={i} className={`text-body-lg text-ink${i ? " mt-md" : ""}`}>
+            {para.split(/\*\*(.+?)\*\*/).map((s, j) =>
+              j % 2 ? (
+                <strong key={j} className="font-semibold">
+                  {s}
+                </strong>
+              ) : (
+                s
+              ),
+            )}
+          </p>
+        ))}
+        <dl className="mt-md flex flex-1 flex-col">
+          {intro.results.map((r) => (
+            <div
+              key={r.value}
+              className="flex flex-1 items-center justify-between gap-lg border-b border-hairline py-lg last:border-b-0 last:pb-0"
+            >
+              <dt className="flex items-center gap-sm text-heading-md text-ink">
+                {r.value}
+                {r.badge ? (
+                  <span className="rounded-xs border border-hairline px-xs py-xxs text-label-sm text-mute">
+                    {r.badge}
+                  </span>
+                ) : null}
+              </dt>
+              <dd className="max-w-[50%] text-right text-body-md text-body">{r.label}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <dl className="flex flex-col gap-lg border-t border-hairline pt-lg md:border-t-0 md:pt-0">
+        {intro.facts.map((f) => (
+          <div key={f.label}>
+            <dt className="text-label-sm text-ink">{f.label}</dt>
+            <dd className="mt-xxs whitespace-pre-line text-body-md text-body">
+              {f.href ? (
+                <a
+                  href={f.href}
+                  onClick={(e) => {
+                    // Scroll inside the overlay; skip the hash so routing stays put.
+                    e.preventDefault();
+                    document
+                      .querySelector(f.href!)
+                      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
+                  className="border-b border-ink pb-px font-medium text-ink transition-opacity hover:opacity-70"
+                >
+                  {f.value}
+                </a>
+              ) : (
+                f.value
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      {intro.image ? (
+        <figure className="col-span-full mt-2xl overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg md:p-xl md:col-span-full">
+          <Image
+            src={intro.image.src}
+            alt={intro.image.alt}
+            width={intro.image.width}
+            height={intro.image.height}
+            sizes="(max-width: 768px) 100vw, 1000px"
+            className="h-auto w-full"
+          />
+        </figure>
+      ) : null}
+    </section>
+  );
+}
+
+// Each slide holds, then dissolves into the next (ease-out).
+const SLIDE_HOLD_MS = 2500;
+const SLIDE_FADE_MS = 500;
+
+/** Index that advances every hold + fade while autoplay is on. Reduced
+    motion starts it off; a single image never cycles. */
+function useSlideCycle(count: number) {
+  const [active, setActive] = useState(0);
+  const [auto, setAuto] = useState(count > 1);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) setAuto(false);
+  }, []);
+
+  useEffect(() => {
+    if (!auto) return;
+    const t = window.setTimeout(
+      () => setActive((i) => (i + 1) % count),
+      SLIDE_HOLD_MS + SLIDE_FADE_MS,
+    );
+    return () => window.clearTimeout(t);
+  }, [active, auto, count]);
+
+  return { active, setActive, setAuto };
+}
+
+/** Stack of same-ratio images; only the active one is visible. */
+function CrossfadeImages({
+  images,
+  active,
+  sizes,
+}: {
+  images: { src: string; width: number; height: number; alt: string }[];
+  active: number;
+  sizes: string;
+}) {
+  const first = images[0];
+  return (
+    <div className="relative w-full" style={{ aspectRatio: `${first.width}/${first.height}` }}>
+      {images.map((im, i) => (
+        <Image
+          key={im.src}
+          src={im.src}
+          alt={im.alt}
+          width={im.width}
+          height={im.height}
+          sizes={sizes}
+          aria-hidden={i !== active}
+          className="absolute inset-0 h-full w-full object-contain ease-out"
+          style={{ opacity: i === active ? 1 : 0, transition: `opacity ${SLIDE_FADE_MS}ms` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** Numbered rows: the screen on a mat, its title and copy beside it. */
+function FeatureRows({ features }: { features: NonNullable<CaseSection["features"]> }) {
+  return (
+    // Same outer width as the other section blocks, so the heading lines up with them.
+    <div className="mx-auto max-w-5xl">
+      <h3 className="mt-xl max-w-3xl para-header">
+        {features.heading}
+      </h3>
+      <ol className="mt-md flex flex-col gap-2xl">
+        {features.items.map((it, i) => (
+          <FeatureRow key={it.title} item={it} n={i + 1} />
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function FeatureRow({
+  item,
+  n,
+}: {
+  item: NonNullable<CaseSection["features"]>["items"][number];
+  n: number;
+}) {
+  const { active } = useSlideCycle(item.images.length);
+  return (
+    <li className="grid items-center gap-lg md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:gap-2xl">
+      <figure>
+        <div className="flex items-center overflow-hidden md:min-h-[200px] rounded-xs border border-hairline bg-hairline-soft p-lg md:p-xl">
+          <CrossfadeImages
+            images={item.images}
+            active={active}
+            sizes="(max-width: 768px) 100vw, 600px"
+          />
+        </div>
+        {item.caption ? (
+          <figcaption className="mt-sm font-mono text-body-sm leading-5 text-body">
+            {item.caption}
+          </figcaption>
+        ) : null}
+      </figure>
+      <div className="flex gap-xs">
+        <span className="text-body-lg font-semibold text-ink">{n}.</span>
+        <div>
+          <p className="text-body-lg font-semibold text-ink">{item.title}</p>
+          <Prose text={item.body} className="mt-xxs text-body-lg text-body" />
+        </div>
+      </div>
+    </li>
+  );
+}
+
+/** Crossfading image sequence on a mat, with its steps listed beside it;
+    the step for the showing image is highlighted. Steps are buttons, so the
+    sequence can be stepped by hand; reduced motion turns autoplay off. */
+function SlideSequence({ slides }: { slides: NonNullable<CaseSection["slides"]> }) {
+  const { items } = slides;
+  const { active, setActive, setAuto } = useSlideCycle(items.length);
+
+  const first = items[0];
+  return (
+    <div className="grid items-center gap-xl overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg md:grid-cols-2 md:gap-2xl md:p-2xl">
+      <div
+        className="relative mx-auto w-full max-w-[400px] overflow-hidden rounded-xs border border-hairline"
+        style={{ aspectRatio: `${first.width}/${first.height}` }}
+      >
+        {items.map((sl, i) => (
+          <Image
+            key={sl.src}
+            src={sl.src}
+            alt={sl.alt}
+            width={sl.width}
+            height={sl.height}
+            sizes="400px"
+            aria-hidden={i !== active}
+            className="absolute inset-0 h-full w-full ease-out"
+            style={{
+              opacity: i === active ? 1 : 0,
+              transition: `opacity ${SLIDE_FADE_MS}ms`,
+            }}
+          />
+        ))}
+      </div>
+      <div>
+        <h3 className="para-header">{slides.title}</h3>
+        {slides.caption ? (
+          <p className="mt-xs text-body-md italic text-body">{slides.caption}</p>
+        ) : null}
+        <ol className="mt-lg flex flex-col gap-sm">
+          {items.map((sl, i) => (
+            <li key={sl.src} className="flex gap-xs text-body-lg">
+              <span className={i === active ? "font-semibold text-ink" : "text-body"}>{i + 1}.</span>
+              <button
+                type="button"
+                aria-current={i === active ? "step" : undefined}
+                onClick={() => {
+                  setAuto(false);
+                  setActive(i);
+                }}
+                className={`rounded-sm text-left outline-none transition-colors duration-300 ease-out focus-visible:ring-2 focus-visible:ring-link ${
+                  i === active ? "font-semibold text-ink" : "text-body hover:text-ink"
+                }`}
+              >
+                {sl.step}
+              </button>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+/** Line drawing of a charging station with its cable and plug, used as
+    quiet corner marks on the question mat. */
+function ChargerDoodle({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 80 100"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <rect x="40" y="6" width="34" height="60" rx="6" />
+      <path d="M60 18l-8 14h9l-8 14" />
+      <path d="M57 66v14c0 8-6 12-14 12H30c-6 0-9-4-9-10v-16" />
+      <rect x="13" y="50" width="16" height="16" rx="3" />
+      <path d="M13 55H5M13 61H5" />
+    </svg>
   );
 }
 
@@ -242,17 +537,24 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
   const callouts = [...(s.callout ? [s.callout] : []), ...(s.callouts ?? [])];
   return (
     <section id={s.id} className={s.id ? "scroll-mt-3xl" : undefined}>
-      <div className="mx-auto max-w-3xl">
-        <h2 className="text-heading-md text-ink">{s.heading}</h2>
+      <div className="mx-auto max-w-5xl">
+        <h2 className="max-w-3xl para-header md:!text-[32px] md:!leading-[1.3]">{s.heading}</h2>
         {s.label ? (
           <p className="mt-xs font-mono text-mono-eyebrow uppercase text-mute">{s.label}</p>
         ) : null}
         {s.body ? (
           <Prose
             text={s.body}
-            leadClassName="mt-md text-body-lg text-ink"
-            className="mt-md text-body-lg text-body"
+            leadClassName="mt-md max-w-3xl text-body-lg text-ink"
+            className="mt-md max-w-3xl text-body-lg text-body"
           />
+        ) : null}
+
+        {s.sub ? (
+          <>
+            <h3 className={`${s.body ? "mt-xl" : "mt-md"} max-w-3xl para-header`}>{s.sub.heading}</h3>
+            <Prose text={s.sub.body} className="mt-sm max-w-3xl text-body-lg text-body" />
+          </>
         ) : null}
 
         {s.metrics ? (
@@ -266,7 +568,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
           </dl>
         ) : null}
 
-        {s.points ? <BulletList items={s.points} className="mt-lg" /> : null}
+        {s.points ? <BulletList items={s.points} className="mt-lg max-w-3xl" /> : null}
 
         {callouts.map((c, i) => (
           <aside key={i} className="mt-xl rounded-md border border-hairline bg-elevated p-lg">
@@ -277,6 +579,99 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
           </aside>
         ))}
       </div>
+
+      {s.slides ? (
+        <div className="mx-auto mt-xl max-w-5xl">
+          <SlideSequence slides={s.slides} />
+        </div>
+      ) : null}
+
+      {s.features ? <FeatureRows features={s.features} /> : null}
+
+      {s.decision ? (
+        <aside className="mx-auto mt-2xl max-w-5xl rounded-md border border-hairline bg-elevated p-lg">
+          <p className="font-mono text-mono-eyebrow uppercase text-mute">Design decision</p>
+          <Prose text={s.decision} className="mt-sm text-body-lg text-body" />
+        </aside>
+      ) : null}
+
+      {s.subsAfter?.map((sub, i) =>
+        sub.quote ? (
+          <blockquote
+            key={i}
+            className="relative mx-auto mt-2xl max-w-5xl overflow-hidden rounded-xs border border-hairline bg-hairline-soft px-lg py-3xl md:py-4xl"
+          >
+            <ChargerDoodle className="absolute -right-xs top-md hidden w-20 text-mute opacity-50 sm:block" />
+            <ChargerDoodle className="absolute -left-xs bottom-md hidden w-20 text-mute opacity-50 sm:block" />
+            <p className="para-header relative mx-auto max-w-2xl md:!text-[32px] md:!leading-[1.35]">
+              {sub.quote}
+            </p>
+            {sub.quoteBy ? (
+              <footer className="relative mx-auto mt-md max-w-2xl text-body-md text-body">
+                {sub.quoteBy}
+              </footer>
+            ) : null}
+          </blockquote>
+        ) : (
+        <div key={i} className="mx-auto mt-3xl max-w-5xl">
+          {sub.heading ? (
+            <h3
+              className="max-w-3xl para-header"
+            >
+              {sub.heading}
+            </h3>
+          ) : null}
+          {sub.body ? (
+            <Prose
+              text={sub.body}
+              className={`mt-sm max-w-3xl text-body text-body-lg${sub.bodyLarge ? " !text-[20px] !leading-[28px]" : ""}`}
+            />
+          ) : null}
+          {(() => {
+            const list = sub.items ? (
+              <dl
+                className={
+                  sub.itemsCols === 3
+                    ? "mt-lg grid gap-x-2xl gap-y-lg text-center sm:grid-cols-3"
+                    : "mt-md grid gap-x-2xl gap-y-lg sm:grid-cols-2"
+                }
+              >
+                {sub.items.map((it) => (
+                  <div key={it.title}>
+                    <dt className="text-body-lg font-semibold text-ink">{it.title}</dt>
+                    <dd className="mt-xxs text-body-lg text-body">{it.body}</dd>
+                    {it.tag ? (
+                      <dd className="mt-xs text-label-sm text-mute">{it.tag}</dd>
+                    ) : null}
+                  </div>
+                ))}
+              </dl>
+            ) : null;
+            // Three-up items sit inside the image mat so the whole group shares one background.
+            const inMat = sub.itemsCols === 3;
+            return (
+              <>
+                {sub.image ? (
+                  <div className="mt-md overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg md:p-xl">
+                    <Image
+                      src={sub.image.src}
+                      alt={sub.image.alt}
+                      width={sub.image.width}
+                      height={sub.image.height}
+                      sizes="(max-width: 768px) 100vw, 768px"
+                      className="h-auto w-full"
+                    />
+                    {inMat ? list : null}
+                  </div>
+                ) : null}
+                {inMat ? null : list}
+              </>
+            );
+          })()}
+        </div>
+        ),
+      )}
+
 
       {s.images ? (
         <div className="mx-auto max-w-5xl">
@@ -364,12 +759,27 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
       </div>
 
       <article className="mx-auto max-w-container px-lg pb-section pt-2xl">
+        {project.headline ? (
+        <header className="flex items-start justify-between gap-lg">
+          <h1 className="max-w-3xl para-header !text-[32px] !leading-[1.25] md:!text-[40px]">{project.headline}</h1>
+          {project.logo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={project.logo.src}
+              alt={project.logo.alt}
+              width={40}
+              height={40}
+              className="h-10 w-10 shrink-0"
+            />
+          ) : null}
+        </header>
+        ) : (
         <header className="max-w-3xl">
           <p className="eyebrow text-mute">
-            {project.index} · {project.discipline} · {project.org}
+            {project.discipline ? `${project.discipline} · ` : ""}{project.org}
             {project.inProgress ? " · In Progress" : ` · ${project.year}`}
           </p>
-          <h1 className="mt-md text-heading-lg text-ink md:text-display-xl">
+          <h1 className="mt-md para-header !text-[32px] !leading-[1.25] md:!text-[40px]">
             {project.title}
           </h1>
           <p className="mt-lg text-body-lg text-body">{project.subtitle}</p>
@@ -385,15 +795,17 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
                     .querySelector(project.introNote!.href)
                     ?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
-                className="text-ink underline underline-offset-4 hover:text-link"
+                className="border-b border-ink pb-px font-medium text-ink transition-opacity hover:opacity-70"
               >
                 {project.introNote.linkLabel}
               </a>
             </p>
           ) : null}
         </header>
+        )}
 
         {/* Meta strip */}
+        {project.intro ? null : (
         <dl className="mt-2xl grid grid-cols-2 gap-lg border-y border-hairline py-lg md:grid-cols-4">
           {project.meta.map((m) => (
             <div key={m.label}>
@@ -404,6 +816,7 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
             </div>
           ))}
         </dl>
+        )}
 
         {/* Hero image - rendered at its true ratio so nothing crops.
             Portrait heroes (phone screenshots) sit centered on the mat at a
@@ -426,7 +839,7 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
           </div>
         ) : project.overlayHeroFramed ? (
           <div className="mt-2xl overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg">
-            <span className="framed-shot">
+            <span className="framed-shot mx-auto !w-[65%]">
               <Image
                 src={(project.overlayHero ?? project.hero).src}
                 alt={project.title}
@@ -460,6 +873,8 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
             );
           })()
         )}
+
+        {project.intro ? <IntroBlock intro={project.intro} /> : null}
 
         {/* Sections - copy in a narrow reading column, images breathe wider */}
         <div className="mt-3xl flex flex-col gap-3xl">

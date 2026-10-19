@@ -514,3 +514,12 @@ html.lenis-stopped body {
     width: 82%;
   }
 }
+
+/* No single-word last lines in case-study copy. */
+[role="dialog"] p,
+[role="dialog"] h2,
+[role="dialog"] h3,
+[role="dialog"] dd,
+[role="dialog"] figcaption {
+  text-wrap: pretty;
+}
