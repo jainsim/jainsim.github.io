@@ -47,11 +47,8 @@ function ProjectPager({
   );
 
   return (
-    <nav
-      aria-label="More projects"
-      className="mt-3xl border-t border-hairline pt-2xl"
-    >
-      <div className="flex items-center justify-between gap-lg">
+    <nav aria-label="More projects" className="border-t border-hairline">
+      <div className="mx-auto flex max-w-container items-center justify-between gap-lg px-lg py-lg">
         {prev ? <Link project={prev} dir="prev" /> : <span />}
         {next ? <Link project={next} dir="next" /> : <span />}
       </div>
@@ -758,7 +755,7 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
         </div>
       </div>
 
-      <article className="mx-auto max-w-container px-lg pb-section pt-2xl">
+      <article className="mx-auto max-w-container px-lg pb-4xl pt-2xl">
         {project.headline ? (
         <header className="flex items-start justify-between gap-lg">
           <h1 className="max-w-3xl para-header !text-m3-headline-md md:!text-m3-display-sm">{project.headline}</h1>
@@ -883,8 +880,9 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
           ))}
         </div>
 
-        <ProjectPager slug={project.slug} onNavigate={onNavigate} />
       </article>
+
+      <ProjectPager slug={project.slug} onNavigate={onNavigate} />
     </div>
   );
 }
