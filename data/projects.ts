@@ -518,8 +518,7 @@ export const projects: Project[] = [
         },
       },
       {
-        heading: "Research & Discovery",
-        body: "Real research started after MVP.",
+        heading: "Real research started after MVP",
         subsAfter: [
           {
             heading: "Insight",

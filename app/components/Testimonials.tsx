@@ -89,10 +89,10 @@ function Card({
         className
       }
     >
-      <p className="text-[length:clamp(1.0625rem,1.2vw+0.7rem,1.25rem)] font-normal leading-[1.45] tracking-[-0.01em] text-ink [text-wrap:pretty]">
+      <p className="font-sans italic text-m3-title-lg text-ink [text-wrap:pretty]">
         {t.quote}
       </p>
-      <cite className="mt-auto block pt-lg font-mono text-mono-eyebrow uppercase not-italic tracking-normal text-body">
+      <cite className="mt-auto block pt-lg font-sans text-m3-body-sm uppercase not-italic tracking-normal text-body">
         <span className="block font-medium text-ink">{t.name}</span>
         {line2 && <span className="mt-xxs block">{line2}</span>}
       </cite>

@@ -40,11 +40,11 @@ export default function Nav() {
             if (window.lenis?.scrollTo) window.lenis.scrollTo(0);
             else window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="text-label-sm font-semibold"
+          className="text-m3-title-sm font-semibold"
         >
           Seema Jain
         </a>
-        <div className="flex items-center gap-xs text-body-md">
+        <div className="flex items-center gap-xs text-m3-body-md">
           <a href="#work" className="rounded-pill px-sm py-xs hover:opacity-70">
             Work
           </a>

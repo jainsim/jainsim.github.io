@@ -37,7 +37,7 @@ function ProjectPager({
         dir === "next" ? "items-end text-right" : "items-start text-left"
       }`}
     >
-      <span className="font-mono text-mono-eyebrow uppercase text-mute transition-colors group-hover:text-ink">
+      <span className="font-sans text-m3-body-sm uppercase text-mute transition-colors group-hover:text-ink">
         {dir === "prev" ? "← Previous" : "Next →"}
       </span>
       <span className="text-m3-title-sm text-ink underline-offset-4 group-hover:underline">
@@ -85,7 +85,7 @@ function Figure({ image }: { image: CaseImage }) {
       </span>
       {image.caption ? (
         <figcaption
-          className={`mt-sm font-mono text-m3-body-sm leading-5 text-mute ${
+          className={`mt-sm font-sans text-m3-body-sm leading-5 text-mute ${
             isFull ? "" : "max-w-sm text-center"
           }`}
         >
@@ -429,7 +429,7 @@ function FeatureRow({
           />
         </div>
         {item.caption ? (
-          <figcaption className="mt-sm font-mono text-m3-body-sm leading-5 text-body">
+          <figcaption className="mt-sm font-sans text-m3-body-sm leading-5 text-body">
             {item.caption}
           </figcaption>
         ) : null}
@@ -537,7 +537,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
       <div className="mx-auto max-w-5xl">
         <h2 className="max-w-3xl para-header !text-m3-headline-sm md:!text-m3-headline-lg">{s.heading}</h2>
         {s.label ? (
-          <p className="mt-xs font-mono text-mono-eyebrow uppercase text-mute">{s.label}</p>
+          <p className="mt-xs font-sans text-m3-body-sm uppercase text-mute">{s.label}</p>
         ) : null}
         {s.body ? (
           <Prose
@@ -558,7 +558,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
           <dl className="mt-xl grid grid-cols-1 gap-lg border-y border-hairline py-lg sm:grid-cols-3">
             {s.metrics.map((m) => (
               <div key={m.label}>
-                <dt className="text-m3-headline-md text-ink">{m.value}</dt>
+                <dt className="para-header !text-m3-headline-sm">{m.value}</dt>
                 <dd className="mt-xxs text-m3-body-md text-mute">{m.label}</dd>
               </div>
             ))}
@@ -570,7 +570,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
         {callouts.map((c, i) => (
           <aside key={i} className="mt-xl rounded-md border border-hairline bg-elevated p-lg">
             {c.label ? (
-              <p className="font-mono text-mono-eyebrow uppercase text-mute">{c.label}</p>
+              <p className="font-sans text-m3-body-sm uppercase text-mute">{c.label}</p>
             ) : null}
             <Prose text={c.body} className="mt-sm text-m3-body-lg text-body" />
           </aside>
@@ -587,7 +587,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
 
       {s.decision ? (
         <aside className="mx-auto mt-2xl max-w-5xl rounded-md border border-hairline bg-elevated p-lg">
-          <p className="font-mono text-mono-eyebrow uppercase text-mute">Design decision</p>
+          <p className="font-sans text-m3-body-sm uppercase text-mute">Design decision</p>
           <Prose text={s.decision} className="mt-sm text-m3-body-lg text-body" />
         </aside>
       ) : null}
@@ -610,7 +610,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
             ) : null}
           </blockquote>
         ) : (
-        <div key={i} className="mx-auto mt-3xl max-w-5xl">
+        <div key={i} className="mx-auto mt-xl max-w-5xl">
           {sub.heading ? (
             <h3
               className={`max-w-3xl para-header ${sub.headingLarge ? "!text-m3-headline-md" : "!text-m3-headline-sm"}`}
@@ -684,7 +684,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
               <EmbedFrame src={s.embed.src} title={s.embed.title} height={s.embed.height} />
             </span>
             {s.embed.caption ? (
-              <figcaption className="mt-sm font-mono text-m3-body-sm leading-5 text-mute">
+              <figcaption className="mt-sm font-sans text-m3-body-sm leading-5 text-mute">
                 {s.embed.caption}
               </figcaption>
             ) : null}
@@ -741,14 +741,14 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
           <button
             type="button"
             onClick={onClose}
-            className="rounded-sm py-sm font-mono text-mono-eyebrow uppercase text-mute outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-link focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+            className="rounded-sm py-sm font-sans text-m3-body-sm uppercase text-mute outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-link focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
           >
             ← All work
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-sm py-sm font-mono text-mono-eyebrow uppercase text-mute outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-link focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+            className="rounded-sm py-sm font-sans text-m3-body-sm uppercase text-mute outline-none transition-colors hover:text-ink focus-visible:ring-2 focus-visible:ring-link focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
           >
             Close ✕
           </button>
@@ -806,7 +806,7 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
         <dl className="mt-2xl grid grid-cols-2 gap-lg border-y border-hairline py-lg md:grid-cols-4">
           {project.meta.map((m) => (
             <div key={m.label}>
-              <dt className="font-mono text-mono-eyebrow uppercase text-mute">
+              <dt className="font-sans text-m3-body-sm uppercase text-mute">
                 {m.label}
               </dt>
               <dd className="mt-xxs text-m3-title-sm text-ink">{m.value}</dd>

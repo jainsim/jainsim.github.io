@@ -123,13 +123,13 @@ export default function Hero() {
         <div />
 
         <div className="max-w-4xl pb-4xl">
-          <h1 className="text-fjord-text text-[length:clamp(3rem,11vw,6rem)] font-semibold leading-[0.95] tracking-[-0.03em]">
+          <h1 className="font-hand text-m3-display-lg font-normal text-fjord-text">
             Seema Jain
           </h1>
-          <p className="mt-lg max-w-xl text-heading-md text-fjord-text">
+          <p className="mt-lg max-w-xl text-m3-title-lg text-fjord-text">
             I design the software layer around physical infrastructure.
           </p>
-          <p className="mt-sm max-w-xl text-body-lg text-fjord-text/80">
+          <p className="mt-sm max-w-xl text-m3-body-lg text-fjord-text/80">
             Multi-role enterprise platforms, legacy modernisation, and the
             design systems that hold them together. 7+ years across enterprise
             B2B SaaS and native mobile.
@@ -150,13 +150,13 @@ export default function Hero() {
                 window.history.pushState({}, "", `${base}/work/${prototypeItem.slug}/`);
                 window.dispatchEvent(new PopStateEvent("popstate"));
               }}
-              className="rounded-pill border border-transparent bg-fjord-text px-lg py-sm text-body-lg font-medium text-fjord-ink transition-opacity hover:opacity-90"
+              className="rounded-pill border border-transparent bg-fjord-text px-lg py-sm text-m3-body-lg font-medium text-fjord-ink transition-opacity hover:opacity-90"
             >
               See a live prototype
             </a>
             <a
               href="#work"
-              className="rounded-pill border border-white/25 px-lg py-sm text-body-lg font-medium text-fjord-text transition-colors hover:border-fjord-text hover:bg-white/10"
+              className="rounded-pill border border-white/25 px-lg py-sm text-m3-body-lg font-medium text-fjord-text transition-colors hover:border-fjord-text hover:bg-white/10"
             >
               Read the work
             </a>

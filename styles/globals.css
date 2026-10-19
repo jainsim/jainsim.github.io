@@ -24,7 +24,7 @@ html {
 body {
   background-color: theme("colors.canvas");
   color: theme("colors.ink");
-  font-family: var(--font-geist-sans), Inter, Arial, sans-serif;
+  font-family: var(--font-open-sans), Arial, sans-serif;
 }
 
 /* Lenis smooth scroll */
@@ -47,7 +47,7 @@ html.lenis-stopped body {
     @apply border border-hairline bg-elevated;
   }
   .eyebrow {
-    @apply font-mono text-mono-eyebrow uppercase tracking-normal;
+    @apply font-sans text-m3-body-sm uppercase tracking-[0.08em];
   }
 
   /* Cuberto-style masked reveal: the parent span is overflow-hidden; the line
@@ -217,10 +217,10 @@ html.lenis-stopped body {
 /* Hero atmosphere is a WebGL canvas (HeroFluid); it self-disables under
    prefers-reduced-motion, leaving a clean still hero. */
 
-/* ===== Selected work - device-frame cards ported from selected-work/work.html,
+/* ===== Selected work - device-frame cards,
    now living INSIDE the GSAP sticky-stack. Tokens (were :root) + typography
    (were the global body rule) are scoped to the stacked card so nothing leaks
-   site-wide; the rest of the site keeps its Geist font. Every .card / .device
+   site-wide; the rest of the site keeps the site font. Every .card / .device
    rule below is the source CSS, unchanged. */
 .stack-card {
   --canvas: #fafafa;
@@ -228,16 +228,15 @@ html.lenis-stopped body {
   --hair: #ebebeb;
   --ink: #171717;
   --body: #4d4d4d;
-  --mute: #8f8f8f;
-  --faint: #a1a1a1;
+  --mute: #6b6b6b;
+  --faint: #6b6b6b;
   --frame: linear-gradient(152deg, #5b6068 0%, #33373d 42%, #1b1e22 100%);
   --frame-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     inset 1px 0 0 rgba(255, 255, 255, 0.1),
     inset -1px 0 0 rgba(0, 0, 0, 0.2),
     0 20px 38px -24px rgba(20, 24, 28, 0.62);
-  --sans: Inter, -apple-system, Arial, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sans: var(--font-open-sans), Arial, sans-serif;
   font-family: var(--sans);
   color: var(--ink);
 }
@@ -276,15 +275,9 @@ html.lenis-stopped body {
   margin-bottom: 18px;
   min-height: 22px;
 }
-.card__index {
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  color: var(--faint);
-}
 .card__badge {
-  font-family: var(--mono);
-  font-size: 10px;
+  font-family: var(--sans);
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   border: 1px solid var(--hair);
@@ -303,15 +296,15 @@ html.lenis-stopped body {
   background: #0d7a3e;
 }
 .card__title {
-  font-size: 23px;
-  font-weight: 600;
-  line-height: 29px;
-  letter-spacing: -0.62px;
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.3;
   margin: 0 0 6px;
 }
 .card__kind {
-  font-family: var(--mono);
-  font-size: 11px;
+  font-family: var(--sans);
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--mute);
@@ -319,9 +312,21 @@ html.lenis-stopped body {
 }
 .card__desc {
   margin: 0 0 auto;
-  color: var(--body);
-  font-size: 14.5px;
-  line-height: 22px;
+  max-width: 50ch;
+  font-family: var(--font-hand), cursive;
+  font-size: 24px;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+}
+
+.para-header {
+  font-family: var(--font-hand), cursive;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  color: var(--ink);
 }
 .card__foot {
   margin-top: 24px;
@@ -329,19 +334,18 @@ html.lenis-stopped body {
   align-items: center;
 }
 .card__link {
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--ink);
-  text-decoration: none;
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 1px;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
 }
-.card__link:hover {
-  opacity: 0.7;
+.card__link:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
 }
 .card__year {
-  font-family: var(--mono);
-  font-size: 11px;
+  font-family: var(--sans);
+  font-size: 12px;
   color: var(--faint);
   margin-left: auto;
 }
@@ -361,6 +365,35 @@ html.lenis-stopped body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+}
+
+/* Home-card illustration: flat on the white pane, no device frame, contained
+   with even breathing room so the hand-drawn line never touches the edges. */
+.illus {
+  position: absolute;
+  inset: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.illus img {
+  width: 100%;
+  height: 100%;
+  max-width: 560px;
+  display: block;
+  object-fit: contain;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.card:hover .illus img {
+  transform: scale(1.035);
+}
+@media (prefers-reduced-motion: reduce) {
+  .illus img {
+    transition: none;
+  }
+  .card:hover .illus img {
+    transform: none;
+  }
 }
 
 .device {
@@ -499,8 +532,8 @@ html.lenis-stopped body {
   /* Laptops render short when width-constrained, so a fixed 300px pane leaves
      them floating. Scale the pane with the viewport (capped at 300px) so the
      device always overflows the bottom and clips, like on desktop. */
-  .card--laptop .card__visual {
-    min-height: min(300px, 46vw);
+  .illus {
+    inset: 24px;
   }
   /* More top gap so the device clears the divider, not hugging it. */
   .stage {

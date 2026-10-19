@@ -17,15 +17,13 @@ type Props = {
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 /**
- * Card face per project - the approved device-frame design (selected-work/work.html).
- * Keyed by slug because the device-ready screenshots and the "Northbeam" copy are
- * the design's own, distinct from the case-study data model. `--ar` is the image's
- * pixel width/height; swapping a file means updating both `ar` and width/height.
+ * Card face per project - a hand-drawn illustration set flat on the card.
+ * Keyed by slug because the illustrations and the "Northbeam" copy are the
+ * design's own, distinct from the case-study data model. width/height are the
+ * SVG's native size; swapping a file means updating both.
  */
 type Face = {
-  device: "phone" | "laptop";
   img: string;
-  ar: string;
   w: number;
   h: number;
   title: string;
@@ -38,53 +36,45 @@ type Face = {
 
 const FACE: Record<string, Face> = {
   "field-commissioning": {
-    device: "phone",
-    img: "/projects/selected-work/northbeam.jpg",
-    ar: "720/1558",
-    w: 720,
-    h: 1558,
+    img: "/projects/selected-work/northbeam-illustration.svg",
+    w: 291,
+    h: 155,
     title: "Northbeam",
     kind: "Prototype, built in code",
     desc: "Offline-first field job flow. Queues, recovers, and shows what has not synced",
     year: "2026",
     badge: "Live prototype",
-    alt: "Northbeam home screen with Install and Service task tiles, a supported-hardware note, and a list of installation guides.",
+    alt: "Sketch of a robot writing code, sparkles, and a phone screen built from the result.",
   },
   installer: {
-    device: "phone",
-    img: "/projects/selected-work/installer-app.jpg",
-    ar: "720/1512",
-    w: 720,
-    h: 1512,
+    img: "/projects/selected-work/installer-illustration.svg",
+    w: 289,
+    h: 120,
     title: "Installer App",
     kind: "Native mobile",
     desc: "Field commissioning without a deployment specialist",
     year: "2025",
-    alt: "Device setup progress screen confirming two stations were set up, each showing MAC address, serial number and model.",
+    alt: "Sketch of three chargers with the same config, each checked off, leading to a Setup complete phone screen and an email.",
   },
   activation: {
-    device: "laptop",
-    img: "/projects/selected-work/station-activation.jpg",
-    ar: "1560/998",
-    w: 1560,
-    h: 998,
-    title: "Station Activation Flow",
-    kind: "Enterprise workflow",
-    desc: "Specialist-only site configuration, 3 to 5 days to same-day self-serve",
+    img: "/projects/selected-work/activation-illustration.svg",
+    w: 289,
+    h: 145,
+    title: "Charging station activation",
+    kind: "",
+    desc: "From a specialist-led flow to a simple self-serve wizard for non-experts",
     year: "2025",
-    alt: "Charging management console with an activate-stations banner, a 70 percent activation progress bar, and a station table showing pending, online and offline states.",
+    alt: "Sketch of a team juggling three legacy systems, leading to a single numbered wizard with an Activate button.",
   },
   designgrid: {
-    device: "laptop",
-    img: "/projects/selected-work/designgrid.jpg",
-    ar: "1560/1192",
-    w: 1560,
-    h: 1192,
+    img: "/projects/selected-work/designgrid-illustration.svg",
+    w: 289,
+    h: 137,
     title: "DesignGrid",
     kind: "Design systems",
     desc: "One component library across web and mobile, 80% faster feature development",
     year: "2023-2024",
-    alt: "Placeholder: replace with a DesignGrid screen.",
+    alt: "Sketch of a phone setup wizard and a sites dropdown component reused in a desktop dashboard.",
   },
 };
 
@@ -163,73 +153,60 @@ export default function ProjectStage({
   }, [onActive, order]);
 
   const face = FACE[project.slug];
-  const index = `(0${order + 1})`;
 
   return (
     <section
       ref={cardRef}
       data-slug={project.slug}
       style={{ "--i": order } as CSSProperties}
-      className={`stack-card card card--${face.device}`}
+      className="stack-card card"
     >
+      {/* Stretched link: covers the whole card, so the card is one click target
+          while the anchor keeps keyboard focus and crawlable href. */}
+      <a
+        className="card__link"
+        href={`${BASE_PATH}/work/${project.slug}/`}
+        onClick={(e) => {
+          if (
+            e.metaKey ||
+            e.ctrlKey ||
+            e.shiftKey ||
+            e.altKey ||
+            e.button !== 0
+          )
+            return;
+          e.preventDefault();
+          if (isPrototype) onOpenPrototype();
+          else onOpen(project.slug);
+        }}
+        aria-label={
+          isPrototype
+            ? `Launch ${face.title} live prototype`
+            : `Open ${face.title} case study`
+        }
+      />
       <div className="card__text">
         <div className="card__meta">
-          <span className="card__index">{index}</span>
           {face.badge ? <span className="card__badge">{face.badge}</span> : null}
         </div>
         <h3 className="card__title">{face.title}</h3>
-        <div className="card__kind">{face.kind}</div>
+        {face.kind ? <div className="card__kind">{face.kind}</div> : null}
         <p className="card__desc">{face.desc}</p>
-        {/* Whole card is not a link; this footer link is the only interactive
-            target. Case studies open the overlay; the prototype opens its
-            full-screen embed. Real href stays crawlable / new-tab friendly. */}
         <div className="card__foot">
-          <a
-            className="card__link"
-            href={`${BASE_PATH}/work/${project.slug}/`}
-            onClick={(e) => {
-              if (
-                e.metaKey ||
-                e.ctrlKey ||
-                e.shiftKey ||
-                e.altKey ||
-                e.button !== 0
-              )
-                return;
-              e.preventDefault();
-              if (isPrototype) onOpenPrototype();
-              else onOpen(project.slug);
-            }}
-            aria-label={
-              isPrototype
-                ? `Launch ${face.title} live prototype`
-                : `Open ${face.title} case study`
-            }
-          >
-            View project
-          </a>
           <span className="card__year">{face.year}</span>
         </div>
       </div>
 
       <div className="card__visual">
-        <div className="stage">
-          <div
-            className={`device ${
-              face.device === "phone" ? "device--phone" : "device--laptop"
-            }`}
-          >
-            <div className="device__screen" style={{ "--ar": face.ar } as CSSProperties}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={face.img}
-                alt={face.alt}
-                loading="lazy"
-                width={face.w}
-                height={face.h}
-              />
-            </div>
-          </div>
+        <div className="illus">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={face.img}
+            alt={face.alt}
+            loading="lazy"
+            width={face.w}
+            height={face.h}
+          />
         </div>
       </div>
     </section>

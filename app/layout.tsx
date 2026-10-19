@@ -1,8 +1,20 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Open_Sans, Shadows_Into_Light_Two } from "next/font/google";
 import SmoothScroll from "./components/SmoothScroll";
 import "../styles/globals.css";
+
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+});
+
+const handwritten = Shadows_Into_Light_Two({
+  variable: "--font-hand",
+  subsets: ["latin"],
+  weight: "400",
+});
 
 // Absolute-URL base for OG/Twitter tags. Domain-agnostic: set
 // NEXT_PUBLIC_SITE_URL to override; defaults to the custom domain.
@@ -40,7 +52,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${openSans.variable} ${handwritten.variable}`}
     >
       <body suppressHydrationWarning className="bg-canvas text-ink antialiased">
         <SmoothScroll />

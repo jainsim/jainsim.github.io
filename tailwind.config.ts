@@ -26,25 +26,11 @@ const config: Config = {
         "fjord-mute": "#a1a1a1",
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "Inter", "Arial", "sans-serif"],
-        mono: [
-          "var(--font-geist-mono)",
-          "JetBrains Mono",
-          "ui-monospace",
-          "monospace",
-        ],
+        sans: ["var(--font-open-sans)", "Arial", "sans-serif"],
+        hand: ["var(--font-hand)", "cursive"],
       },
       fontSize: {
-        "display-xl": ["48px", { lineHeight: "48px", letterSpacing: "-2.4px", fontWeight: "600" }],
-        "display-hero": ["96px", { lineHeight: "0.95", letterSpacing: "-4px", fontWeight: "600" }],
-        "heading-lg": ["32px", { lineHeight: "40px", letterSpacing: "-1.28px", fontWeight: "600" }],
-        "heading-md": ["20px", { lineHeight: "28px", letterSpacing: "-0.4px", fontWeight: "600" }],
-        "label-sm": ["14px", { lineHeight: "20px", letterSpacing: "-0.28px", fontWeight: "500" }],
-        "mono-eyebrow": ["12px", { lineHeight: "16px", letterSpacing: "0" }],
-        "body-lg": ["16px", { lineHeight: "24px" }],
-        "body-md": ["14px", { lineHeight: "20px" }],
-        "body-sm": ["12px", { lineHeight: "16px" }],
-        // Material 3 type scale, used by the case study
+        "m3-display-lg": ["57px", { lineHeight: "64px" }],
         "m3-display-sm": ["36px", { lineHeight: "44px" }],
         "m3-headline-lg": ["32px", { lineHeight: "40px" }],
         "m3-headline-md": ["28px", { lineHeight: "36px" }],

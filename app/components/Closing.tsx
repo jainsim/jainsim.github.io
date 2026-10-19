@@ -18,19 +18,19 @@ export default function Closing() {
           <p className="eyebrow text-mute">About</p>
           <AboutReveal />
           <div className="mt-2xl max-w-2xl">
-            <p className="text-body-lg text-body">
+            <p className="text-m3-body-lg text-body">
               On one side, apps used by electricians and technicians standing in
               front of a machine with bad signal and no patience. On the other,
               the operator console where someone in an office has to trust what
               the field just did.
             </p>
-            <p className="mt-lg text-body-lg text-body">
+            <p className="mt-lg text-m3-body-lg text-body">
               Nearly four years of high-consequence enterprise work taught me the
               same three things repeat: dense technical data, configuration that
               lives in one team&apos;s heads, and legacy workflows nobody can
               rebuild from scratch.
             </p>
-            <p className="mt-lg text-body-lg text-body">
+            <p className="mt-lg text-m3-body-lg text-body">
               In EV charging that meant a native installer app, a station
               activation workflow inside a legacy enterprise platform, and the
               design system that held both together. Modernisation, not
@@ -47,13 +47,13 @@ export default function Closing() {
               {/* Left - origin story */}
               <div>
                 <p className="eyebrow text-mute">Before UX</p>
-                <p className="mt-lg max-w-lg text-body-lg text-body">
+                <p className="mt-lg max-w-lg text-m3-body-lg text-body">
                   Before UX, I was at Tommy Hilfiger, Kenneth Cole, Emporio
                   Armani, years on the floor as a fashion consultant, reading
                   what someone felt about a garment in the two seconds before
                   they said anything.
                 </p>
-                <p className="mt-md max-w-lg text-body-lg text-body">
+                <p className="mt-md max-w-lg text-m3-body-lg text-body">
                   Nobody on a shop floor tells you what&apos;s wrong. You watch
                   what they pick up and what they put back. That&apos;s still how
                   I work: I trust what I watch people do over what they say they
@@ -89,10 +89,10 @@ export default function Closing() {
                       key={label}
                       className="flex flex-col gap-xxs py-sm sm:flex-row sm:gap-lg"
                     >
-                      <dt className="font-mono text-mono-eyebrow uppercase text-mute sm:w-32 sm:shrink-0 sm:pt-[3px]">
+                      <dt className="font-sans text-m3-body-sm uppercase text-mute sm:w-32 sm:shrink-0 sm:pt-[3px]">
                         {label}
                       </dt>
-                      <dd className="text-body-md text-ink sm:flex-1">{value}</dd>
+                      <dd className="text-m3-body-md text-ink sm:flex-1">{value}</dd>
                     </div>
                   ))}
                 </dl>
@@ -111,13 +111,13 @@ export default function Closing() {
       {/* CTA / Contact */}
       <section id="contact" className="border-t border-hairline bg-canvas">
         <div className="mx-auto max-w-container px-lg py-4xl text-center">
-          <h2 className="mx-auto max-w-3xl text-[length:clamp(1.75rem,4vw+0.5rem,3rem)] font-semibold leading-none tracking-[-0.05em] text-ink">
+          <h2 className="mx-auto max-w-3xl text-m3-headline-lg font-semibold text-ink md:text-m3-display-sm">
             Got a gnarly problem worth solving?
           </h2>
           <div className="mt-2xl flex flex-wrap items-center justify-center gap-md">
             <a
               href="mailto:seemasam2113@gmail.com"
-              className="rounded-pill border border-transparent bg-ink px-lg py-sm text-body-lg font-medium text-on-primary transition-colors hover:bg-black"
+              className="rounded-pill border border-transparent bg-ink px-lg py-sm text-m3-body-lg font-medium text-on-primary transition-colors hover:bg-black"
             >
               Get in touch
             </a>
@@ -125,7 +125,7 @@ export default function Closing() {
               href="/seema-jain-resume.pdf"
               target="_blank"
               rel="noopener"
-              className="rounded-pill border border-hairline bg-elevated px-lg py-sm text-body-lg font-medium text-ink transition-colors hover:bg-hairline-soft"
+              className="rounded-pill border border-hairline bg-elevated px-lg py-sm text-m3-body-lg font-medium text-ink transition-colors hover:bg-hairline-soft"
             >
               Resume
             </a>
@@ -137,13 +137,13 @@ export default function Closing() {
       <footer className="border-t border-hairline bg-canvas">
         <div className="mx-auto flex max-w-container flex-col items-start justify-between gap-md px-lg py-lg md:flex-row md:items-center">
           <div className="flex flex-col items-start gap-xs sm:flex-row sm:items-center sm:gap-md">
-            <span className="text-label-sm font-semibold text-ink">
+            <span className="text-m3-title-sm font-semibold text-ink">
               Seema Jain
             </span>
-            <span className="font-mono text-mono-eyebrow text-mute">
+            <span className="font-sans text-m3-body-sm text-mute">
               · © 2026 · Salzburg, AT
             </span>
-            <span className="font-mono text-mono-eyebrow text-mute/70">
+            <span className="font-sans text-m3-body-sm text-mute/70">
               V1.0
             </span>
           </div>
@@ -151,7 +151,7 @@ export default function Closing() {
             href="https://www.linkedin.com/in/seema-sampathraj/"
             target="_blank"
             rel="noopener"
-            className="font-mono text-mono-eyebrow text-mute transition-colors hover:text-ink"
+            className="font-sans text-m3-body-sm text-mute transition-colors hover:text-ink"
           >
             LinkedIn ↗
           </a>

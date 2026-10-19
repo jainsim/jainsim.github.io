@@ -143,7 +143,7 @@ export default function ProjectsSection({
       {/* Sticky "where am I" counter - bottom-left, only within Work */}
       <div
         aria-hidden
-        className={`pointer-events-none fixed bottom-lg left-lg z-30 font-mono text-mono-eyebrow text-mute transition-opacity duration-500 max-md:hidden ${
+        className={`pointer-events-none fixed bottom-lg left-lg z-30 font-sans text-m3-body-sm text-mute transition-opacity duration-500 max-md:hidden ${
           inView && !openSlug && !protoOpen ? "opacity-100" : "opacity-0"
         }`}
       >
