@@ -18,7 +18,7 @@ export type CaseMetric = { value: string; label: string };
 
 export type CaseSection = {
   heading: string;
-  body: string;
+  body?: string;
   points?: string[]; // scannable supporting points
   images?: CaseImage[];
   callout?: { label?: string; body: string }; // design-decision aside
