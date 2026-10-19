@@ -48,7 +48,7 @@ export type CaseSection = {
   subsAfter?: {
     heading?: string;
     body?: string;
-    headingLarge?: boolean; // uses the larger .para-header--lg style
+    headingLarge?: boolean; // Material headline-md size instead of headline-sm
     bodyLarge?: boolean; // larger paragraph size, for a lead-in
     quote?: string; // pull quote on a mat
     quoteBy?: string; // who said it, shown under the quote

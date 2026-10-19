@@ -40,7 +40,7 @@ function ProjectPager({
       <span className="font-mono text-mono-eyebrow uppercase text-mute transition-colors group-hover:text-ink">
         {dir === "prev" ? "← Previous" : "Next →"}
       </span>
-      <span className="text-label-sm text-ink underline-offset-4 group-hover:underline">
+      <span className="text-m3-title-sm text-ink underline-offset-4 group-hover:underline">
         {p.title}
       </span>
     </a>
@@ -88,7 +88,7 @@ function Figure({ image }: { image: CaseImage }) {
       </span>
       {image.caption ? (
         <figcaption
-          className={`mt-sm font-mono text-body-sm leading-5 text-mute ${
+          className={`mt-sm font-mono text-m3-body-sm leading-5 text-mute ${
             isFull ? "" : "max-w-sm text-center"
           }`}
         >
@@ -169,7 +169,7 @@ function BulletList({ items, className }: { items: string[]; className: string }
   return (
     <ul className={`${className} flex flex-col gap-sm`}>
       {items.map((p) => (
-        <li key={p} className="flex gap-sm text-body-lg text-body">
+        <li key={p} className="flex gap-sm text-m3-body-lg text-body">
           <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-mute" />
           <span>{p}</span>
         </li>
@@ -267,7 +267,7 @@ function IntroBlock({ intro }: { intro: NonNullable<Project["intro"]> }) {
     <section className="mt-2xl grid gap-2xl md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] md:gap-3xl">
       <div className="flex flex-col">
         {intro.body.split(/\n\n+/).map((para, i) => (
-          <p key={i} className={`text-body-lg text-ink${i ? " mt-md" : ""}`}>
+          <p key={i} className={`text-m3-body-lg text-ink${i ? " mt-md" : ""}`}>
             {para.split(/\*\*(.+?)\*\*/).map((s, j) =>
               j % 2 ? (
                 <strong key={j} className="font-semibold">
@@ -285,15 +285,15 @@ function IntroBlock({ intro }: { intro: NonNullable<Project["intro"]> }) {
               key={r.value}
               className="flex flex-1 items-center justify-between gap-lg border-b border-hairline py-lg last:border-b-0 last:pb-0"
             >
-              <dt className="flex items-center gap-sm text-heading-md text-ink">
+              <dt className="flex items-center gap-sm !text-m3-title-lg font-semibold text-ink">
                 {r.value}
                 {r.badge ? (
-                  <span className="rounded-xs border border-hairline px-xs py-xxs text-label-sm text-mute">
+                  <span className="rounded-xs border border-hairline px-xs py-xxs text-m3-title-sm text-mute">
                     {r.badge}
                   </span>
                 ) : null}
               </dt>
-              <dd className="max-w-[50%] text-right text-body-md text-body">{r.label}</dd>
+              <dd className="max-w-[50%] text-right text-m3-body-md text-body">{r.label}</dd>
             </div>
           ))}
         </dl>
@@ -301,8 +301,8 @@ function IntroBlock({ intro }: { intro: NonNullable<Project["intro"]> }) {
       <dl className="flex flex-col gap-lg border-t border-hairline pt-lg md:border-t-0 md:pt-0">
         {intro.facts.map((f) => (
           <div key={f.label}>
-            <dt className="text-label-sm text-ink">{f.label}</dt>
-            <dd className="mt-xxs whitespace-pre-line text-body-md text-body">
+            <dt className="text-m3-title-sm text-ink">{f.label}</dt>
+            <dd className="mt-xxs whitespace-pre-line text-m3-body-md text-body">
               {f.href ? (
                 <a
                   href={f.href}
@@ -401,7 +401,7 @@ function FeatureRows({ features }: { features: NonNullable<CaseSection["features
   return (
     // Same outer width as the other section blocks, so the heading lines up with them.
     <div className="mx-auto max-w-5xl">
-      <h3 className="mt-xl max-w-3xl para-header">
+      <h3 className="mt-xl max-w-3xl para-header !text-m3-headline-sm">
         {features.heading}
       </h3>
       <ol className="mt-md flex flex-col gap-2xl">
@@ -432,16 +432,16 @@ function FeatureRow({
           />
         </div>
         {item.caption ? (
-          <figcaption className="mt-sm font-mono text-body-sm leading-5 text-body">
+          <figcaption className="mt-sm font-mono text-m3-body-sm leading-5 text-body">
             {item.caption}
           </figcaption>
         ) : null}
       </figure>
       <div className="flex gap-xs">
-        <span className="text-body-lg font-semibold text-ink">{n}.</span>
+        <span className="text-m3-body-lg font-semibold text-ink">{n}.</span>
         <div>
-          <p className="text-body-lg font-semibold text-ink">{item.title}</p>
-          <Prose text={item.body} className="mt-xxs text-body-lg text-body" />
+          <p className="text-m3-body-lg font-semibold text-ink">{item.title}</p>
+          <Prose text={item.body} className="mt-xxs text-m3-body-lg text-body" />
         </div>
       </div>
     </li>
@@ -480,13 +480,13 @@ function SlideSequence({ slides }: { slides: NonNullable<CaseSection["slides"]> 
         ))}
       </div>
       <div>
-        <h3 className="para-header">{slides.title}</h3>
+        <h3 className="para-header !text-m3-headline-sm">{slides.title}</h3>
         {slides.caption ? (
-          <p className="mt-xs text-body-md italic text-body">{slides.caption}</p>
+          <p className="mt-xs text-m3-body-md italic text-body">{slides.caption}</p>
         ) : null}
         <ol className="mt-lg flex flex-col gap-sm">
           {items.map((sl, i) => (
-            <li key={sl.src} className="flex gap-xs text-body-lg">
+            <li key={sl.src} className="flex gap-xs text-m3-body-lg">
               <span className={i === active ? "font-semibold text-ink" : "text-body"}>{i + 1}.</span>
               <button
                 type="button"
@@ -538,22 +538,22 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
   return (
     <section id={s.id} className={s.id ? "scroll-mt-3xl" : undefined}>
       <div className="mx-auto max-w-5xl">
-        <h2 className="max-w-3xl para-header md:!text-[32px] md:!leading-[1.3]">{s.heading}</h2>
+        <h2 className="max-w-3xl para-header !text-m3-headline-sm md:!text-m3-headline-lg">{s.heading}</h2>
         {s.label ? (
           <p className="mt-xs font-mono text-mono-eyebrow uppercase text-mute">{s.label}</p>
         ) : null}
         {s.body ? (
           <Prose
             text={s.body}
-            leadClassName="mt-md max-w-3xl text-body-lg text-ink"
-            className="mt-md max-w-3xl text-body-lg text-body"
+            leadClassName="mt-md max-w-3xl text-m3-body-lg text-ink"
+            className="mt-md max-w-3xl text-m3-body-lg text-body"
           />
         ) : null}
 
         {s.sub ? (
           <>
-            <h3 className={`${s.body ? "mt-xl" : "mt-md"} max-w-3xl para-header`}>{s.sub.heading}</h3>
-            <Prose text={s.sub.body} className="mt-sm max-w-3xl text-body-lg text-body" />
+            <h3 className={`${s.body ? "mt-xl" : "mt-md"} max-w-3xl para-header !text-m3-headline-sm`}>{s.sub.heading}</h3>
+            <Prose text={s.sub.body} className="mt-sm max-w-3xl text-m3-body-lg text-body" />
           </>
         ) : null}
 
@@ -561,8 +561,8 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
           <dl className="mt-xl grid grid-cols-1 gap-lg border-y border-hairline py-lg sm:grid-cols-3">
             {s.metrics.map((m) => (
               <div key={m.label}>
-                <dt className="text-heading-lg text-ink">{m.value}</dt>
-                <dd className="mt-xxs text-body-md text-mute">{m.label}</dd>
+                <dt className="text-m3-headline-md text-ink">{m.value}</dt>
+                <dd className="mt-xxs text-m3-body-md text-mute">{m.label}</dd>
               </div>
             ))}
           </dl>
@@ -575,7 +575,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
             {c.label ? (
               <p className="font-mono text-mono-eyebrow uppercase text-mute">{c.label}</p>
             ) : null}
-            <Prose text={c.body} className="mt-sm text-body-lg text-body" />
+            <Prose text={c.body} className="mt-sm text-m3-body-lg text-body" />
           </aside>
         ))}
       </div>
@@ -591,7 +591,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
       {s.decision ? (
         <aside className="mx-auto mt-2xl max-w-5xl rounded-md border border-hairline bg-elevated p-lg">
           <p className="font-mono text-mono-eyebrow uppercase text-mute">Design decision</p>
-          <Prose text={s.decision} className="mt-sm text-body-lg text-body" />
+          <Prose text={s.decision} className="mt-sm text-m3-body-lg text-body" />
         </aside>
       ) : null}
 
@@ -603,11 +603,11 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
           >
             <ChargerDoodle className="absolute -right-xs top-md hidden w-20 text-mute opacity-50 sm:block" />
             <ChargerDoodle className="absolute -left-xs bottom-md hidden w-20 text-mute opacity-50 sm:block" />
-            <p className="para-header relative mx-auto max-w-2xl md:!text-[32px] md:!leading-[1.35]">
+            <p className="para-header relative mx-auto max-w-2xl !text-m3-headline-sm md:!text-m3-headline-md">
               {sub.quote}
             </p>
             {sub.quoteBy ? (
-              <footer className="relative mx-auto mt-md max-w-2xl text-body-md text-body">
+              <footer className="relative mx-auto mt-md max-w-2xl text-m3-body-md text-body">
                 {sub.quoteBy}
               </footer>
             ) : null}
@@ -616,7 +616,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
         <div key={i} className="mx-auto mt-3xl max-w-5xl">
           {sub.heading ? (
             <h3
-              className={`max-w-3xl para-header${sub.headingLarge ? " para-header--lg" : ""}`}
+              className={`max-w-3xl para-header ${sub.headingLarge ? "!text-m3-headline-md" : "!text-m3-headline-sm"}`}
             >
               {sub.heading}
             </h3>
@@ -624,7 +624,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
           {sub.body ? (
             <Prose
               text={sub.body}
-              className={`mt-sm max-w-3xl text-body text-body-lg${sub.bodyLarge ? " !text-[20px] !leading-[28px]" : ""}`}
+              className={`mt-sm max-w-3xl text-body text-m3-body-lg${sub.bodyLarge ? " !text-m3-title-lg" : ""}`}
             />
           ) : null}
           {(() => {
@@ -638,10 +638,10 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
               >
                 {sub.items.map((it) => (
                   <div key={it.title}>
-                    <dt className="text-body-lg font-semibold text-ink">{it.title}</dt>
-                    <dd className="mt-xxs text-body-lg text-body">{it.body}</dd>
+                    <dt className="text-m3-body-lg font-semibold text-ink">{it.title}</dt>
+                    <dd className="mt-xxs text-m3-body-lg text-body">{it.body}</dd>
                     {it.tag ? (
-                      <dd className="mt-xs text-label-sm text-mute">{it.tag}</dd>
+                      <dd className="mt-xs text-m3-title-sm text-mute">{it.tag}</dd>
                     ) : null}
                   </div>
                 ))}
@@ -687,14 +687,14 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
               <EmbedFrame src={s.embed.src} title={s.embed.title} height={s.embed.height} />
             </span>
             {s.embed.caption ? (
-              <figcaption className="mt-sm font-mono text-body-sm leading-5 text-mute">
+              <figcaption className="mt-sm font-mono text-m3-body-sm leading-5 text-mute">
                 {s.embed.caption}
               </figcaption>
             ) : null}
           </figure>
           {s.embed.after ? (
             <div className="mx-auto mt-xl max-w-3xl">
-              <Prose text={s.embed.after} className="text-body-lg text-body" />
+              <Prose text={s.embed.after} className="text-m3-body-lg text-body" />
             </div>
           ) : null}
         </>
@@ -761,7 +761,7 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
       <article className="mx-auto max-w-container px-lg pb-section pt-2xl">
         {project.headline ? (
         <header className="flex items-start justify-between gap-lg">
-          <h1 className="max-w-3xl para-header !text-[32px] !leading-[1.25] md:!text-[40px]">{project.headline}</h1>
+          <h1 className="max-w-3xl para-header !text-m3-headline-md md:!text-m3-display-sm">{project.headline}</h1>
           {project.logo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -779,12 +779,12 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
             {project.discipline ? `${project.discipline} · ` : ""}{project.org}
             {project.inProgress ? " · In Progress" : ` · ${project.year}`}
           </p>
-          <h1 className="mt-md para-header !text-[32px] !leading-[1.25] md:!text-[40px]">
+          <h1 className="mt-md para-header !text-m3-headline-md md:!text-m3-display-sm">
             {project.title}
           </h1>
-          <p className="mt-lg text-body-lg text-body">{project.subtitle}</p>
+          <p className="mt-lg text-m3-body-lg text-body">{project.subtitle}</p>
           {project.introNote ? (
-            <p className="mt-sm text-body-sm text-mute">
+            <p className="mt-sm text-m3-body-sm text-mute">
               {project.introNote.text}{" "}
               <a
                 href={project.introNote.href}
@@ -812,7 +812,7 @@ export default function CaseStudyOverlay({ project, onClose, onNavigate }: Props
               <dt className="font-mono text-mono-eyebrow uppercase text-mute">
                 {m.label}
               </dt>
-              <dd className="mt-xxs text-label-sm text-ink">{m.value}</dd>
+              <dd className="mt-xxs text-m3-title-sm text-ink">{m.value}</dd>
             </div>
           ))}
         </dl>
