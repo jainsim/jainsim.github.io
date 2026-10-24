@@ -610,7 +610,7 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
             ) : null}
           </blockquote>
         ) : (
-        <div key={i} className="mx-auto mt-xl max-w-5xl">
+        <div key={i} className={`mx-auto ${sub.tight ? "mt-xs" : "mt-xl"} max-w-5xl`}>
           {sub.heading ? (
             <h3
               className={`max-w-3xl para-header ${sub.headingLarge ? "!text-m3-headline-md" : "!text-m3-headline-sm"}`}
@@ -659,6 +659,21 @@ function SectionBlock({ section: s }: { section: CaseSection }) {
                       className="h-auto w-full"
                     />
                     {inMat ? list : null}
+                  </div>
+                ) : null}
+                {sub.video ? (
+                  <div className="mt-md overflow-hidden rounded-xs border border-hairline bg-hairline-soft p-lg md:p-xl">
+                    <video
+                      src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${sub.video.src}`}
+                      width={sub.video.width}
+                      height={sub.video.height}
+                      aria-label={sub.video.label}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="h-auto w-full"
+                    />
                   </div>
                 ) : null}
                 {inMat ? null : list}
