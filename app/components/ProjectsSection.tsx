@@ -31,7 +31,6 @@ export default function ProjectsSection({
   initialSlug?: string | null;
 }) {
   const [active, setActive] = useState(0);
-  const [inView, setInView] = useState(false);
   // Seeded from the route so the right overlay is present in the static HTML
   // (and matches on hydration): a case-study slug opens CaseStudyOverlay, the
   // prototype slug opens the live embed.
@@ -103,18 +102,6 @@ export default function ProjectsSection({
     return () => window.removeEventListener("popstate", sync);
   }, []);
 
-  // Show the sticky counter only while the Work section is in view
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { rootMargin: "-20% 0px -20% 0px" }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   return (
     <section id="work" ref={sectionRef} className="relative bg-canvas">
       {/* Fonts for the device-frame cards (Inter / JetBrains Mono). Loaded once
@@ -138,16 +125,6 @@ export default function ProjectsSection({
             onActive={setActive}
           />
         ))}
-      </div>
-
-      {/* Sticky "where am I" counter - bottom-left, only within Work */}
-      <div
-        aria-hidden
-        className={`pointer-events-none fixed bottom-lg left-lg z-30 font-sans text-m3-body-sm text-mute transition-opacity duration-500 max-md:hidden ${
-          inView && !openSlug && !protoOpen ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        {galleryItems[active].index} / (0{galleryItems.length})
       </div>
 
       <CaseStudyOverlay
