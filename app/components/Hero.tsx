@@ -99,12 +99,12 @@ export default function Hero() {
       {/* Background image - statically over-scaled so parallax never reveals an edge */}
       <div ref={imageRef} className="absolute inset-0 scale-110 will-change-transform motion-reduce:scale-100">
         <Image
-          src="/hero/summit.jpg"
+          src="/hero/summit-v2.jpg"
           alt="Seema sitting on a summit rock above Salzburg"
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[75%_50%] opacity-90"
+          className="object-cover object-[50%_50%] opacity-90"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-fjord-ink/40 via-fjord-ink/10 to-fjord-ink/85" />
         {/* Left scrim - keeps the hero copy legible over the busy town */}
