@@ -26,7 +26,7 @@ const config: Config = {
         "fjord-mute": "#a1a1a1",
       },
       fontFamily: {
-        sans: ["var(--font-open-sans)", "Arial", "sans-serif"],
+        sans: ["var(--font-figtree)", "Arial", "sans-serif"],
         hand: ["var(--font-hand)", "cursive"],
       },
       fontSize: {

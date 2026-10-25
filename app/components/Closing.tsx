@@ -1,5 +1,3 @@
-import AboutReveal from "./AboutReveal";
-import AboutBand from "./AboutBand";
 import Testimonials from "./Testimonials";
 
 /**
@@ -15,93 +13,55 @@ export default function Closing() {
         className="border-t border-hairline bg-canvas"
       >
         <div className="mx-auto max-w-container px-lg py-section">
-          <p className="eyebrow text-mute">About</p>
-          <AboutReveal />
-          <div className="mt-2xl max-w-2xl">
-            <p className="text-m3-body-lg text-body">
-              On one side, apps used by electricians and technicians standing in
-              front of a machine with bad signal and no patience. On the other,
-              the operator console where someone in an office has to trust what
-              the field just did.
-            </p>
-            <p className="mt-lg text-m3-body-lg text-body">
-              Nearly four years of high-consequence enterprise work taught me the
-              same three things repeat: dense technical data, configuration that
-              lives in one team&apos;s heads, and legacy workflows nobody can
-              rebuild from scratch.
-            </p>
-            <p className="mt-lg text-m3-body-lg text-body">
-              In EV charging that meant a native installer app, a station
-              activation workflow inside a legacy enterprise platform, and the
-              design system that held both together. Modernisation, not
-              greenfield. Existing workflows, real users, real consequences,
-              rebuilt without breaking the people who depend on them.
-            </p>
-          </div>
-        </div>
-
-        {/* Origin story + facts, then a full-width photo band */}
-        <div className="border-t border-hairline">
-          <div className="mx-auto max-w-container px-lg py-4xl">
-            <div className="grid gap-3xl md:grid-cols-2 md:gap-2xl">
-              {/* Left - origin story */}
-              <div>
-                <p className="eyebrow text-mute">Before UX</p>
-                <p className="mt-lg max-w-lg text-m3-body-lg text-body">
-                  Before UX, I was at Tommy Hilfiger, Kenneth Cole, Emporio
-                  Armani, years on the floor as a fashion consultant, reading
-                  what someone felt about a garment in the two seconds before
-                  they said anything.
-                </p>
-                <p className="mt-md max-w-lg text-m3-body-lg text-body">
-                  Nobody on a shop floor tells you what&apos;s wrong. You watch
-                  what they pick up and what they put back. That&apos;s still how
-                  I work: I trust what I watch people do over what they say they
-                  want.
-                </p>
+          <h2 className="para-header !text-m3-headline-sm md:!text-m3-headline-lg">About me</h2>
+          <div className="mt-2xl max-w-3xl">
+            {[
+              [
+                "Where it started",
+                "Before UX, I was a fashion consultant at Tommy Hilfiger, Kenneth Cole and Emporio Armani. The clothes were the easy part. The real work was asking the right questions until I understood someone\u2019s personality. Swap the wardrobe for a product workflow, and that\u2019s still my process.",
+              ],
+              [
+                "What I\u2019ve built",
+                "Most recently at ChargePoint, I turned a 5-day specialist process into a 4-minute self-serve activation flow. Before that, I co-led DesignGrid at The Mobility House, one design system behind four products. It started in Bengaluru, designing for 30,000+ women artisans and building a virtual try-on app with ML engineers.",
+              ],
+              [
+                "How I work",
+                "I\u2019m comfortable owning everything or bringing everyone in. Solo, I\u2019ve led 30+ interviews, run usability tests, and QA\u2019d every dev build myself. With a team, I facilitate the workshops where product, engineering, and business make the big calls.",
+              ],
+              [
+                "Outside of work",
+                "I\u2019m usually somewhere in the Alps, chasing a new trail or a quiet spot for yoga. I\u2019ve also just started learning German.",
+              ],
+            ].map(([heading, body], i) => (
+              <div key={heading} className={i ? "mt-xl" : undefined}>
+                <h3 className="para-header !text-m3-headline-sm">{heading}</h3>
+                <p className="mt-sm text-m3-body-lg text-body">{body}</p>
               </div>
-
-              {/* Right - facts */}
-              <div>
-                <p className="eyebrow text-mute">At a glance</p>
-                <dl className="mt-lg divide-y divide-hairline border-y border-hairline">
-                  {[
-                    ["Role", "Senior Product Designer, IC"],
-                    ["Experience", "7+ years design, 5 in enterprise B2B SaaS"],
-                    [
-                      "Domains",
-                      "EV charging and energy infrastructure, field service, regulated and safety-critical",
-                    ],
-                    [
-                      "Products",
-                      "Native iOS and Android, enterprise admin and back-office platforms, design systems",
-                    ],
-                    [
-                      "Strengths",
-                      "Legacy system modernisation, complex workflow design, two-sided systems, design tokens and component libraries",
-                    ],
-                    ["Builds", "Prototypes in code"],
-                    ["Based", "Salzburg, Austria"],
-                    ["Authorisation", "EU Blue Card, open to relocation"],
-                    ["Looking for", "Senior IC role in complex enterprise software"],
-                  ].map(([label, value]) => (
-                    <div
-                      key={label}
-                      className="flex flex-col gap-xxs py-sm sm:flex-row sm:gap-lg"
-                    >
-                      <dt className="font-sans text-m3-body-sm uppercase text-mute sm:w-32 sm:shrink-0 sm:pt-[3px]">
-                        {label}
-                      </dt>
-                      <dd className="text-m3-body-md text-ink sm:flex-1">{value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </div>
-
-            {/* Full-width band across both columns, above the closing rule */}
-            <AboutBand />
+            ))}
           </div>
+
+          {/* Photo wall - polaroids, faces other than mine blurred */}
+          <ul className="photo-wall mt-3xl">
+            {[
+              ["stylist-years", "the stylist years", "Seema with a colleague outside a luxury store during her fashion styling years", "50% 30%"],
+              ["field-testing", "field testing", "Seema and colleagues testing at a ChargePoint fast charger", "50% 45%"],
+              ["workshop-day", "workshop day", "Seema facilitating a workshop with the product team", "50% 60%"],
+              ["site-visit", "site visit", "Seema on a site visit at a wall charger in a parking garage", "50% 40%"],
+            ].map(([file, caption, alt, pos]) => (
+              <li key={file} className="photo-wall__card">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/about/wall/${file}.jpg`}
+                  alt={alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="photo-wall__img"
+                  style={{ objectPosition: pos }}
+                />
+                <p className="photo-wall__caption">{caption}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -110,10 +70,15 @@ export default function Closing() {
 
       {/* CTA / Contact */}
       <section id="contact" className="border-t border-hairline bg-canvas">
-        <div className="mx-auto max-w-container px-lg py-4xl text-center">
-          <h2 className="mx-auto max-w-3xl text-m3-headline-lg font-semibold text-ink md:text-m3-display-sm">
+        <div className="mx-auto max-w-container px-lg py-3xl text-center">
+          <h2 className="mx-auto max-w-3xl para-header !text-m3-headline-lg md:!text-m3-display-sm">
             Got a gnarly problem worth solving?
           </h2>
+          <p className="mx-auto mt-md max-w-xl text-m3-body-lg text-body">
+            Senior Product Designer, open to IC roles.
+            <br />
+            Based in Salzburg, EU Blue Card holder, open to relocation.
+          </p>
           <div className="mt-2xl flex flex-wrap items-center justify-center gap-md">
             <a
               href="mailto:seemasam2113@gmail.com"
@@ -141,7 +106,7 @@ export default function Closing() {
               Seema Jain
             </span>
             <span className="font-sans text-m3-body-sm text-mute">
-              · © 2026 · Salzburg, AT
+              <span className="hidden sm:inline">· </span>© 2026 · Salzburg, AT
             </span>
             <span className="font-sans text-m3-body-sm text-mute/70">
               V1.0

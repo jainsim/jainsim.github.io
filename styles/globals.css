@@ -24,7 +24,7 @@ html {
 body {
   background-color: theme("colors.canvas");
   color: theme("colors.ink");
-  font-family: var(--font-open-sans), Arial, sans-serif;
+  font-family: var(--font-figtree), Arial, sans-serif;
 }
 
 /* Lenis smooth scroll */
@@ -123,6 +123,55 @@ html.lenis-stopped body {
    the section's closing rule. One 2:1 master shown as a 2:1 band on narrow
    screens and a wider 3:1 band on desktop (object-fit: cover). Fades in with a
    12px upward translate on scroll. */
+/* About photo wall: four polaroids, slight alternating tilt, hand-written
+   captions. Hairline + whisper shadow only (no drop shadows). */
+.photo-wall {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 16px;
+  list-style: none;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+}
+@media (min-width: 768px) {
+  .photo-wall {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+.photo-wall__card {
+  background: #fff;
+  border: 1px solid #ebebeb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 10px 10px 0;
+  transform: rotate(-2deg);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.photo-wall__card:nth-child(2) { transform: rotate(1.5deg) translateY(6px); }
+.photo-wall__card:nth-child(3) { transform: rotate(-1deg); }
+.photo-wall__card:nth-child(4) { transform: rotate(2deg) translateY(4px); }
+.photo-wall__card:hover { transform: rotate(0deg) translateY(-4px); }
+.photo-wall__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: #f2f2f2; /* placeholder while the lazy image loads */
+}
+.photo-wall__caption {
+  font-family: var(--font-hand), cursive;
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  text-align: center;
+  padding: 16px 0 18px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .photo-wall__card { transition: none; }
+}
+
 .about-band {
   margin: 0;
   margin-top: 64px; /* separate from the columns above */
@@ -236,7 +285,7 @@ html.lenis-stopped body {
     inset 1px 0 0 rgba(255, 255, 255, 0.1),
     inset -1px 0 0 rgba(0, 0, 0, 0.2),
     0 20px 38px -24px rgba(20, 24, 28, 0.62);
-  --sans: var(--font-open-sans), Arial, sans-serif;
+  --sans: var(--font-figtree), Arial, sans-serif;
   font-family: var(--sans);
   color: var(--ink);
 }

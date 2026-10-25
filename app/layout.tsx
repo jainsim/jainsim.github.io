@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Open_Sans, Shadows_Into_Light_Two } from "next/font/google";
+import { Figtree, Shadows_Into_Light_Two } from "next/font/google";
 import SmoothScroll from "./components/SmoothScroll";
 import "../styles/globals.css";
 
-const openSans = Open_Sans({
-  variable: "--font-open-sans",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
 });
 
 const handwritten = Shadows_Into_Light_Two({
@@ -52,7 +51,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${openSans.variable} ${handwritten.variable}`}
+      className={`${figtree.variable} ${handwritten.variable}`}
     >
       <body suppressHydrationWarning className="bg-canvas text-ink antialiased">
         <SmoothScroll />

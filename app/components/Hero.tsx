@@ -99,14 +99,16 @@ export default function Hero() {
       {/* Background image - statically over-scaled so parallax never reveals an edge */}
       <div ref={imageRef} className="absolute inset-0 scale-110 will-change-transform motion-reduce:scale-100">
         <Image
-          src="/hero/misty-mountains.jpg"
-          alt="Misty fjord mountains"
+          src="/hero/summit.jpg"
+          alt="Seema sitting on a summit rock above Salzburg"
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-90"
+          className="object-cover object-[75%_50%] opacity-90"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-fjord-ink/40 via-fjord-ink/10 to-fjord-ink/85" />
+        {/* Left scrim - keeps the hero copy legible over the busy town */}
+        <div className="absolute inset-0 bg-gradient-to-r from-fjord-ink/70 via-fjord-ink/30 to-transparent" />
       </div>
 
       {/* Fluid-smoke atmosphere - between image and content. Only mounted on
@@ -127,12 +129,11 @@ export default function Hero() {
             Seema Jain
           </h1>
           <p className="mt-lg max-w-xl text-m3-title-lg text-fjord-text">
-            I design the software layer around physical infrastructure.
+            Senior Product Designer
           </p>
           <p className="mt-sm max-w-xl text-m3-body-lg text-fjord-text/80">
-            Multi-role enterprise platforms, legacy modernisation, and the
-            design systems that hold them together. 7+ years across enterprise
-            B2B SaaS and native mobile.
+            Every summit starts with a messy trail. On weekdays, I chart complex
+            user journeys into clear paths. Weekends, I hike to the top to meditate.
           </p>
 
           {/* CTA row - light-on-dark twins of the Closing pills */}
